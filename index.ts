@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 // Dados
 let controle = {
   folha: 1,

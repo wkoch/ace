@@ -171,7 +171,7 @@ module.exports = reloadCSS;
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"./node_modules/normalize.css/normalize.css":4,"_css_loader":5}],8:[function(require,module,exports) {
+},{"./node_modules/normalize.css/normalize.css":4,"_css_loader":5}],20:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -341,4 +341,4 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[8], null)
+},{}]},{},[20], null)

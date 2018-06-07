@@ -6,31 +6,69 @@
 <script src="/style.a171e114.js"></script></head>
 <body>
   <div class="container">
-    <div class="center" id="menu">
+    <div class="dock centro">
       <button class="material-icons" id="vistoriado">thumb_up</button>
       <button class="material-icons" id="recuperado">history</button>
       <button class="material-icons" id="fechado">no_meeting_room</button>
       <button class="material-icons" id="recusado">block</button>
       <button class="material-icons" id="config">settings</button>
-      <button class="material-icons" id="atualizar">refresh</button>
-    </div><br>
-    <div id="painel">
-      <label>Normal</label>
-      <input id="vistoriado" type="time" value="00:13:00"><br>
-      <label>Recuperado</label>
-      <input id="recuperado" type="time" value="00:16:00"><br>
-      <label>Fechado</label>
-      <input id="fechado" type="time" value="00:02:00"><br>
-      <label>Recusado</label>
-      <input id="recusado" type="time" value="00:03:00"><br>
     </div>
-    <table id="lista">
+    <div class="painel" id="configurar">
+      <h1 class="centro">Configurações</h1>
+      <div class="grid">
+        <fieldset class="grid-item centro">
+          <legend>Manhã</legend>
+          <label>Ativado
+            <input id="manha" type="checkbox" checked="true">
+          </label>
+          <hr>
+          <div class="grid">
+            <div class="grid-item direita">
+              <label for="inicio-manha">Início:</label>
+            </div>
+            <div class="grid-item">
+              <input id="inicio-manha" type="time" value="08:40:00" name="inicio-manha">
+            </div>
+            <div class="grid-item direita">
+              <label>Fim:</label>
+            </div>
+            <div class="grid-item">
+              <input id="fim-manha" type="time" value="11:12:00">
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="grid-item centro">
+          <legend>Tarde</legend>
+          <label>Ativado
+            <input id="tarde" type="checkbox" checked="true">
+          </label>
+          <hr>
+          <div class="grid">
+            <div class="grid-item direita">
+              <label>Início:</label>
+            </div>
+            <div class="grid-item">
+              <input id="inicio-tarde" type="time" value="14:30:00">
+            </div>
+            <div class="grid-item direita">
+              <label>Fim:</label>
+            </div>
+            <div class="grid-item">
+              <input id="fim-tarde" type="time" value="17:20:00">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <div class="painel" id="conteudo">
+      <h1 class="centro">Vistorias</h1>
+      <table id="lista"></table>
       <tr>
         <th>ID</th>
         <th>Tipo</th>
         <th>Hora</th>
       </tr>
-    </table>
+    </div>
   </div>
   <script src="/ace.f8342dad.js"></script>
 </body>

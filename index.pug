@@ -4,29 +4,48 @@ head
   link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
   link(rel='stylesheet' href='./style.css')
 body
-  .container
-    #menu.center
+  div.container
+    div.dock.centro
       button#vistoriado.material-icons thumb_up
       button#recuperado.material-icons history
       button#fechado.material-icons no_meeting_room
       button#recusado.material-icons block
       button#config.material-icons settings
-      button#atualizar.material-icons refresh
-    br
-    #painel
-      label Normal
-      input#vistoriado(type="time" value="00:13:00")
-      br
-      label Recuperado
-      input#recuperado(type="time" value="00:16:00")
-      br
-      label Fechado
-      input#fechado(type="time" value="00:02:00")
-      br
-      label Recusado
-      input#recusado(type="time" value="00:03:00")
-      br
-    table#lista
+    div#configurar.painel
+      h1.centro Configurações
+      div.grid
+        fieldset.grid-item.centro
+          legend Manhã
+          label Ativado
+            input#manha(type="checkbox" checked="true")
+          hr
+          div.grid
+            div.grid-item.direita
+              label(for="inicio-manha") Início:
+            div.grid-item
+              input#inicio-manha(type="time" value="08:40:00" name="inicio-manha")
+            div.grid-item.direita
+              label Fim:
+            div.grid-item
+              input#fim-manha(type="time" value="11:12:00")
+        fieldset.grid-item.centro
+          legend Tarde
+          label Ativado
+            input#tarde(type="checkbox" checked="true")
+          hr
+          div.grid
+            div.grid-item.direita
+              label Início:
+            div.grid-item
+              input#inicio-tarde(type="time" value="14:30:00")
+            div.grid-item.direita
+              label Fim:
+            div.grid-item
+              input#fim-tarde(type="time" value="17:20:00")
+    div#conteudo.painel
+      h1.centro Vistorias
+
+      table#lista
       tr
         th ID
         th Tipo

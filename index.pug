@@ -1,0 +1,27 @@
+div.container
+  div#menu.center
+    button#vistoriado.material-icons thumb_up
+    button#recuperado.material-icons history
+    button#fechado.material-icons no_meeting_room
+    button#recusado.material-icons block
+    button#config.material-icons settings
+    button#atualizar.material-icons refresh
+  br
+  div#painel
+    label Normal
+    input#vistoriado(type="time" value="00:13:00")
+    br
+    label Recuperado
+    input#recuperado(type="time" value="00:16:00")
+    br
+    label Fechado
+    input#fechado(type="time" value="00:02:00")
+    br
+    label Recusado
+    input#recusado(type="time" value="00:03:00")
+    br
+  table#lista
+    tr
+      th ID
+      th Tipo
+      th Hora

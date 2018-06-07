@@ -1,0 +1,49 @@
+.container {
+  max-width: 600px;
+  width: 100%;
+}
+
+#menu {
+  position: sticky;
+  top: 0px;
+  background: #c6c6c6;
+}
+
+#painel {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-decoration: bold;
+  background: lightgreen;
+  vertical-align: middle;
+  padding: 5px;
+}
+
+td {
+  height: 25px;
+  border: 1px solid lightgray;
+  text-align: center;
+  align-content: middle;
+  vertical-align: middle;
+  padding: 5px;
+}
+
+body button {
+  padding: 10px;
+  margin: 5px;
+}
+
+.center {
+  width: 100%;
+  text-align: center;
+}
+
+span {
+  height: 100%;
+}

@@ -4659,7 +4659,6 @@ var icone = {
 };
 function parseHora(input) {
     var regExp = /^(\d{2}):(\d{2})/;
-    // console.log(`${Number(input.value.match(regExp)[1])}:${Number(input.value.match(regExp)[2])}`);
     return moment({
         hour: Number(input.value.match(regExp)[1]),
         minute: Number(input.value.match(regExp)[2])
@@ -4711,7 +4710,6 @@ function atualizaHora() {
         hora.total = 0;
         hora.atual = null;
     }
-    console.log(hora.total);
 }
 var checkboxManha = document.querySelector("input#manha");
 checkboxManha.checked = true;
@@ -4831,7 +4829,7 @@ botaoAtualizar.addEventListener("click", function () {
     });
 });
 atualizaHora();
-},{"moment":6}],15:[function(require,module,exports) {
+},{"moment":6}],16:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -5001,5 +4999,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[15,2], null)
+},{}]},{},[16,2], null)
 //# sourceMappingURL=/ace.f8342dad.map

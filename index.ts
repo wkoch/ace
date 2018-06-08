@@ -61,7 +61,6 @@ let icone = {
 
 function parseHora(input) {
   let regExp = /^(\d{2}):(\d{2})/;
-  // console.log(`${Number(input.value.match(regExp)[1])}:${Number(input.value.match(regExp)[2])}`);
   return moment({
       hour: Number(input.value.match(regExp)[1]),
     minute: Number(input.value.match(regExp)[2])
@@ -116,8 +115,6 @@ function atualizaHora() {
     hora.total = 0;
     hora.atual = null;
   }
-
-  console.log(hora.total);
 }
 
 

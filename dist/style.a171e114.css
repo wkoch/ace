@@ -341,6 +341,7 @@ template {
 }
 /* Geral */
 body {
+  font-family: sans-serif;
   font-size: 18px;
 }
 
@@ -377,6 +378,10 @@ body {
   font-size: 48px;
 }
 
+td > .material-icons {
+  font-size: 24px;
+}
+
 #vistoriado {
   color: #259b24;
 }
@@ -406,10 +411,6 @@ body {
   grid-column-gap: 5px;
 }
 
-.grid-item {
-  
-}
-
 .grid-item > h2 {
   margin-bottom: 5px;
 }
@@ -430,17 +431,14 @@ th {
           text-decoration: bold;
   background: lightgreen;
   vertical-align: middle;
-  padding: 5px;
 }
 
 td {
-  height: 25px;
   border: 1px solid lightgray;
   text-align: center;
   -ms-flex-line-pack: middle;
       align-content: middle;
   vertical-align: middle;
-  padding: 5px;
 }
 
 /* Helpers */

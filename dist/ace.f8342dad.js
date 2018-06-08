@@ -98,7 +98,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({21:[function(require,module,exports) {
+})({6:[function(require,module,exports) {
 var define;
 var global = arguments[3];
 //! moment.js
@@ -4608,12 +4608,13 @@ var global = arguments[3];
 
 })));
 
-},{}],3:[function(require,module,exports) {
+},{}],2:[function(require,module,exports) {
 var moment = require('moment');
 // Painel: Configurações <|> Conteúdo
 var configurar = document.querySelector("div#configurar");
 var conteudo = document.querySelector("div#conteudo");
 var botaoConfig = document.querySelector("button#config");
+configurar.style.display = 'none';
 botaoConfig.addEventListener('click', function () {
     if (configurar.style.display === 'none') {
         configurar.style.display = 'block';
@@ -4624,48 +4625,213 @@ botaoConfig.addEventListener('click', function () {
     }
 });
 // App
+var controle = {
+    folha: 1,
+    linha: 1
+};
 var hora = {
-    atual: moment({ hour: 0, minute: 0 }),
+    atual: null,
+    total: 0,
     manha: {
         ativo: true,
-        inicio: moment({ hour: 0, minute: 0 }),
-        fim: moment({ hour: 0, minute: 0 })
+        inicio: null,
+        fim: null,
+        duracao: 0
     },
     tarde: {
         ativo: true,
-        inicio: moment({ hour: 0, minute: 0 }),
-        fim: moment({ hour: 0, minute: 0 })
+        inicio: null,
+        fim: null,
+        duracao: 0
     }
+};
+var duracao = {
+    vistoriado: 14,
+    recuperado: 16,
+    fechado: 2,
+    recusado: 3
+};
+var icone = {
+    vistoriado: "thumb_up",
+    recuperado: "history",
+    fechado: "no_meeting_room",
+    recusado: "block"
 };
 function parseHora(input) {
     var regExp = /^(\d{2}):(\d{2})/;
-    console.log(Number(input.value.match(regExp)[1]) + ":" + Number(input.value.match(regExp)[2]));
+    // console.log(`${Number(input.value.match(regExp)[1])}:${Number(input.value.match(regExp)[2])}`);
     return moment({
-        hour: Number(input.value.match(regExp)[0]),
-        minute: Number(input.value.match(regExp)[1])
+        hour: Number(input.value.match(regExp)[1]),
+        minute: Number(input.value.match(regExp)[2])
     });
 }
+// Inputs de Horários
 var inputInicioManha = document.querySelector("input#inicio-manha");
+inputInicioManha.addEventListener("change", function () {
+    atualizaHora();
+});
 var inputFimManha = document.querySelector("input#fim-manha");
+inputFimManha.addEventListener("change", function () {
+    atualizaHora();
+});
 var inputInicioTarde = document.querySelector("input#inicio-tarde");
+inputInicioTarde.addEventListener("change", function () {
+    atualizaHora();
+});
 var inputFimTarde = document.querySelector("input#fim-tarde");
+inputFimTarde.addEventListener("change", function () {
+    atualizaHora();
+});
 function atualizaHora() {
     if (hora.manha.ativo) {
         hora.manha.inicio = parseHora(inputInicioManha);
         hora.manha.fim = parseHora(inputFimManha);
+        hora.manha.duracao = hora.manha.fim.diff(hora.manha.inicio, "minutes");
+    } else {
+        hora.manha.duracao = 0;
     }
     if (hora.tarde.ativo) {
         hora.tarde.inicio = parseHora(inputInicioTarde);
         hora.tarde.fim = parseHora(inputFimTarde);
+        hora.tarde.duracao = hora.tarde.fim.diff(hora.tarde.inicio, "minutes");
+    } else {
+        hora.tarde.duracao = 0;
     }
+    // Calcula total
+    if (hora.manha.ativo && hora.tarde.ativo) {
+        hora.total = hora.manha.duracao + hora.tarde.duracao;
+        hora.atual = hora.manha.inicio.clone();
+    } else if (hora.manha.ativo && !hora.tarde.ativo) {
+        hora.total = hora.manha.duracao;
+        hora.atual = hora.manha.inicio.clone();
+    } else if (!hora.manha.ativo && hora.tarde.ativo) {
+        hora.total = hora.tarde.duracao;
+        hora.atual = hora.tarde.inicio.clone();
+    } else {
+        hora.total = 0;
+        hora.atual = null;
+    }
+    console.log(hora.total);
 }
 var checkboxManha = document.querySelector("input#manha");
+checkboxManha.checked = true;
 checkboxManha.addEventListener("change", function () {
     hora.manha.ativo = checkboxManha.checked;
     atualizaHora();
-    console.log(hora.manha.inicio);
 });
-},{"moment":21}],24:[function(require,module,exports) {
+var checkboxTarde = document.querySelector("input#tarde");
+checkboxTarde.checked = true;
+checkboxTarde.addEventListener("change", function () {
+    hora.tarde.ativo = checkboxTarde.checked;
+    atualizaHora();
+});
+// Refatorar
+var visitas = [];
+var tabela = document.querySelector("#lista");
+var visitado = {
+    vistoriado: 0,
+    recuperado: 0,
+    fechado: 0,
+    recusado: 0
+};
+var botaoVistoriado = document.querySelector("button#vistoriado");
+botaoVistoriado.addEventListener("click", function () {
+    visitado.vistoriado += 1;
+    novaVisita("vistoriado");
+    display();
+});
+var botaoRecuperado = document.querySelector("button#recuperado");
+botaoRecuperado.addEventListener("click", function () {
+    visitado.recuperado += 1;
+    novaVisita("recuperado");
+    display();
+});
+var botaoFechado = document.querySelector("button#fechado");
+botaoFechado.addEventListener("click", function () {
+    visitado.fechado += 1;
+    novaVisita("fechado");
+    display();
+});
+var botaoRecusado = document.querySelector("button#recusado");
+botaoRecusado.addEventListener("click", function () {
+    visitado.recusado += 1;
+    novaVisita("recusado");
+    display();
+});
+function novaVisita(tipo) {
+    visitas.push({ id: controle.folha + "." + controle.linha, folha: controle.folha, linha: controle.linha, tipo: tipo, icone: icone["" + tipo], hora: hora.atual.clone() });
+    if (controle.linha < 20) {
+        controle.linha += 1;
+    } else {
+        controle.folha += 1;
+        controle.linha = 1;
+    }
+    hora.atual.add(duracao["" + tipo], "minutes").format("HH:mm");
+    if (hora.atual >= hora.manha.fim && hora.atual < hora.tarde.inicio) {
+        hora.atual = hora.tarde.inicio.clone();
+    }
+}
+function criaHeader() {
+    var tr = document.createElement("tr");
+    var id = document.createElement("th");
+    id.textContent = "ID";
+    tr.appendChild(id);
+    var tipo = document.createElement("th");
+    tipo.textContent = "Tipo";
+    tr.appendChild(tipo);
+    var hora = document.createElement("th");
+    hora.textContent = "Hora";
+    tr.appendChild(hora);
+    return tr;
+}
+function display() {
+    tabela.innerHTML = '';
+    var tableHeader = criaHeader();
+    tabela.appendChild(tableHeader);
+    visitas.forEach(function (linha) {
+        var tr = document.createElement("tr");
+        tr.setAttribute("id", linha.id);
+        // ID
+        var tdID = document.createElement("td");
+        tdID.textContent = linha.id;
+        tr.appendChild(tdID);
+        // TIPO
+        var tdTipo = document.createElement("td");
+        var span = document.createElement("span");
+        span.classList.add('material-icons');
+        span.textContent = linha.icone;
+        tdTipo.appendChild(span);
+        tr.appendChild(tdTipo);
+        // HORA
+        var tdHora = document.createElement("td");
+        tdHora.textContent = linha.hora.format("HH:mm");
+        tr.appendChild(tdHora);
+        tabela.appendChild(tr);
+    });
+}
+var botaoAtualizar = document.querySelector("button#atualizar");
+botaoAtualizar.addEventListener("click", function () {
+    visitas.forEach(function (linha) {
+        var totalFechado = visitado.fechado * duracao.fechado;
+        var totalRecusado = visitado.recusado * duracao.recusado;
+        var parcialRecuperado = visitado.recuperado * duracao.fechado;
+        var tempoRestante = hora.total - (totalFechado + totalRecusado + parcialRecuperado);
+        duracao.vistoriado = tempoRestante / (visitado.vistoriado + visitado.recuperado);
+        duracao.recuperado = duracao.vistoriado + duracao.fechado;
+        if (linha.id === "1.1") {
+            hora.atual = hora.manha.inicio.clone();
+            // linha.hora = hora.atual.clone();
+        }
+        linha.hora = hora.atual.clone();
+        hora.atual.add(duracao["" + linha.tipo], "minutes").format("HH:mm");
+        if (hora.atual >= hora.manha.fim && hora.atual < hora.tarde.inicio) {
+            hora.atual = hora.tarde.inicio.clone();
+        }
+        display();
+    });
+});
+atualizaHora();
+},{"moment":6}],15:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -4694,7 +4860,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '60043' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53197' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -4835,5 +5001,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[24,3], null)
+},{}]},{},[15,2], null)
 //# sourceMappingURL=/ace.f8342dad.map

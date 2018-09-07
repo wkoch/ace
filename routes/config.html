@@ -1,18 +1,70 @@
 <svelte:head>
-	<title>Sobre</title>
+	<title>Configurações</title>
 </svelte:head>
 
-<h1>About this site</h1>
+<h1>Configurações</h1>
 
-<p>This is the 'about' page. There's not much here. {count}</p>
+<fieldset>
+	<legend>Manhã</legend>
+	<label>Ativado
+		<input type="checkbox" bind:checked=manha.ativado>
+	</label>
+	<br>
+	<label for="inicio-manha">
+		Início:
+		<input type="time" bind:value=manha.inicio>
+	</label>
+	<br>
+	<label>
+		Fim:
+		<input type="time" bind:value=manha.fim>
+	</label>
+
+</fieldset>
+
+
+<fieldset>
+	<legend>Tarde</legend>
+	<label>Ativado
+		<input type="checkbox" bind:checked=tarde.ativado>
+	</label>
+	<br>
+	<label>
+		Início:
+		<input type="time" bind:value=tarde.inicio>
+	</label>
+	<br>
+	<label>
+		Fim:
+		<input type="time" bind:value=tarde.fim>
+	</label>
+</fieldset>
+
+<p>Manhã {manha.ativado} das {manha.inicio} as {manha.fim}.</p>
 
 <script>
+	import { Store } from 'svelte/store.js';
+
+	const store = new Store({
+		manha: {
+			ativado: true
+		}
+	});
+
 	export default {
 		data() {
 			return {
-				count: 0,
-				vistorias: [{id:1,tipo:"N",hora:"10:00"},{id:2,tipo:"N",hora:"10:15"},{id:3,tipo:"F",hora:"10:30"}]
+				manha: {
+					ativado: true,
+					inicio: "08:40",
+					fim: "11:20"
+				},
+				tarde: {
+					ativado: true,
+					inicio: "14:30",
+					fim: "17:20"
+				}
 			};
-		}
+		},
 	};
 </script>

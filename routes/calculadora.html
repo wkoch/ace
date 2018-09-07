@@ -5,29 +5,23 @@
 <h1>Calculadora de Horário de Vistorias</h1>
 
 <div>
-	<button id="vistoriado" on:click="add('N')">N</button>
-	<button id="fechado" on:click="add('F')">F</button></div>
+	<button id="vistoriado" on:click="add('N', 15)">N</button>
+	<button id="fechado" on:click="add('F', 2)">F</button></div>
 
 
 <table>
+	{#each vistorias as vistoria}
+	{#if vistoria.linha === 1}
 	<tr>
 		<th>Folha</th>
 		<th>Linha</th>
 		<th>Tipo</th>
 		<th>Hora</th>
 	</tr>
-	{#each vistorias as vistoria}
-	{#if vistoria.folha > 1 && vistoria.linha === 1}
-	<tr>
-		<td>-</td>
-		<td>-</td>
-		<td>-</td>
-		<td>-</td>
-	</tr>
 	{/if}
 	<tr>
 		<td>{vistoria.folha}</td>
-		<td>{vistoria.linha}</td>
+		<td>{String(vistoria.linha).padStart(2, '0')}</td>
 		<td>{vistoria.tipo}</td>
 		<td>{vistoria.hora}</td>
 	</tr>
@@ -36,20 +30,43 @@
 
 
 <script>
-	var moment = require('moment');
+	function timeAfter(time, duration) {
+		let [hour, minutes] = time.split(':');
+		hour = Number(hour);
+		minutes = Number(minutes);
+		duration = Number(duration);
+		if (minutes + duration >= 60) {
+			hour += 1;
+			minutes = minutes+duration-60;
+		} else {
+			minutes += duration;
+		}
+		return `${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+	}
 
 	export default {
+		helpers: {
+			timeAfter
+		},
 		data() {
 			return {
 				folha: 1,
 				linha: 1,
-				vistorias: []
+				vistorias: [],
+				hora: "08:40"
 			};
 		},
 		methods: {
-			add(tipo) {
-				const { folha, linha, vistorias } = this.get();
-				this.set({ vistorias: vistorias.concat({ folha: folha, linha: linha, tipo: tipo, hora: moment().format('LT') }) });
+			add(type, time) {
+				const { folha, linha, vistorias, hora } = this.get();
+				// Registra a vistoria
+				this.set({ vistorias: vistorias.concat({ folha: folha, linha: linha, tipo: type, hora: hora }) });
+
+				// Prepara o terreno para os próximos registros
+
+				// Ajusta o horário
+				this.set({ hora: timeAfter(hora, time)});
+				// Ajusta as folhas e linhas
 				this.set({ linha: linha + 1 });
 				if (linha >= 20) {
 					this.set({ folha: folha + 1 });

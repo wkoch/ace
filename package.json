@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "ACEC",
+  "description": "Calculadora de Horas",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "compression": "^1.7.1",
-    "moment": "^2.22.2",
     "polka": "^0.4.0",
     "sapper": "^0.20.0",
     "sirv": "^0.2.0"

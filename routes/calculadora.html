@@ -5,33 +5,46 @@
 <h1>Calculadora de Horário de Vistorias</h1>
 
 <div>
-	<button id="vistoriado" on:click="set({vistorias: vistorias.concat({id:count++,tipo:'N',hora:'10:00'})})">N</button>
-	<button id="fechado" on:click="set({vistorias: vistorias.concat({id:count++,tipo:'F',hora:'11:00'})})">F</button></div>
+	<button id="vistoriado" on:click="add('N')">N</button>
+	<button id="fechado" on:click="add('F')">F</button></div>
 
 
-	<table>
-		<tr>
-			<th>Nº</th>
-			<th>Tipo</th>
-			<th>Hora</th>
-		</tr>
-		{#each vistorias as vistoria}
-		<tr>
-			<td>{vistoria.id}</td>
-			<td>{vistoria.tipo}</td>
-			<td>{vistoria.hora}</td>
-		</tr>
-		{/each}
-	</table>
+<table>
+	<tr>
+		<th>Nº</th>
+		<th>Tipo</th>
+		<th>Hora</th>
+	</tr>
+	{#each vistorias as vistoria}
+	<tr>
+		<td>{vistoria.folha}.{vistoria.linha}</td>
+		<td>{vistoria.tipo}</td>
+		<td>{vistoria.hora}</td>
+	</tr>
+	{/each}
+</table>
 
 
 <script>
+	var moment = require('moment');
 	export default {
 		data() {
 			return {
-				count: 0,
-				vistorias: [{id:1,tipo:"N",hora:"10:00"},{id:2,tipo:"N",hora:"10:15"},{id:3,tipo:"F",hora:"10:30"}]
+				folha: 1,
+				linha: 1,
+				vistorias: []
 			};
-		}
+		},
+		methods: {
+			add(tipo) {
+				const { folha, linha, vistorias } = this.get();
+				this.set({vistorias: vistorias.concat({folha: folha, linha: linha, tipo: tipo, hora: moment().format('LT')})});
+				this.set({linha: linha+1});
+				if (linha >= 20) {
+					this.set({folha: folha+1});
+					this.set({linha: 1});
+				}
+			}
+		},
 	};
 </script>

@@ -1,0 +1,35 @@
+<svelte:head>
+	<title>Sobre</title>
+</svelte:head>
+
+<h1>About this site</h1>
+
+<p>This is the 'about' page. There's not much here. {count}</p>
+
+{#if vistorias.length > 0}
+	<table>
+		<tr>
+			<th>Nº</th>
+			<th>Tipo</th>
+			<th>Hora</th>
+		</tr>
+		{#each vistorias as vistoria}
+		<tr>
+			<td>{vistoria.id}</td>
+			<td>{vistoria.tipo}</td>
+			<td>{vistoria.hora}</td>
+		</tr>
+		{/each}
+	</table>
+{/if}
+
+<script>
+	export default {
+		data() {
+			return {
+				count: 0,
+				vistorias: [{id:1,tipo:"N",hora:"10:00"},{id:2,tipo:"N",hora:"10:15"},{id:3,tipo:"F",hora:"10:30"}]
+			};
+		}
+	};
+</script>

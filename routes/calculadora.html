@@ -1,0 +1,37 @@
+<svelte:head>
+	<title>Calculadora</title>
+</svelte:head>
+
+<h1>Calculadora de Horário de Vistorias</h1>
+
+<div>
+	<button id="vistoriado" on:click="set({vistorias: vistorias.concat({id:count++,tipo:'N',hora:'10:00'})})">N</button>
+	<button id="fechado" on:click="set({vistorias: vistorias.concat({id:count++,tipo:'F',hora:'11:00'})})">F</button></div>
+
+
+	<table>
+		<tr>
+			<th>Nº</th>
+			<th>Tipo</th>
+			<th>Hora</th>
+		</tr>
+		{#each vistorias as vistoria}
+		<tr>
+			<td>{vistoria.id}</td>
+			<td>{vistoria.tipo}</td>
+			<td>{vistoria.hora}</td>
+		</tr>
+		{/each}
+	</table>
+
+
+<script>
+	export default {
+		data() {
+			return {
+				count: 0,
+				vistorias: [{id:1,tipo:"N",hora:"10:00"},{id:2,tipo:"N",hora:"10:15"},{id:3,tipo:"F",hora:"10:30"}]
+			};
+		}
+	};
+</script>

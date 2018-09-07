@@ -1,12 +1,8 @@
 <nav>
 	<ul>
 		<li><a class='{segment === undefined ? "selected" : ""}' href='.'>ACE</a></li>
-		<li><a class='{segment === "about" ? "selected" : ""}' href='calculadora'>Calculadora</a></li>
-		<li><a class='{segment === "about" ? "selected" : ""}' href='sobre'>Sobre</a></li>
-
-		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-		     the blog data when we hover over the link or tap it on a touchscreen -->
-		<li><a rel=prefetch class='{segment === "blog" ? "selected" : ""}' href='blog'>blog</a></li>
+		<li><a class='{segment === "calculadora" ? "selected" : ""}' href='calculadora'>Calculadora</a></li>
+		<li><a class='{segment === "config" ? "selected" : ""}' href='config'>Configurações</a></li>
 	</ul>
 </nav>
 

@@ -11,13 +11,23 @@
 
 <table>
 	<tr>
-		<th>Nº</th>
+		<th>Folha</th>
+		<th>Linha</th>
 		<th>Tipo</th>
 		<th>Hora</th>
 	</tr>
 	{#each vistorias as vistoria}
+	{#if vistoria.folha > 1 && vistoria.linha === 1}
 	<tr>
-		<td>{vistoria.folha}.{vistoria.linha}</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+	</tr>
+	{/if}
+	<tr>
+		<td>{vistoria.folha}</td>
+		<td>{vistoria.linha}</td>
 		<td>{vistoria.tipo}</td>
 		<td>{vistoria.hora}</td>
 	</tr>
@@ -27,6 +37,7 @@
 
 <script>
 	var moment = require('moment');
+
 	export default {
 		data() {
 			return {
@@ -38,11 +49,11 @@
 		methods: {
 			add(tipo) {
 				const { folha, linha, vistorias } = this.get();
-				this.set({vistorias: vistorias.concat({folha: folha, linha: linha, tipo: tipo, hora: moment().format('LT')})});
-				this.set({linha: linha+1});
+				this.set({ vistorias: vistorias.concat({ folha: folha, linha: linha, tipo: tipo, hora: moment().format('LT') }) });
+				this.set({ linha: linha + 1 });
 				if (linha >= 20) {
-					this.set({folha: folha+1});
-					this.set({linha: 1});
+					this.set({ folha: folha + 1 });
+					this.set({ linha: 1 });
 				}
 			}
 		},

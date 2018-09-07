@@ -6,23 +6,6 @@
 
 <p>This is the 'about' page. There's not much here. {count}</p>
 
-{#if vistorias.length > 0}
-	<table>
-		<tr>
-			<th>Nº</th>
-			<th>Tipo</th>
-			<th>Hora</th>
-		</tr>
-		{#each vistorias as vistoria}
-		<tr>
-			<td>{vistoria.id}</td>
-			<td>{vistoria.tipo}</td>
-			<td>{vistoria.hora}</td>
-		</tr>
-		{/each}
-	</table>
-{/if}
-
 <script>
 	export default {
 		data() {

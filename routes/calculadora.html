@@ -6,73 +6,169 @@
 
 <div>
 	<button id="vistoriado" on:click="add('N', 15)">N</button>
-	<button id="fechado" on:click="add('F', 2)">F</button></div>
+	<button id="fechado" on:click="add('F', 2)">F</button>
+	<button id="config" on:click="config()">Config</button>
+</div>
+
+<div class={config}>
+	<h1>Configurações</h1>
+
+	<fieldset>
+		<legend>Manhã</legend>
+		<label>Ativado
+			<input type="checkbox" bind:checked=manha.ativado>
+		</label>
+		<br>
+		<label for="inicio-manha">
+			Início:
+			<input type="time" bind:value=manha.inicio>
+		</label>
+		<br>
+		<label>
+			Fim:
+			<input type="time" bind:value=manha.fim>
+		</label>
+
+	</fieldset>
 
 
-<table>
-	{#each vistorias as vistoria}
-	{#if vistoria.linha === 1}
-	<tr>
-		<th>Folha</th>
-		<th>Linha</th>
-		<th>Tipo</th>
-		<th>Hora</th>
-	</tr>
-	{/if}
-	<tr>
-		<td>{vistoria.folha}</td>
-		<td>{String(vistoria.linha).padStart(2, '0')}</td>
-		<td>{vistoria.tipo}</td>
-		<td>{vistoria.hora}</td>
-	</tr>
-	{/each}
-</table>
+	<fieldset>
+		<legend>Tarde</legend>
+		<label>Ativado
+			<input type="checkbox" bind:checked=tarde.ativado>
+		</label>
+		<br>
+		<label>
+			Início:
+			<input type="time" bind:value=tarde.inicio>
+		</label>
+		<br>
+		<label>
+			Fim:
+			<input type="time" bind:value=tarde.fim>
+		</label>
+	</fieldset>
+
+	<p>Manhã {manha.ativado} das {manha.inicio} as {manha.fim}.</p>
+</div>
+
+
+<div class={content}>
+	<table>
+		{#each vistorias as vistoria} {#if vistoria.linha === 1}
+		<tr>
+			<th>Folha</th>
+			<th>Linha</th>
+			<th>Tipo</th>
+			<th>Hora</th>
+		</tr>
+		{/if}
+		<tr>
+			<td>{vistoria.folha}</td>
+			<td>{String(vistoria.linha).padStart(2, '0')}</td>
+			<td>{vistoria.tipo}</td>
+			<td>{vistoria.hora}</td>
+		</tr>
+		{/each}
+	</table>
+</div>
 
 
 <script>
 	function timeAfter(time, duration) {
-		let [hour, minutes] = time.split(':');
-		hour = Number(hour);
-		minutes = Number(minutes);
-		duration = Number(duration);
-		if (minutes + duration >= 60) {
-			hour += 1;
-			minutes = minutes+duration-60;
-		} else {
-			minutes += duration;
-		}
-		return `${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+	  let [hour, minutes] = time.split(":");
+	  hour = Number(hour);
+	  minutes = Number(minutes);
+	  duration = Number(duration);
+	  if (minutes + duration >= 60) {
+	    hour += 1;
+	    minutes = minutes + duration - 60;
+	  } else {
+	    minutes += duration;
+	  }
+	  return `${String(hour).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 	}
 
 	export default {
-		helpers: {
-			timeAfter
-		},
-		data() {
-			return {
-				folha: 1,
-				linha: 1,
-				vistorias: [],
-				hora: "08:40"
-			};
-		},
-		methods: {
-			add(type, time) {
-				const { folha, linha, vistorias, hora } = this.get();
-				// Registra a vistoria
-				this.set({ vistorias: vistorias.concat({ folha: folha, linha: linha, tipo: type, hora: hora }) });
+	  helpers: {
+	    timeAfter
+	  },
+	  data() {
+	    return {
+	      config: "hide",
+	      content: "show",
+	      folha: 1,
+	      linha: 1,
+	      vistorias: [],
+	      hora: "08:40",
+	      manha: {
+	        ativado: true,
+	        inicio: "08:40",
+	        fim: "11:20"
+	      },
+	      tarde: {
+	        ativado: true,
+	        inicio: "14:30",
+	        fim: "17:20"
+	      }
+	    };
+	  },
+	  methods: {
+	    config() {
+	      const {
+	        config,
+	        content,
+	        folha,
+	        linha,
+	        vistorias,
+	        hora,
+	        manha,
+	        tarde
+	      } = this.get();
+	      if (config == "show") {
+	        this.set({ config: "hide" });
+	        this.set({ content: "show" });
+	      } else {
+	        this.set({ config: "show" });
+	        this.set({ content: "hide" });
+	      }
+	    },
+	    add(type, time) {
+	      const { config, content, folha, linha, vistorias, hora, manha, tarde } = this.get();
+	      // Registra a vistoria
+	      this.set({
+	        vistorias: vistorias.concat({
+	          folha: folha,
+	          linha: linha,
+	          tipo: type,
+	          hora: hora
+	        })
+	      });
 
-				// Prepara o terreno para os próximos registros
+	      // Prepara o terreno para os próximos registros
 
-				// Ajusta o horário
-				this.set({ hora: timeAfter(hora, time)});
-				// Ajusta as folhas e linhas
-				this.set({ linha: linha + 1 });
-				if (linha >= 20) {
-					this.set({ folha: folha + 1 });
-					this.set({ linha: 1 });
-				}
-			}
-		},
+	      // Adiciona alguma aleatoriedade aos horários.
+	      let randomize =
+	        Math.trunc(Math.random() * 3) - Math.trunc(Math.random() * 2);
+	      // Ajusta o horário
+	      this.set({ hora: timeAfter(hora, time + randomize) });
+	      // Ajusta as folhas e linhas
+	      this.set({ linha: linha + 1 });
+	      if (linha >= 20) {
+	        this.set({ folha: folha + 1 });
+	        this.set({ linha: 1 });
+	      }
+	    }
+	  }
 	};
 </script>
+
+<style>
+	.hide {
+	  display: none;
+	}
+
+	.show {
+	  display: block;
+	}
+</style>

@@ -1,55 +1,58 @@
 <svelte:head>
 	<title>Calculadora</title>
+	<link href="https://unpkg.com/ionicons@4.4.2/dist/css/ionicons.min.css" rel="stylesheet">
 </svelte:head>
 
-<h1>Calculadora de Horário de Vistorias</h1>
-
-<div>
-	<button id="vistoriado" on:click="add('N', 15)">N</button>
-	<button id="fechado" on:click="add('F', 2)">F</button>
-	<button id="config" on:click="config()">Config</button>
+<div class="center">
+	<i class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></i>
+	<i class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></i>
+	<i class="icon ion-md-cog spaced" on:click="config()"></i>
 </div>
 
 <div class={config}>
 	<h1>Configurações</h1>
 
-	<fieldset>
-		<legend>Manhã</legend>
-		<label>Ativado
-			<input type="checkbox" bind:checked=manha.ativado>
-		</label>
-		<br>
-		<label for="inicio-manha">
-			Início:
-			<input type="time" bind:value=manha.inicio>
-		</label>
-		<br>
-		<label>
-			Fim:
-			<input type="time" bind:value=manha.fim>
-		</label>
+	<div class="container">
+		<div>
+			<fieldset>
+				<legend>Manhã</legend>
+				<label>Ativado
+					<input type="checkbox" bind:checked=manha.ativado>
+				</label>
+				<br>
+				<br>
+				<div class="container">
+					<label>Início:</label>
+					<input type="time" bind:value=manha.inicio>
+				</div>
+				<br>
+				<div class="container">
+					<label>Fim:</label>
+					<input type="time" bind:value=manha.fim>
+				</div>
+			</fieldset>
+		</div>
 
-	</fieldset>
-
-
-	<fieldset>
-		<legend>Tarde</legend>
-		<label>Ativado
-			<input type="checkbox" bind:checked=tarde.ativado>
-		</label>
-		<br>
-		<label>
-			Início:
-			<input type="time" bind:value=tarde.inicio>
-		</label>
-		<br>
-		<label>
-			Fim:
-			<input type="time" bind:value=tarde.fim>
-		</label>
-	</fieldset>
-
-	<p>Manhã {manha.ativado} das {manha.inicio} as {manha.fim}.</p>
+		<div>
+			<fieldset>
+				<legend>Tarde</legend>
+				<label>Ativado
+					<input type="checkbox" bind:checked=tarde.ativado>
+				</label>
+				<br>
+				<br>
+				<div class="container">
+					<label>Início:</label>
+					<input type="time" bind:value=tarde.inicio>
+				</div>
+				<br>
+				<div class="container">
+					<label>Fim:</label>
+					<input type="time" bind:value=tarde.fim>
+				</div>
+			</fieldset>
+		</div>
+	</div>
 </div>
 
 
@@ -61,13 +64,15 @@
 			<th>Linha</th>
 			<th>Tipo</th>
 			<th>Hora</th>
+			<th>Excluir</th>
 		</tr>
 		{/if}
 		<tr>
 			<td>{vistoria.folha}</td>
 			<td>{String(vistoria.linha).padStart(2, '0')}</td>
-			<td>{vistoria.tipo}</td>
+			<td><i class="icon {vistoria.tipo}"></i></td>
 			<td>{vistoria.hora}</td>
+			<td><i class="icon ion-md-trash"></i></td>
 		</tr>
 		{/each}
 	</table>
@@ -134,7 +139,16 @@
 	      }
 	    },
 	    add(type, time) {
-	      const { config, content, folha, linha, vistorias, hora, manha, tarde } = this.get();
+	      const {
+	        config,
+	        content,
+	        folha,
+	        linha,
+	        vistorias,
+	        hora,
+	        manha,
+	        tarde
+	      } = this.get();
 	      // Registra a vistoria
 	      this.set({
 	        vistorias: vistorias.concat({
@@ -164,11 +178,47 @@
 </script>
 
 <style>
+	/* * {
+		border: 1px solid gray;
+	} */
+
+	table {
+	  width: 100%;
+	}
+
+	td {
+	  text-align: center;
+	}
+
 	.hide {
 	  display: none;
 	}
 
 	.show {
 	  display: block;
+	}
+
+	div > .icon {
+	  font-size: 48px;
+	}
+
+	td > .icon {
+		font-size: 25px;
+	}
+
+	.center {
+		text-align: center;
+	}
+
+	i {
+		margin: 0px 20px 0px 20px;
+	}
+
+	.success {
+		color: #32b643;
+	}
+
+	.warning {
+		color: #e85600;
 	}
 </style>

@@ -1,46 +1,250 @@
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Calculadora</title>
+	<link href="https://unpkg.com/ionicons@4.4.2/dist/css/ionicons.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"> -->
 </svelte:head>
 
-<h1>Great success!</h1>
+<div class="menu center">
+	<i class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></i>
+	<i class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></i>
+	<i class="icon ion-md-cog spaced" on:click="config()"></i>
+</div>
 
-<figure>
-	<img alt='Borat' src='great-success.png'>
-	<figcaption>HIGH FIVE!</figcaption>
-</figure>
+<div class={config}>
+	<h1>Configurações</h1>
 
-<p><strong>Try editing this file (routes/index.html) to test hot module reloading.</strong></p>
+	<div class="container">
+		<div>
+			<fieldset>
+				<legend>Manhã</legend>
+				<label>Ativado
+					<input type="checkbox" bind:checked=manha.ativado>
+				</label>
+				<br>
+				<br>
+				<div class="container">
+					<label>Início:</label>
+					<input type="time" bind:value=manha.inicio>
+				</div>
+				<br>
+				<div class="container">
+					<label>Fim:</label>
+					<input type="time" bind:value=manha.fim>
+				</div>
+			</fieldset>
+		</div>
+
+		<div>
+			<fieldset>
+				<legend>Tarde</legend>
+				<label>Ativado
+					<input type="checkbox" bind:checked=tarde.ativado>
+				</label>
+				<br>
+				<br>
+				<div class="container">
+					<label>Início:</label>
+					<input type="time" bind:value=tarde.inicio>
+				</div>
+				<br>
+				<div class="container">
+					<label>Fim:</label>
+					<input type="time" bind:value=tarde.fim>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>
+
+
+<div class={content}>
+	<table>
+		{#each vistorias as vistoria} {#if vistoria.linha === 1}
+		<tr>
+			<th>Folha</th>
+			<th>Linha</th>
+			<th>Tipo</th>
+			<th>Hora</th>
+			<th>Excluir</th>
+		</tr>
+		{/if}
+		<tr>
+			<td>{vistoria.folha}</td>
+			<td>{String(vistoria.linha).padStart(2, '0')}</td>
+			<td><i class="icon {vistoria.tipo}"></i></td>
+			<td>{vistoria.hora}</td>
+			<td><i class="icon ion-md-trash"></i></td>
+		</tr>
+		{/each}
+	</table>
+</div>
+
+
+<script>
+	function timeAfter(time, duration) {
+	  let [hour, minutes] = time.split(":");
+	  hour = Number(hour);
+	  minutes = Number(minutes);
+	  duration = Number(duration);
+	  if (minutes + duration >= 60) {
+	    hour += 1;
+	    minutes = minutes + duration - 60;
+	  } else {
+	    minutes += duration;
+	  }
+	  return `${String(hour).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+	}
+
+	export default {
+	  helpers: {
+	    timeAfter
+	  },
+	  data() {
+	    return {
+	      config: "hide",
+	      content: "show",
+	      folha: 1,
+	      linha: 1,
+	      vistorias: [],
+	      hora: "08:40",
+	      manha: {
+	        ativado: true,
+	        inicio: "08:40",
+	        fim: "11:20"
+	      },
+	      tarde: {
+	        ativado: true,
+	        inicio: "14:30",
+	        fim: "17:20"
+	      }
+	    };
+	  },
+	  methods: {
+	    config() {
+	      const {
+	        config,
+	        content,
+	        folha,
+	        linha,
+	        vistorias,
+	        hora,
+	        manha,
+	        tarde
+	      } = this.get();
+	      if (config == "show") {
+	        this.set({ config: "hide" });
+	        this.set({ content: "show" });
+	      } else {
+	        this.set({ config: "show" });
+	        this.set({ content: "hide" });
+	      }
+	    },
+	    add(type, time) {
+	      const {
+	        config,
+	        content,
+	        folha,
+	        linha,
+	        vistorias,
+	        hora,
+	        manha,
+	        tarde
+	      } = this.get();
+	      // Registra a vistoria
+	      this.set({
+	        vistorias: vistorias.concat({
+	          folha: folha,
+	          linha: linha,
+	          tipo: type,
+	          hora: hora
+	        })
+	      });
+
+	      // Prepara o terreno para os próximos registros
+
+	      // Adiciona alguma aleatoriedade aos horários.
+	      let randomize =
+	        Math.trunc(Math.random() * 3) - Math.trunc(Math.random() * 2);
+	      // Ajusta o horário
+	      this.set({ hora: timeAfter(hora, time + randomize) });
+	      // Ajusta as folhas e linhas
+	      this.set({ linha: linha + 1 });
+	      if (linha >= 20) {
+	        this.set({ folha: folha + 1 });
+	        this.set({ linha: 1 });
+	      }
+	    }
+	  }
+	};
+</script>
 
 <style>
-	h1, figure, p {
+	/* * {
+		border: 1px solid gray;
+	} */
+
+	.menu {
+		border-top: 1px solid lightgray;
+		display: block;
+		/* width: 100%; */
+		position: fixed;
+		bottom: 0;
+		background-color: white;
+		margin: 10 auto;
+	}
+
+	table {
+	  width: 100%;
+	  border-collapse: collapse;
+	}
+
+	th {
+		font-size: 1.4em;
+	}
+
+	tr {
+		/* margin-bottom: 10px; */
+		border-bottom: 5px solid white;
+	}
+
+	td {
+	  text-align: center;
+	  vertical-align: middle;
+	  background-color: #F6F6F6;
+	  font-size: 1.4em;
+	}
+
+	.hide {
+	  display: none;
+	}
+
+	.show {
+	  display: block;
+	}
+
+	div > .icon {
+	  font-size: 48px;
+	}
+
+	td > .icon {
+		font-size: 1.2em;
+	}
+
+	.center {
 		text-align: center;
-		margin: 0 auto;
 	}
 
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
+	i {
+		margin: 0px 20px 0px 20px;
+		vertical-align: middle;
 	}
 
-	figure {
-		margin: 0 0 1em 0;
+	.success {
+		color: #32b643;
 	}
 
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
-
-	p {
-		margin: 1em auto;
-	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
+	.warning {
+		color: #e85600;
 	}
 </style>

@@ -11,11 +11,12 @@
 </div> -->
 
 <div class="dock">
-	<button class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></button>
-	<button class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></button>
+	<button class="icon ion-md-checkmark-circle success" on:click="add('N')"></button>
+	<button class="icon ion-md-close-circle warning" on:click="add('F')"></button>
 	<button class="icon ion-md-cog spaced" on:click="config()"></button>
 </div>
 
+<p>Folhas: {folha}. Linhas: {folha*20-(20-(linha-1))} N: {vistorias.filter(obj => obj.tipo == "N").length}. F: {vistorias.filter(obj => obj.tipo == "F").length}</p>
 
 <div class={config}>
 	<h1>Configurações</h1>
@@ -75,10 +76,16 @@
 		</tr>
 		{/if}
 		<tr>
-			<td>{vistoria.folha}/{String(vistoria.linha).padStart(2, '0')}</td>
-			<td><i class="icon {vistoria.tipo}"></i></td>
+			<td>{vistoria.id}</td>
+			<td>
+				{#if vistoria.tipo == "N"}
+				<button class="icon ion-md-checkmark-circle success" on:click='changeTo(`${vistoria.id}`, "F")'></button>
+				{:else}
+				<button class="icon ion-md-close-circle warning" on:click='changeTo(`${vistoria.id}`, "N")'></button>
+				{/if}
+			</td>
 			<td>{vistoria.hora}</td>
-			<td><i class="icon ion-md-trash"></i></td>
+			<td><button class="icon ion-md-trash"></button></td>
 		</tr>
 		{/each}
 	</table>
@@ -144,7 +151,7 @@
 	        this.set({ content: "hide" });
 	      }
 	    },
-	    add(type, time) {
+	    add(type) {
 	      const {
 	        config,
 	        content,
@@ -158,12 +165,20 @@
 	      // Registra a vistoria
 	      this.set({
 	        vistorias: vistorias.concat({
+	          id: `${folha}.${String(linha).padStart(2, "0")}`,
 	          folha: folha,
 	          linha: linha,
 	          tipo: type,
 	          hora: hora
 	        })
 	      });
+
+	      let time;
+	      if (type == "N") {
+	        time = 15;
+	      } else {
+	        time = 2;
+	      }
 
 	      // Prepara o terreno para os próximos registros
 
@@ -178,30 +193,24 @@
 	        this.set({ folha: folha + 1 });
 	        this.set({ linha: 1 });
 	      }
-	    }
+	    },
+	    changeTo(id, type) {
+				1+1;
+			}
 	  }
 	};
 </script>
 
 <style>
-	/* * {
-					border: 1px solid gray;
-				} */
-
 	button {
-	  background-color: white;
+	  background-color: transparent;
 	  border: none;
 	}
-
-	/* .menu {
-				width: 100%;
-				top: 0;
-			  background-color: white;
-			} */
 
 	table {
 	  width: 100%;
 	  border-collapse: collapse;
+	  margin-bottom: 80px;
 	}
 
 	th {
@@ -209,7 +218,6 @@
 	}
 
 	tr {
-	  /* margin-bottom: 10px; */
 	  border-bottom: 5px solid white;
 	}
 
@@ -229,7 +237,7 @@
 	}
 
 	div > .icon {
-	  font-size: 48px;
+	  font-size: 62px;
 	}
 
 	td > .icon {
@@ -266,6 +274,6 @@
 	}
 
 	legend {
-		font-size: 1.4em;
+	  font-size: 1.4em;
 	}
 </style>

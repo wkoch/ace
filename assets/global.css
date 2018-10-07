@@ -2,7 +2,7 @@ body {
 	margin: 0;
 	font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	font-size: 16px;
-	line-height: 1.5;
+	line-height: 1.2;
 	color: black;
 }
 
@@ -35,8 +35,8 @@ code {
 
 .container {
 	display: grid;
-	grid-gap: 25px;
-	grid-template-columns: repeat(auto-fit, 160px);
+	grid-gap: 5px;
+	grid-template-columns: repeat(auto-fit, 200px);
 }
 
 label {

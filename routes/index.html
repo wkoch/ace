@@ -1,15 +1,21 @@
 <svelte:head>
 	<title>Calculadora</title>
-	<link href="https://unpkg.com/ionicons@4.4.2/dist/css/ionicons.min.css" rel="stylesheet">
-	<meta name="viewport" content="width=device-width, user-scalable=no">
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"> -->
 </svelte:head>
 
-<div class="menu center">
-	<i class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></i>
-	<i class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></i>
-	<i class="icon ion-md-cog spaced" on:click="config()"></i>
+<!-- <div class="center">
+	<div class="menu">
+		<button class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></button>
+		<button class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></button>
+		<button class="icon ion-md-cog spaced" on:click="config()"></button>
+	</div>
+</div> -->
+
+<div class="dock">
+	<button class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></button>
+	<button class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></button>
+	<button class="icon ion-md-cog spaced" on:click="config()"></button>
 </div>
+
 
 <div class={config}>
 	<h1>Configurações</h1>
@@ -62,16 +68,14 @@
 	<table>
 		{#each vistorias as vistoria} {#if vistoria.linha === 1}
 		<tr>
-			<th>Folha</th>
-			<th>Linha</th>
+			<th>F/L</th>
 			<th>Tipo</th>
 			<th>Hora</th>
 			<th>Excluir</th>
 		</tr>
 		{/if}
 		<tr>
-			<td>{vistoria.folha}</td>
-			<td>{String(vistoria.linha).padStart(2, '0')}</td>
+			<td>{vistoria.folha}/{String(vistoria.linha).padStart(2, '0')}</td>
 			<td><i class="icon {vistoria.tipo}"></i></td>
 			<td>{vistoria.hora}</td>
 			<td><i class="icon ion-md-trash"></i></td>
@@ -181,18 +185,19 @@
 
 <style>
 	/* * {
-		border: 1px solid gray;
-	} */
+					border: 1px solid gray;
+				} */
 
-	.menu {
-		border-top: 1px solid lightgray;
-		display: block;
-		/* width: 100%; */
-		position: fixed;
-		bottom: 0;
-		background-color: white;
-		margin: 10 auto;
+	button {
+	  background-color: white;
+	  border: none;
 	}
+
+	/* .menu {
+				width: 100%;
+				top: 0;
+			  background-color: white;
+			} */
 
 	table {
 	  width: 100%;
@@ -200,18 +205,18 @@
 	}
 
 	th {
-		font-size: 1.4em;
+	  font-size: 1.3em;
 	}
 
 	tr {
-		/* margin-bottom: 10px; */
-		border-bottom: 5px solid white;
+	  /* margin-bottom: 10px; */
+	  border-bottom: 5px solid white;
 	}
 
 	td {
 	  text-align: center;
 	  vertical-align: middle;
-	  background-color: #F6F6F6;
+	  background-color: #f6f6f6;
 	  font-size: 1.4em;
 	}
 
@@ -228,23 +233,39 @@
 	}
 
 	td > .icon {
-		font-size: 1.2em;
+	  font-size: 1.2em;
 	}
 
 	.center {
-		text-align: center;
+	  text-align: center;
 	}
 
-	i {
-		margin: 0px 20px 0px 20px;
-		vertical-align: middle;
+	button {
+	  margin: 0px 10px 0px 10px;
+	  vertical-align: middle;
 	}
 
 	.success {
-		color: #32b643;
+	  color: #32b643;
 	}
 
 	.warning {
-		color: #e85600;
+	  color: #e85600;
+	}
+
+	.dock {
+	  position: fixed;
+	  bottom: 0px;
+	  right: 0px;
+	  left: 0px;
+	  background-color: white;
+	  text-align: center;
+	  -webkit-box-shadow: 0px -5px 70px 0px rgba(74, 74, 74, 0.75);
+	  -moz-box-shadow: 0px -5px 70px 0px rgba(74, 74, 74, 0.75);
+	  box-shadow: 0px -5px 70px 0px rgba(74, 74, 74, 0.75);
+	}
+
+	legend {
+		font-size: 1.4em;
 	}
 </style>

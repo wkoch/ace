@@ -2,21 +2,13 @@
 	<title>Calculadora</title>
 </svelte:head>
 
-<!-- <div class="center">
-	<div class="menu">
-		<button class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></button>
-		<button class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></button>
-		<button class="icon ion-md-cog spaced" on:click="config()"></button>
-	</div>
-</div> -->
-
 <div class="dock">
 	<button class="icon ion-md-checkmark-circle success" on:click="add('N')"></button>
 	<button class="icon ion-md-close-circle warning" on:click="add('F')"></button>
 	<button class="icon ion-md-cog spaced" on:click="config()"></button>
 </div>
 
-<p>Linhas: {vistorias.length} N: {n}. F: {vistorias.filter(obj => obj.tipo == "F").length}</p>
+<p>Linhas: {vistorias.length} N: {n}. F: {vistorias.filter(obj => obj.tipo == "F").length} Tempo: {tempo}</p>
 
 <div class={config}>
 	<h1>Configurações</h1>
@@ -107,48 +99,49 @@
 	}
 
 	function getDuration(start, finish) {
-	  let regExp = /^(\d{2}):(\d{2})/;
-	  let h1 = Number(start.value.match(regExp)[1]);
-	  let m1 = Number(start.value.match(regExp)[2]);
+  	let regExp = /^(\d{1,2}):(\d{2})/;
+		let h1 = Number(start.match(regExp)[1]);
+		let m1 = Number(start.match(regExp)[2]);
 
-	  let h2 = Number(finish.value.match(regExp)[1]);
-	  let m2 = Number(finish.value.match(regExp)[2]);
-
-	  return (h2 - h1 + 1) * 60 - m1 + m2;
+		let h2 = Number(finish.match(regExp)[1]);
+		let m2 = Number(finish.match(regExp)[2]);
+		
+		return ((h2-(h1+1))*60) + (60-m1) + m2;
 	}
+
+	console.log(getDuration("8:40", "11:00"));
+	
 
 	function calculaTempo(manha, tarde) {
-	  if (manha.ativado && tarde.ativado) {
-	    let minutos =
-	      getDuration(manha.inicio, manha.fim) +
-	      getDuration(tarde.inicio, tarde.fim);
-	    return minutos;
-	  } else if (manha.ativado && !tarde.ativado) {
-	    let minutos = getDuration(manha.inicio, manha.fim);
-	    return minutos;
-	  } else if (manha.ativado && !tarde.ativado) {
-	    let minutos = getDuration(tarde.inicio, tarde.fim);
-	    return minutos;
-	  } else {
-	    return 0;
-	  }
-	}
+				if (manha.ativado && tarde.ativado) {
+					let minutos = getDuration(manha.inicio, manha.fim) + getDuration(tarde.inicio, tarde.fim);
+					return minutos;
+				} else if (manha.ativado && !tarde.ativado) {
+					let minutos = getDuration(manha.inicio, manha.fim);
+					return minutos;
+				} else  if (manha.ativado && !tarde.ativado) {
+					let minutos = getDuration(tarde.inicio, tarde.fim);
+					return minutos;
+				} else {
+					return 0;
+				}
+			}
 
 	export default {
 	  helpers: {
-	    timeAfter,
-	    getDuration,
-	    calculaTempo
+			timeAfter,
+			getDuration,
+			calculaTempo
 	  },
 	  data() {
 	    return {
 	      config: "hide",
-	      content: "show",
-	      id: 0,
+				content: "show",
+				id: 0,
 	      folha: 1,
 	      linha: 1,
 	      vistorias: [],
-	      hora: "08:40",
+				hora: "08:40",
 	      manha: {
 	        ativado: true,
 	        inicio: "08:40",
@@ -160,24 +153,21 @@
 	        fim: "17:20"
 	      }
 	    };
-	  },
-	  computed: {
-	    n: ({ vistorias }) => {
-	      vistorias.filter(obj => obj.tipo == "N").length;
-	    },
-	    tempo: ({ manha, tarde }) => {
-	      calculaTempo(manha, tarde);
-	    }
-	  },
+		},
+		computed: {
+			n: ({ id, vistorias }) => { vistorias.filter(obj => obj.tipo == "N").length },
+			tempo: ({ manha, tarde }) => { calculaTempo(manha, tarde); }
+		},
 	  methods: {
 	    config() {
 	      const {
 	        config,
-	        content,
-	        id,
+					content,
+					id,
 	        folha,
 	        linha,
-	        vistorias,
+					vistorias,
+					tempo,
 	        hora,
 	        manha,
 	        tarde
@@ -188,98 +178,103 @@
 	      } else {
 	        this.set({ config: "show" });
 	        this.set({ content: "hide" });
-	      }
+				}
 	    },
 	    add(type) {
 	      const {
 	        config,
-	        content,
-	        id,
+					content,
+					id,
 	        folha,
 	        linha,
-	        vistorias,
-	        tempo,
+					vistorias,
+					tempo,
 	        hora,
 	        manha,
 	        tarde
-	      } = this.get();
-
-	      // Adiciona alguma aleatoriedade aos horários.
+				} = this.get();
+				
+				// Adiciona alguma aleatoriedade aos horários.
 	      let randomize =
-	        Math.trunc(Math.random() * 3) - Math.trunc(Math.random() * 2);
+					Math.trunc(Math.random() * 3) - Math.trunc(Math.random() * 2);
 
 	      // Registra a vistoria
 	      this.set({
 	        vistorias: vistorias.concat({
-	          id: id,
-	          folha: folha,
-	          linha: linha,
+						id: id,
+						folha: folha,
+						linha: linha,
 	          tipo: type,
 	          hora: hora
 	        })
 	      });
 
-	      let n = vistorias.filter(obj => obj.tipo == "N").length;
-	      let f = vistorias.filter(obj => obj.tipo == "F").length;
-	      let fs = 2 * f;
-	      let timeN = (tempo - fs) / n;
-	      console.log(timeN);
-	      let timeF = 2;
-	      console.log(fs);
+				let n = vistorias.filter(obj => obj.tipo == "N").length;
+				let f = vistorias.filter(obj => obj.tipo == "F").length;
+				let fs = 2*f;
+				let timeN = (tempo - fs)/n;
+				console.log(tempo);
+				let timeF = 2;
+				console.log(fs);
 
 	      // let time;
 	      if (type == "N") {
-	        this.set({ hora: timeAfter(hora, timeN + randomize) });
+					this.set({ hora: timeAfter(hora, timeN + randomize) });
 	      } else {
 	        this.set({ hora: timeAfter(hora, timeF + randomize) });
-	      }
-
+				}
+	      
 	      // Ajusta as folhas e linhas
-	      this.set({ id: id + 1 });
-	      this.set({ linha: linha + 1 });
+				this.set({ id: id + 1 });
+				this.set({ linha: linha + 1 });
 	      if (linha >= 20) {
 	        this.set({ folha: folha + 1 });
 	        this.set({ linha: 1 });
-	      }
+				}
+				
+				
 	    },
 	    changeTo(id, type) {
-	      const {
+				const {
 	        config,
 	        content,
-	        _,
-	        folha,
-	        linha,
-	        vistorias,
+					_,
+					folha,
+					linha,
+					vistorias,
+					tempo,
 	        hora,
 	        manha,
 	        tarde
-	      } = this.get();
-
-	      let list = vistorias;
-	      list[id].tipo = type;
-
-	      this.set({
+				} = this.get();
+				
+				let list = vistorias;
+				list[id].tipo = type
+				
+				this.set({
 	        vistorias: list
 	      });
-	    },
-	    remove(id) {
-	      const {
+	      
+			},
+			remove(id) {
+				const {
 	        config,
 	        content,
-	        _,
-	        folha,
-	        linha,
-	        vistorias,
+					_,
+					folha,
+					linha,
+					vistorias,
+					tempo,
 	        hora,
 	        manha,
 	        tarde
-	      } = this.get();
+				} = this.get();
 
-	      this.set({
+				this.set({
 	        vistorias: vistorias.filter(obj => obj.id != id)
 	      });
-	    }
-	  }
+			}
+		}
 	};
 </script>
 

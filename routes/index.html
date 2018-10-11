@@ -69,7 +69,7 @@
 		<tr>
 			<td>{vistorias.findIndex(obj => obj.id == vistoria.id)+1}</td>
 			<td>
-				{#if vistoria.normal == true}
+				{#if vistoria.normal}
 				<button class="icon ion-md-checkmark-circle success" on:click='change(vistoria.id)'></button>
 				{:else}
 				<button class="icon ion-md-close-circle warning" on:click='change(vistoria.id)'></button>
@@ -85,7 +85,10 @@
 
 <script>
 	function hmAsTime(time) {
-		return `${String(time.h).padStart(2, "0")}:${String(time.m).padStart(2,"0")}`;
+	  return `${String(time.h).padStart(2, "0")}:${String(time.m).padStart(
+	    2,
+	    "0"
+	  )}`;
 	}
 
 	function timeAfter(time, duration) {
@@ -99,7 +102,7 @@
 	  } else {
 	    minutes += duration;
 	  }
-	  return hmAsTime({h: hour, m: minutes});
+	  return hmAsTime({ h: hour, m: minutes });
 	}
 
 	function getHoursMinutes(time) {
@@ -136,7 +139,7 @@
 
 	function randomize(n) {
 	  // Aleatoriedade dos horários.
-		return Math.trunc(Math.random() * 3) - 1 + n;
+	  return Math.trunc(Math.random() * 3) - 1 + n;
 	}
 
 	function horaInicio(manha, tarde) {
@@ -160,8 +163,7 @@
 
 	function update(vistorias, manha, tarde) {
 	  let media = Math.trunc(
-	    totalDuration(manha, tarde) /
-	      vistorias.filter(obj => obj.normal == true).length
+	    totalDuration(manha, tarde) / vistorias.filter(obj => obj.normal).length
 	  );
 
 	  let lista = vistorias;
@@ -183,15 +185,15 @@
 	}
 
 	export default {
-	  helpers: {
-	    timeAfter,
-	    getDuration,
-	    totalDuration,
-	    randomize,
-	    horaInicio,
-	    horaSaida,
-	    update
-	  },
+	  // helpers: {
+	  //   timeAfter,
+	  //   getDuration,
+	  //   totalDuration,
+	  //   randomize,
+	  //   horaInicio,
+	  //   horaSaida,
+	  //   update
+	  // },
 	  data() {
 	    return {
 	      config: false,
@@ -211,23 +213,20 @@
 	  computed: {
 	    showConfig: ({ config }) => (config ? "show" : "hide"),
 	    showContent: ({ config }) => (!config ? "show" : "hide"),
-	    normais: ({ vistorias }) =>
-	      vistorias.filter(obj => obj.normal == true).length,
+	    normais: ({ vistorias }) => vistorias.filter(obj => obj.normal).length,
 	    fechadas: ({ vistorias }) =>
 	      vistorias.filter(obj => obj.normal == false).length,
 	    mediaNormal: ({ manha, tarde, vistorias }) =>
 	      Math.trunc(
-	        totalDuration(manha, tarde) /
-	          vistorias.filter(obj => obj.normal == true).length
+	        totalDuration(manha, tarde) / vistorias.filter(obj => obj.normal).length
 	      ),
-	    updater: ({ vistorias, manha, tarde, config }) =>
-	      update(vistorias, manha, tarde)
+	    update: ({ vistorias, manha, tarde }) => update(vistorias, manha, tarde)
 	  },
 	  methods: {
 	    config() {
 	      const { config, ..._ } = this.get();
 
-	      if (config == true) {
+	      if (config) {
 	        this.set({ config: false });
 	      } else {
 	        this.set({ config: true });
@@ -315,7 +314,8 @@
 	  display: block;
 	}
 
-	div > .icon, button > .icon {
+	div > .icon,
+	button > .icon {
 	  font-size: 62px;
 	}
 
@@ -370,7 +370,7 @@
 	  display: block;
 	  border-radius: 50%;
 	  background: rgb(67, 151, 232);
-	  border: 1px solid #DDD;
+	  border: 1px solid #ddd;
 	  color: #fff;
 	  position: absolute;
 	  bottom: 10px;

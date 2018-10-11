@@ -3,20 +3,15 @@
 </svelte:head>
 
 <div class="dock">
-	<!-- <button class="icon ion-md-checkmark-circle success" on:click="add(true)"></button> -->
-	<!-- <button class="icon ion-md-close-circle warning" on:click="add(false)"></button> -->
 	<button class="badge" on:click="add(true)" data-count={normais}><i class="icon ion-md-checkmark-circle success"></i></button>
 	<button class="badge" on:click="add(false)" data-count={fechadas}><i class="icon ion-md-close-circle warning"></i></button>
-	<!-- <button class="icon ion-md-refresh-circle spaced"></button> -->
 	<button class="icon ion-md-cog spaced" on:click="config()"></button>
 </div>
 
-<!-- <p>Abertas: {normais}. Fechadas: {fechadas} Média: {mediaNormal}</p> -->
-<!-- <button class="badge" on:click="add(true)" data-count={normais}><i class="icon ion-md-checkmark-circle success"></i></button> -->
-<!-- <button class="badge" on:click="add(false)" data-count={fechadas}><i class="icon ion-md-close-circle warning"></i></button> -->
-
 <div class={showConfig}>
 	<h1>Configurações</h1>
+
+	{#if normais != 0}<p>Tempo médio por Vistoria N: {mediaNormal}</p>{/if}
 
 	<div class="container">
 		<div>
@@ -75,13 +70,13 @@
 			<td>{vistorias.findIndex(obj => obj.id == vistoria.id)+1}</td>
 			<td>
 				{#if vistoria.normal == true}
-				<button class="icon ion-md-checkmark-circle success" on:click='change(`${vistoria.id}`)'></button>
+				<button class="icon ion-md-checkmark-circle success" on:click='change(vistoria.id)'></button>
 				{:else}
-				<button class="icon ion-md-close-circle warning" on:click='change(`${vistoria.id}`)'></button>
+				<button class="icon ion-md-close-circle warning" on:click='change(vistoria.id)'></button>
 				{/if}
 			</td>
 			<td>{vistoria.hora}</td>
-			<td><button class="icon ion-md-trash" on:click='remove(`${vistoria.id}`)'></button></td>
+			<td><button class="icon ion-md-trash" on:click='remove(vistoria.id)'></button></td>
 		</tr>
 		{/each}
 	</table>
@@ -89,6 +84,10 @@
 
 
 <script>
+	function hmAsTime(time) {
+		return `${String(time.h).padStart(2, "0")}:${String(time.m).padStart(2,"0")}`;
+	}
+
 	function timeAfter(time, duration) {
 	  let [hour, minutes] = time.split(":");
 	  hour = Number(hour);
@@ -100,7 +99,7 @@
 	  } else {
 	    minutes += duration;
 	  }
-	  return `${String(hour).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+	  return hmAsTime({h: hour, m: minutes});
 	}
 
 	function getHoursMinutes(time) {
@@ -118,7 +117,7 @@
 	  return (finish.h - (start.h + 1)) * 60 + (60 - start.m) + finish.m;
 	}
 
-	function calculaTempo(manha, tarde) {
+	function totalDuration(manha, tarde) {
 	  if (manha.ativado && tarde.ativado) {
 	    let minutos =
 	      getDuration(manha.inicio, manha.fim) +
@@ -137,7 +136,7 @@
 
 	function randomize(n) {
 	  // Aleatoriedade dos horários.
-	  return Math.trunc(Math.random() * 3) - 1 + n;
+		return Math.trunc(Math.random() * 3) - 1 + n;
 	}
 
 	function horaInicio(manha, tarde) {
@@ -152,22 +151,16 @@
 	    if (hora.h >= manhaFim.h && hora.m > manhaFim.m && hora.h < tardeInicio.h) {
 	      return tarde.inicio;
 	    } else {
-	      return `${String(hora.h).padStart(2, "0")}:${String(hora.m).padStart(
-	        2,
-	        "0"
-	      )}`;
+	      return hmAsTime(hora);
 	    }
 	  } else {
-	    return `${String(hora.h).padStart(2, "0")}:${String(hora.m).padStart(
-	      2,
-	      "0"
-	    )}`;
+	    return hmAsTime(hora);
 	  }
 	}
 
 	function update(vistorias, manha, tarde) {
 	  let media = Math.trunc(
-	    calculaTempo(manha, tarde) /
+	    totalDuration(manha, tarde) /
 	      vistorias.filter(obj => obj.normal == true).length
 	  );
 
@@ -193,7 +186,7 @@
 	  helpers: {
 	    timeAfter,
 	    getDuration,
-	    calculaTempo,
+	    totalDuration,
 	    randomize,
 	    horaInicio,
 	    horaSaida,
@@ -224,7 +217,7 @@
 	      vistorias.filter(obj => obj.normal == false).length,
 	    mediaNormal: ({ manha, tarde, vistorias }) =>
 	      Math.trunc(
-	        calculaTempo(manha, tarde) /
+	        totalDuration(manha, tarde) /
 	          vistorias.filter(obj => obj.normal == true).length
 	      ),
 	    updater: ({ vistorias, manha, tarde, config }) =>
@@ -241,7 +234,7 @@
 	      }
 	    },
 
-	    add(normal) {
+	    add(type) {
 	      const { config, vistorias, manha, tarde } = this.get();
 
 	      let horaEntrada = horaInicio(manha, tarde);
@@ -258,7 +251,7 @@
 	      this.set({
 	        vistorias: vistorias.concat({
 	          id: vistorias.length,
-	          normal: normal,
+	          normal: type,
 	          hora: horaEntrada
 	        })
 	      });
@@ -266,12 +259,6 @@
 
 	    change(id) {
 	      const { config, vistorias, ..._ } = this.get();
-
-	      // let vistoria = vistorias.findIndex(obj => obj.id == id);
-
-	      // let list = vistorias;
-	      // list[vistoria].normal = !list[vistoria].normal;
-
 	      this.set({
 	        vistorias: vistorias.map(vistoria => {
 	          if (vistoria.id == id) {
@@ -371,10 +358,6 @@
 
 	/* Button Badge */
 	button.badge {
-	  /* width: 60px; */
-	  /* height: 60px; */
-	  /* margin-top: 5px; */
-	  /* margin-left: 5px; */
 	  position: relative;
 	}
 
@@ -388,7 +371,6 @@
 	  border-radius: 50%;
 	  background: rgb(67, 151, 232);
 	  border: 1px solid #DDD;
-	  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); */
 	  color: #fff;
 	  position: absolute;
 	  bottom: 10px;

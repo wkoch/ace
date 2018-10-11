@@ -2,23 +2,16 @@
 	<title>Calculadora</title>
 </svelte:head>
 
-<!-- <div class="center">
-	<div class="menu">
-		<button class="icon ion-md-checkmark-circle success" on:click="add('ion-md-checkmark-circle success', 15)"></button>
-		<button class="icon ion-md-close-circle warning" on:click="add('ion-md-close-circle warning', 2)"></button>
-		<button class="icon ion-md-cog spaced" on:click="config()"></button>
-	</div>
-</div> -->
-
 <div class="dock">
-	<button class="icon ion-md-checkmark-circle success" on:click="add('N')"></button>
-	<button class="icon ion-md-close-circle warning" on:click="add('F')"></button>
+	<button class="icon ion-md-checkmark-circle success" on:click="add(true)"></button>
+	<button class="icon ion-md-close-circle warning" on:click="add(false)"></button>
+	<!-- <button class="icon ion-md-refresh-circle spaced"></button> -->
 	<button class="icon ion-md-cog spaced" on:click="config()"></button>
 </div>
 
-<p>Linhas: {vistorias.length} N: {n}. F: {vistorias.filter(obj => obj.tipo == "F").length}</p>
+<p>Abertas: {normais}. Fechadas: {fechados} Média: {mediaNormal}</p>
 
-<div class={config}>
+<div class={showConfig}>
 	<h1>Configurações</h1>
 
 	<div class="container">
@@ -65,7 +58,7 @@
 </div>
 
 
-<div class={content}>
+<div class={showContent}>
 	<table>
 		<tr>
 			<th>Linha</th>
@@ -77,10 +70,10 @@
 		<tr>
 			<td>{vistorias.findIndex(obj => obj.id == vistoria.id)+1}</td>
 			<td>
-				{#if vistoria.tipo == "N"}
-				<button class="icon ion-md-checkmark-circle success" on:click='changeTo(`${vistoria.id}`, "F")'></button>
+				{#if vistoria.normal == true}
+				<button class="icon ion-md-checkmark-circle success" on:click='change(`${vistoria.id}`)'></button>
 				{:else}
-				<button class="icon ion-md-close-circle warning" on:click='changeTo(`${vistoria.id}`, "N")'></button>
+				<button class="icon ion-md-close-circle warning" on:click='change(`${vistoria.id}`)'></button>
 				{/if}
 			</td>
 			<td>{vistoria.hora}</td>
@@ -106,15 +99,19 @@
 	  return `${String(hour).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 	}
 
+	function getHoursMinutes(time) {
+	  let regExp = /^(\d{1,2}):(\d{2})/;
+	  let hours = Number(time.match(regExp)[1]);
+	  let minutes = Number(time.match(regExp)[2]);
+
+	  return { h: hours, m: minutes };
+	}
+
 	function getDuration(start, finish) {
-	  let regExp = /^(\d{2}):(\d{2})/;
-	  let h1 = Number(start.value.match(regExp)[1]);
-	  let m1 = Number(start.value.match(regExp)[2]);
+	  start = getHoursMinutes(start);
+	  finish = getHoursMinutes(finish);
 
-	  let h2 = Number(finish.value.match(regExp)[1]);
-	  let m2 = Number(finish.value.match(regExp)[2]);
-
-	  return (h2 - h1 + 1) * 60 - m1 + m2;
+	  return (finish.h - (start.h + 1)) * 60 + (60 - start.m) + finish.m;
 	}
 
 	function calculaTempo(manha, tarde) {
@@ -126,7 +123,7 @@
 	  } else if (manha.ativado && !tarde.ativado) {
 	    let minutos = getDuration(manha.inicio, manha.fim);
 	    return minutos;
-	  } else if (manha.ativado && !tarde.ativado) {
+	  } else if (!manha.ativado && tarde.ativado) {
 	    let minutos = getDuration(tarde.inicio, tarde.fim);
 	    return minutos;
 	  } else {
@@ -134,21 +131,74 @@
 	  }
 	}
 
+	function randomize(n) {
+	  // Aleatoriedade dos horários.
+	  return Math.trunc(Math.random() * 3)-1 + n;
+	}
+
+	function horaInicio(manha, tarde) {
+	  return manha.ativado ? manha.inicio : tarde.inicio;
+	}
+
+	function horaSaida(manha, tarde, hora) {
+	  hora = getHoursMinutes(hora);
+	  if (manha.ativado && tarde.ativado) {
+	    let manhaFim = getHoursMinutes(manha.fim);
+	    let tardeInicio = getHoursMinutes(tarde.inicio);
+	    if (hora.h >= manhaFim.h && hora.m > manhaFim.m && hora.h < tardeInicio.h) {
+	      return tarde.inicio;
+	    } else {
+	      return `${String(hora.h).padStart(2, "0")}:${String(hora.m).padStart(
+	        2,
+	        "0"
+	      )}`;
+	    }
+	  } else {
+	    return `${String(hora.h).padStart(2, "0")}:${String(hora.m).padStart(
+	      2,
+	      "0"
+	    )}`;
+	  }
+	}
+
+	function update(vistorias, manha, tarde) {
+	  let media = Math.trunc(
+	    calculaTempo(manha, tarde) /
+	      vistorias.filter(obj => obj.normal == true).length
+	  );
+
+	  let lista = vistorias;
+
+	  if (vistorias.length > 0 && media < 60) {
+	    let atual = horaInicio(manha, tarde);
+
+	    lista = vistorias.map(vistoria => {
+	      vistoria.hora = atual;
+	      if (vistoria.normal) {
+	        atual = horaSaida(manha, tarde, timeAfter(atual, randomize(media)));
+	      } else {
+	        atual = horaSaida(manha, tarde, timeAfter(atual, randomize(2)));
+	      }
+	      return vistoria;
+	    });
+	  }
+	  return lista;
+	}
+
 	export default {
 	  helpers: {
 	    timeAfter,
 	    getDuration,
-	    calculaTempo
+	    calculaTempo,
+	    randomize,
+	    horaInicio,
+	    horaSaida,
+	    update
 	  },
 	  data() {
 	    return {
-	      config: "hide",
-	      content: "show",
-	      id: 0,
-	      folha: 1,
-	      linha: 1,
+	      config: false,
 	      vistorias: [],
-	      hora: "08:40",
 	      manha: {
 	        ativado: true,
 	        inicio: "08:40",
@@ -162,118 +212,74 @@
 	    };
 	  },
 	  computed: {
-	    n: ({ vistorias }) => {
-	      vistorias.filter(obj => obj.tipo == "N").length;
-	    },
-	    tempo: ({ manha, tarde }) => {
-	      calculaTempo(manha, tarde);
-	    }
+	    showConfig: ({ config }) => (config ? "show" : "hide"),
+	    showContent: ({ config }) => (!config ? "show" : "hide"),
+	    normais: ({ vistorias }) =>
+	      vistorias.filter(obj => obj.normal == true).length,
+	    fechados: ({ vistorias }) =>
+	      vistorias.filter(obj => obj.normal == false).length,
+	    mediaNormal: ({ manha, tarde, vistorias }) =>
+	      Math.trunc(
+	        calculaTempo(manha, tarde) /
+	          vistorias.filter(obj => obj.normal == true).length
+	      ),
+	    updater: ({ vistorias, manha, tarde, config }) =>
+	      update(vistorias, manha, tarde)
 	  },
 	  methods: {
 	    config() {
-	      const {
-	        config,
-	        content,
-	        id,
-	        folha,
-	        linha,
-	        vistorias,
-	        hora,
-	        manha,
-	        tarde
-	      } = this.get();
-	      if (config == "show") {
-	        this.set({ config: "hide" });
-	        this.set({ content: "show" });
+	      const { config, ..._ } = this.get();
+
+	      if (config == true) {
+	        this.set({ config: false });
 	      } else {
-	        this.set({ config: "show" });
-	        this.set({ content: "hide" });
+	        this.set({ config: true });
 	      }
 	    },
-	    add(type) {
-	      const {
-	        config,
-	        content,
-	        id,
-	        folha,
-	        linha,
-	        vistorias,
-	        tempo,
-	        hora,
-	        manha,
-	        tarde
-	      } = this.get();
 
-	      // Adiciona alguma aleatoriedade aos horários.
-	      let randomize =
-	        Math.trunc(Math.random() * 3) - Math.trunc(Math.random() * 2);
+	    add(normal) {
+	      const { config, vistorias, manha, tarde } = this.get();
+
+	      let horaEntrada = horaInicio(manha, tarde);
+	      if (vistorias.length > 0) {
+	        let vistoriaAnterior = vistorias[vistorias.length - 1];
+	        if (vistoriaAnterior.normal) {
+	          horaEntrada = timeAfter(vistoriaAnterior.hora, 15);
+	        } else {
+	          horaEntrada = timeAfter(vistoriaAnterior.hora, 2);
+	        }
+	      }
 
 	      // Registra a vistoria
 	      this.set({
 	        vistorias: vistorias.concat({
-	          id: id,
-	          folha: folha,
-	          linha: linha,
-	          tipo: type,
-	          hora: hora
+	          id: vistorias.length,
+	          normal: normal,
+	          hora: horaEntrada
 	        })
 	      });
-
-	      let n = vistorias.filter(obj => obj.tipo == "N").length;
-	      let f = vistorias.filter(obj => obj.tipo == "F").length;
-	      let fs = 2 * f;
-	      let timeN = (tempo - fs) / n;
-	      console.log(timeN);
-	      let timeF = 2;
-	      console.log(fs);
-
-	      // let time;
-	      if (type == "N") {
-	        this.set({ hora: timeAfter(hora, timeN + randomize) });
-	      } else {
-	        this.set({ hora: timeAfter(hora, timeF + randomize) });
-	      }
-
-	      // Ajusta as folhas e linhas
-	      this.set({ id: id + 1 });
-	      this.set({ linha: linha + 1 });
-	      if (linha >= 20) {
-	        this.set({ folha: folha + 1 });
-	        this.set({ linha: 1 });
-	      }
 	    },
-	    changeTo(id, type) {
-	      const {
-	        config,
-	        content,
-	        _,
-	        folha,
-	        linha,
-	        vistorias,
-	        hora,
-	        manha,
-	        tarde
-	      } = this.get();
 
-	      let list = vistorias;
-	      list[id].tipo = type;
+	    change(id) {
+	      const { config, vistorias, ..._ } = this.get();
+
+	      // let vistoria = vistorias.findIndex(obj => obj.id == id);
+
+	      // let list = vistorias;
+	      // list[vistoria].normal = !list[vistoria].normal;
 
 	      this.set({
-	        vistorias: list
+	        vistorias: vistorias.map(vistoria => {
+	          if (vistoria.id == id) {
+	            vistoria.normal = !vistoria.normal;
+						}
+						return vistoria;
+	        })
 	      });
 	    },
+
 	    remove(id) {
-	      const {
-	        config,
-	        content,
-	        _,
-	        folha,
-	        linha,
-	        vistorias,
-	        hora,
-	        manha,
-	        tarde
-	      } = this.get();
+	      const { config, vistorias, ..._ } = this.get();
 
 	      this.set({
 	        vistorias: vistorias.filter(obj => obj.id != id)

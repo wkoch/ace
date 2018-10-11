@@ -3,13 +3,17 @@
 </svelte:head>
 
 <div class="dock">
-	<button class="icon ion-md-checkmark-circle success" on:click="add(true)"></button>
-	<button class="icon ion-md-close-circle warning" on:click="add(false)"></button>
+	<!-- <button class="icon ion-md-checkmark-circle success" on:click="add(true)"></button> -->
+	<!-- <button class="icon ion-md-close-circle warning" on:click="add(false)"></button> -->
+	<button class="badge" on:click="add(true)" data-count={normais}><i class="icon ion-md-checkmark-circle success"></i></button>
+	<button class="badge" on:click="add(false)" data-count={fechadas}><i class="icon ion-md-close-circle warning"></i></button>
 	<!-- <button class="icon ion-md-refresh-circle spaced"></button> -->
 	<button class="icon ion-md-cog spaced" on:click="config()"></button>
 </div>
 
-<p>Abertas: {normais}. Fechadas: {fechados} Média: {mediaNormal}</p>
+<!-- <p>Abertas: {normais}. Fechadas: {fechadas} Média: {mediaNormal}</p> -->
+<!-- <button class="badge" on:click="add(true)" data-count={normais}><i class="icon ion-md-checkmark-circle success"></i></button> -->
+<!-- <button class="badge" on:click="add(false)" data-count={fechadas}><i class="icon ion-md-close-circle warning"></i></button> -->
 
 <div class={showConfig}>
 	<h1>Configurações</h1>
@@ -133,7 +137,7 @@
 
 	function randomize(n) {
 	  // Aleatoriedade dos horários.
-	  return Math.trunc(Math.random() * 3)-1 + n;
+	  return Math.trunc(Math.random() * 3) - 1 + n;
 	}
 
 	function horaInicio(manha, tarde) {
@@ -216,7 +220,7 @@
 	    showContent: ({ config }) => (!config ? "show" : "hide"),
 	    normais: ({ vistorias }) =>
 	      vistorias.filter(obj => obj.normal == true).length,
-	    fechados: ({ vistorias }) =>
+	    fechadas: ({ vistorias }) =>
 	      vistorias.filter(obj => obj.normal == false).length,
 	    mediaNormal: ({ manha, tarde, vistorias }) =>
 	      Math.trunc(
@@ -272,8 +276,8 @@
 	        vistorias: vistorias.map(vistoria => {
 	          if (vistoria.id == id) {
 	            vistoria.normal = !vistoria.normal;
-						}
-						return vistoria;
+	          }
+	          return vistoria;
 	        })
 	      });
 	    },
@@ -324,7 +328,7 @@
 	  display: block;
 	}
 
-	div > .icon {
+	div > .icon, button > .icon {
 	  font-size: 62px;
 	}
 
@@ -363,5 +367,31 @@
 
 	legend {
 	  font-size: 1.4em;
+	}
+
+	/* Button Badge */
+	button.badge {
+	  /* width: 60px; */
+	  /* height: 60px; */
+	  /* margin-top: 5px; */
+	  /* margin-left: 5px; */
+	  position: relative;
+	}
+
+	button.badge:before {
+	  content: attr(data-count);
+	  width: 20px;
+	  height: 20px;
+	  line-height: 20px;
+	  text-align: center;
+	  display: block;
+	  border-radius: 50%;
+	  background: rgb(67, 151, 232);
+	  border: 1px solid #DDD;
+	  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); */
+	  color: #fff;
+	  position: absolute;
+	  bottom: 10px;
+	  right: 4px;
 	}
 </style>

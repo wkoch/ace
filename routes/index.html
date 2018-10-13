@@ -5,7 +5,7 @@
 <div class="dock">
 	<button class="badge" on:click="add(true)" data-count={normais}><i class="icon ion-md-checkmark-circle success"></i></button>
 	<button class="badge" on:click="add(false)" data-count={fechadas}><i class="icon ion-md-close-circle warning"></i></button>
-	<button class="icon ion-md-cog spaced" on:click="config()"></button>
+	<button on:click="config()"><i class="icon ion-md-cog"></i></button>
 </div>
 
 <div class={showConfig}>
@@ -363,7 +363,6 @@
 	/* Button Badge */
 	button.badge {
 	  position: relative;
-		width: 70px;
 	}
 
 	button.badge:before {

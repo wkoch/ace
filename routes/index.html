@@ -11,7 +11,7 @@
 <div class={showConfig}>
 	<h1>Configurações</h1>
 
-	{#if normais != 0}<p>Tempo médio por Vistoria N: {mediaNormal}</p>{/if}
+	{#if normais != 0}<p>Tempo médio por Vistoria N: {media}</p>{/if}
 
 	<div class="container">
 		<div>
@@ -54,6 +54,9 @@
 			</fieldset>
 		</div>
 	</div>
+	{#if !(manha.ativado || tarde.ativado)}
+	<p class=warning-msg>Erro. Não há período ativo. Ative ao menos um dos períodos.</p>
+	{/if}
 </div>
 
 
@@ -84,116 +87,109 @@
 
 
 <script>
-	function hmAsTime(time) {
-	  return `${String(time.h).padStart(2, "0")}:${String(time.m).padStart(
-	    2,
-	    "0"
-	  )}`;
+	function media(vistorias, manha, tarde) {
+	  let normais = vistorias.filter(obj => obj.normal).length;
+	  let fechadas = vistorias.filter(obj => !obj.normal).length;
+	  return Math.trunc(
+	    (totalDuration(manha, tarde) - fechadas * 2) / (normais - 1)
+	  );
 	}
 
-	function timeAfter(time, duration) {
-	  let [hour, minutes] = time.split(":");
-	  hour = Number(hour);
-	  minutes = Number(minutes);
-	  duration = Number(duration);
-	  if (minutes + duration >= 60) {
-	    hour += 1;
-	    minutes = minutes + duration - 60;
+	function timeObjAsStr(time) {
+	  time.h = String(time.h).padStart(2, "0");
+	  time.m = String(time.m).padStart(2, "0");
+	  return `${time.h}:${time.m}`;
+	}
+
+	function timeStrAsObj(time) {
+	  let [hours, minutes] = time.split(":");
+	  return { h: Number(hours), m: Number(minutes) };
+	}
+
+	function timeDiff(time, duration) {
+	  time = timeStrAsObj(time);
+	  if (time.m + duration >= 60) {
+	    let hours = Math.trunc((time.m + duration) / 60);
+	    time.h += hours;
+	    time.m = time.m + duration - hours * 60;
 	  } else {
-	    minutes += duration;
+	    time.m += duration;
 	  }
-	  return hmAsTime({ h: hour, m: minutes });
-	}
-
-	function getHoursMinutes(time) {
-	  let regExp = /^(\d{1,2}):(\d{2})/;
-	  let hours = Number(time.match(regExp)[1]);
-	  let minutes = Number(time.match(regExp)[2]);
-
-	  return { h: hours, m: minutes };
+	  return timeObjAsStr(time);
 	}
 
 	function getDuration(start, finish) {
-	  start = getHoursMinutes(start);
-	  finish = getHoursMinutes(finish);
-
+	  start = timeStrAsObj(start);
+	  finish = timeStrAsObj(finish);
+	  // returns the duration in minutes between start and finish.
 	  return (finish.h - (start.h + 1)) * 60 + (60 - start.m) + finish.m;
 	}
 
 	function totalDuration(manha, tarde) {
+	  let durationManha = getDuration(manha.inicio, manha.fim);
+	  let durationTarde = getDuration(tarde.inicio, tarde.fim);
+	  let minutos = 0;
 	  if (manha.ativado && tarde.ativado) {
-	    let minutos =
-	      getDuration(manha.inicio, manha.fim) +
-	      getDuration(tarde.inicio, tarde.fim);
-	    return minutos;
+	    minutos = durationManha + durationTarde;
 	  } else if (manha.ativado && !tarde.ativado) {
-	    let minutos = getDuration(manha.inicio, manha.fim);
-	    return minutos;
+	    minutos = durationManha;
 	  } else if (!manha.ativado && tarde.ativado) {
-	    let minutos = getDuration(tarde.inicio, tarde.fim);
-	    return minutos;
-	  } else {
-	    return 0;
+	    minutos = durationTarde;
 	  }
+	  return minutos;
 	}
 
-	function randomize(n) {
-	  // Aleatoriedade dos horários.
-	  return Math.trunc(Math.random() * 3) - 1 + n;
+	// Aleatoriedade dos horários (entre n-1 e n+1).
+	function randomize(time) {
+	  let diff = Math.trunc(Math.random() * 3) - 1;
+	  return timeDiff(time, diff);
 	}
 
 	function horaInicio(manha, tarde) {
-	  return manha.ativado ? manha.inicio : tarde.inicio;
+	  if (manha.ativado) {
+	    return manha.inicio;
+	  } else if (tarde.ativado) {
+	    return tarde.inicio;
+	  } else {
+	    return "00:00";
+	  }
 	}
 
 	function horaSaida(manha, tarde, hora) {
-	  hora = getHoursMinutes(hora);
+	  hora = timeStrAsObj(hora);
 	  if (manha.ativado && tarde.ativado) {
-	    let manhaFim = getHoursMinutes(manha.fim);
-	    let tardeInicio = getHoursMinutes(tarde.inicio);
+	    let manhaFim = timeStrAsObj(manha.fim);
+	    let tardeInicio = timeStrAsObj(tarde.inicio);
 	    if (hora.h >= manhaFim.h && hora.m > manhaFim.m && hora.h < tardeInicio.h) {
 	      return tarde.inicio;
 	    } else {
-	      return hmAsTime(hora);
+	      return timeObjAsStr(hora);
 	    }
 	  } else {
-	    return hmAsTime(hora);
+	    return timeObjAsStr(hora);
 	  }
 	}
 
 	function update(vistorias, manha, tarde) {
-	  let media = Math.trunc(
-	    totalDuration(manha, tarde) / vistorias.filter(obj => obj.normal).length
-	  );
-
-	  let lista = vistorias;
-
-	  if (vistorias.length > 0 && media < 60) {
-	    let atual = horaInicio(manha, tarde);
-
-	    lista = vistorias.map(vistoria => {
+	  let mediaNormal = media(vistorias, manha, tarde);
+	  if (vistorias.length > 0) {
+	    let atual = randomize(horaInicio(manha, tarde));
+	    vistorias = vistorias.map(vistoria => {
 	      vistoria.hora = atual;
 	      if (vistoria.normal) {
-	        atual = horaSaida(manha, tarde, timeAfter(atual, randomize(media)));
+	        atual = randomize(
+	          horaSaida(manha, tarde, timeDiff(atual, mediaNormal))
+	        );
 	      } else {
-	        atual = horaSaida(manha, tarde, timeAfter(atual, randomize(2)));
+	        atual = randomize(horaSaida(manha, tarde, timeDiff(atual, 2)));
 	      }
 	      return vistoria;
 	    });
 	  }
-	  return lista;
+	  return vistorias;
 	}
 
 	export default {
-	  // helpers: {
-	  //   timeAfter,
-	  //   getDuration,
-	  //   totalDuration,
-	  //   randomize,
-	  //   horaInicio,
-	  //   horaSaida,
-	  //   update
-	  // },
 	  data() {
 	    return {
 	      config: false,
@@ -210,27 +206,26 @@
 	      }
 	    };
 	  },
+	  helpers: {},
 	  computed: {
 	    showConfig: ({ config }) => (config ? "show" : "hide"),
 	    showContent: ({ config }) => (!config ? "show" : "hide"),
 	    normais: ({ vistorias }) => vistorias.filter(obj => obj.normal).length,
 	    fechadas: ({ vistorias }) =>
 	      vistorias.filter(obj => obj.normal == false).length,
-	    mediaNormal: ({ manha, tarde, vistorias }) =>
-	      Math.trunc(
-	        totalDuration(manha, tarde) / vistorias.filter(obj => obj.normal).length
-	      ),
+	    media: ({ vistorias, manha, tarde }) => media(vistorias, manha, tarde),
 	    update: ({ vistorias, manha, tarde }) => update(vistorias, manha, tarde)
 	  },
 	  methods: {
 	    config() {
-	      const { config, ..._ } = this.get();
+	      const { config, vistorias, manha, tarde } = this.get();
 
 	      if (config) {
 	        this.set({ config: false });
 	      } else {
 	        this.set({ config: true });
 	      }
+	      this.set({ vistorias: vistorias });
 	    },
 
 	    add(type) {
@@ -240,9 +235,9 @@
 	      if (vistorias.length > 0) {
 	        let vistoriaAnterior = vistorias[vistorias.length - 1];
 	        if (vistoriaAnterior.normal) {
-	          horaEntrada = timeAfter(vistoriaAnterior.hora, 15);
+	          horaEntrada = timeDiff(vistoriaAnterior.hora, 15);
 	        } else {
-	          horaEntrada = timeAfter(vistoriaAnterior.hora, 2);
+	          horaEntrada = timeDiff(vistoriaAnterior.hora, 2);
 	        }
 	      }
 
@@ -338,6 +333,14 @@
 
 	.warning {
 	  color: #e85600;
+	}
+
+	.warning-msg {
+	  padding: 20px;
+	  background-color: #e85600;
+	  color: white;
+	  font-weight: 700;
+	  border-radius: 5px;
 	}
 
 	.dock {

@@ -112,14 +112,14 @@
 	    let hours = Math.trunc((time.m + duration) / 60);
 	    time.h += hours;
 			time.m = time.m + duration - hours * 60;
-			console.log(`Avançou: ${time.h}:${time.m}`);
+			// console.log(`Avançou: ${time.h}:${time.m}`);
 		} else if (time.m + duration < 0) {
 			time.h -= 1;
 			time.m = 60 + duration;
-			console.log(`Retornou: ${time.h}:${time.m}`);
+			// console.log(`Retornou: ${time.h}:${time.m}`);
 	  } else {
 			time.m += duration;
-			console.log(`Normal: ${time.h}:${time.m}`);
+			// console.log(`Normal: ${time.h}:${time.m}`);
 	  }
 	  return timeObjAsStr(time);
 	}

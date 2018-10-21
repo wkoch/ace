@@ -1,7 +1,7 @@
 {
-  "name": "ACE",
+  "name": "ace",
   "description": "Calculadora de Horas",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build",

@@ -3,13 +3,15 @@
 </svelte:head>
 
 <div class="dock">
-	<button class="badge" on:click="add(true)" data-count={normais}><i class="icon ion-md-checkmark-circle success"></i></button>
-	<button class="badge" on:click="add(false)" data-count={fechadas}><i class="icon ion-md-close-circle warning"></i></button>
-	<button on:click="config()"><i class="icon ion-md-cog"></i></button>
+	<button class="badge" on:click="add(true)" data-count={normais}><span class="icon ion-md-checkmark-circle success"></span></button>
+	<button class="badge" on:click="add(false)" data-count={fechadas}><span class="icon ion-md-close-circle warning"></span></button>
+	<button on:click="config()"><span class="icon ion-md-cog"></span></button>
 </div>
 
 <div class={showConfig}>
 	<h1>Configurações</h1>
+
+	<p><strong>Calculadora de Horas ACE <i>v3.2.2.</i></strong></p>
 
 	{#if normais != 0}<p>Tempo médio por Vistoria N: {media}</p>{/if}
 

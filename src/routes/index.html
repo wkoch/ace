@@ -71,7 +71,7 @@
 			<th>Excluir</th>
 		</tr>
 		{#each vistorias as vistoria}
-		<tr>
+		<tr transition:fade>
 			<td>{vistorias.findIndex(obj => obj.id == vistoria.id)+1}</td>
 			<td>
 				{#if vistoria.normal}
@@ -89,6 +89,8 @@
 
 
 <script>
+	import { fade } from 'svelte-transitions';
+
 	function media(vistorias, manha, tarde) {
 	  let normais = vistorias.filter(obj => obj.normal).length;
 	  let fechadas = vistorias.filter(obj => !obj.normal).length;
@@ -198,6 +200,7 @@
 	}
 
 	export default {
+		transitions: { fade },
 	  data() {
 	    return {
 	      config: false,

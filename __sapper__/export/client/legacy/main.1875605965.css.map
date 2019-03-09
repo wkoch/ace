@@ -1,9 +1,9 @@
 {
   "version": 3,
-  "file": "client.c8baf09c.css",
+  "file": "main.1875605965.css",
   "sources": [
-    "../../../../../../src/routes/_layout.html",
-    "../../../../../../src/routes/_error.html"
+    "../../../../../../../src/routes/_layout.html",
+    "../../../../../../../src/routes/_error.html"
   ],
   "sourcesContent": [
     "<main>\r\n\t<svelte:component this={child.component} {...child.props}/>\r\n</main>\r\n\r\n<style>\r\n\tmain {\r\n\t\tposition: relative;\r\n\t\tmax-width: 56em;\r\n\t\tbackground-color: white;\r\n\t\tpadding: 2em;\r\n\t\tmargin: 0 auto;\r\n\t\tbox-sizing: border-box;\r\n\t}\r\n</style>\r\n\r\n<script>\r\n\r\n</script>",

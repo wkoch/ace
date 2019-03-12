@@ -3,35 +3,37 @@
 </svelte:head>
 
 <div class="dock">
-	<button class="badge" on:click="add(true)" data-count={normais}><span class="icon ion-md-checkmark-circle success"></span></button>
-	<button class="badge" on:click="add(false)" data-count={fechadas}><span class="icon ion-md-close-circle warning"></span></button>
-	<button on:click="config()"><span class="icon ion-md-cog"></span></button>
+	<MenuButton type="badge" count={normais} action="{() => vistorias = vistorias.concat({tipo: "n", hora: "00:00"})}" content="icon ion-md-checkmark success" />
+	<MenuButton type="badge" count={fechadas} action="{() => fechadas += 1}" content="icon ion-md-close warning" />
+	<MenuButton type="badge" count={recuperadas} action="{() => recuperadas += 1}" content="icon ion-md-repeat warning" />
+	<MenuButton type="" count="" action="{() => null}" content="icon ion-md-refresh" />
+	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 </div>
 
-<div class={showConfig}>
+<div class={showConfig? "show" : "hide"}>
 	<h1>Configurações</h1>
 
 	<p><strong>Calculadora de Horas ACE <i>v3.3.0.</i></strong></p>
 
-	{#if normais != 0}<p>Tempo médio por Vistoria N: {media}</p>{/if}
+	{#if normais != 0}<p>Tempo médio por Vistoria N: media</p>{/if}
 
 	<div class="container">
 		<div>
 			<fieldset>
 				<legend>Manhã</legend>
 				<label>Ativado
-					<input type="checkbox" bind:checked=manha.ativado>
+					<input type="checkbox" bind:checked={manha.ativado}>
 				</label>
 				<br>
 				<br>
 				<div class="container">
 					<label>Início:</label>
-					<input type="time" bind:value=manha.inicio>
+					<input type="time" bind:value={manha.inicio}>
 				</div>
 				<br>
 				<div class="container">
 					<label>Fim:</label>
-					<input type="time" bind:value=manha.fim>
+					<input type="time" bind:value={manha.fim}>
 				</div>
 			</fieldset>
 		</div>
@@ -40,18 +42,18 @@
 			<fieldset>
 				<legend>Tarde</legend>
 				<label>Ativado
-					<input type="checkbox" bind:checked=tarde.ativado>
+					<input type="checkbox" bind:checked={tarde.ativado}>
 				</label>
 				<br>
 				<br>
 				<div class="container">
 					<label>Início:</label>
-					<input type="time" bind:value=tarde.inicio>
+					<input type="time" bind:value={tarde.inicio}>
 				</div>
 				<br>
 				<div class="container">
 					<label>Fim:</label>
-					<input type="time" bind:value=tarde.fim>
+					<input type="time" bind:value={tarde.fim}>
 				</div>
 			</fieldset>
 		</div>
@@ -61,8 +63,7 @@
 	{/if}
 </div>
 
-
-<div class={showContent}>
+<div class={showConfig? "hide" : "show"}>
 	<table>
 		<tr>
 			<th>Linha</th>
@@ -72,225 +73,63 @@
 		</tr>
 		{#each vistorias as vistoria}
 		<tr transition:fade>
-			<td>{vistorias.findIndex(obj => obj.id == vistoria.id)+1}</td>
+			<td>1</td>
 			<td>
-				{#if vistoria.normal}
-				<button class="icon ion-md-checkmark-circle success" on:click='change(vistoria.id)'></button>
+				{#if vistoria.tipo == "n"}
+				<button class="icon ion-md-checkmark-circle success" on:click=''></button>
 				{:else}
-				<button class="icon ion-md-close-circle warning" on:click='change(vistoria.id)'></button>
+				<button class="icon ion-md-close-circle warning" on:click=''></button>
 				{/if}
 			</td>
 			<td>{vistoria.hora}</td>
-			<td><button class="icon ion-md-trash" on:click='remove(vistoria.id)'></button></td>
+			<td><button class="icon ion-md-trash" on:click=''></button></td>
 		</tr>
 		{/each}
 	</table>
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
 <script>
-	import { fade } from 'svelte-transitions';
-
-	function media(vistorias, manha, tarde) {
-	  let normais = vistorias.filter(obj => obj.normal).length;
-	  let fechadas = vistorias.filter(obj => !obj.normal).length;
-	  return Math.trunc(
-	    (totalDuration(manha, tarde) - fechadas * 2) / (normais - 1)
-	  );
-	}
-
-	function timeObjAsStr(time) {
-	  time.h = String(time.h).padStart(2, "0");
-	  time.m = String(time.m).padStart(2, "0");
-	  return `${time.h}:${time.m}`;
-	}
-
-	function timeStrAsObj(time) {
-	  let [hours, minutes] = time.split(":");
-	  return { h: Number(hours), m: Number(minutes) };
-	}
-
-	function timeDiff(time, duration) {
-	  time = timeStrAsObj(time);
-	  if (time.m + duration >= 60) {
-	    let hours = Math.trunc((time.m + duration) / 60);
-	    time.h += hours;
-			time.m = time.m + duration - hours * 60;
-			// console.log(`Avançou: ${time.h}:${time.m}`);
-		} else if (time.m + duration < 0) {
-			time.h -= 1;
-			time.m = 60 + duration;
-			// console.log(`Retornou: ${time.h}:${time.m}`);
-	  } else {
-			time.m += duration;
-			// console.log(`Normal: ${time.h}:${time.m}`);
-	  }
-	  return timeObjAsStr(time);
-	}
-
-	function getDuration(start, finish) {
-	  start = timeStrAsObj(start);
-	  finish = timeStrAsObj(finish);
-	  // returns the duration in minutes between start and finish.
-	  return (finish.h - (start.h + 1)) * 60 + (60 - start.m) + finish.m;
-	}
-
-	function totalDuration(manha, tarde) {
-	  let durationManha = getDuration(manha.inicio, manha.fim);
-	  let durationTarde = getDuration(tarde.inicio, tarde.fim);
-	  let minutos = 0;
-	  if (manha.ativado && tarde.ativado) {
-	    minutos = durationManha + durationTarde;
-	  } else if (manha.ativado && !tarde.ativado) {
-	    minutos = durationManha;
-	  } else if (!manha.ativado && tarde.ativado) {
-	    minutos = durationTarde;
-	  }
-	  return minutos;
-	}
-
-	// Aleatoriedade dos horários (entre n-1 e n+1).
-	function randomize(time) {
-	  let diff = Math.trunc(Math.random() * 3) - 1;
-	  return timeDiff(time, diff);
-	}
-
-	function horaInicio(manha, tarde) {
-	  if (manha.ativado) {
-	    return manha.inicio;
-	  } else if (tarde.ativado) {
-	    return tarde.inicio;
-	  } else {
-	    return "00:00";
-	  }
-	}
-
-	function horaSaida(manha, tarde, hora) {
-	  hora = timeStrAsObj(hora);
-	  if (manha.ativado && tarde.ativado) {
-	    let manhaFim = timeStrAsObj(manha.fim);
-	    let tardeInicio = timeStrAsObj(tarde.inicio);
-	    if (hora.h >= manhaFim.h && hora.m > manhaFim.m && hora.h < tardeInicio.h) {
-	      return tarde.inicio;
-	    } else {
-	      return timeObjAsStr(hora);
-	    }
-	  } else {
-	    return timeObjAsStr(hora);
-	  }
-	}
-
-	function update(vistorias, manha, tarde) {
-	  let mediaNormal = media(vistorias, manha, tarde);
-	  if (vistorias.length > 0) {
-	    let atual = randomize(horaInicio(manha, tarde));
-	    vistorias = vistorias.map(vistoria => {
-	      vistoria.hora = atual;
-	      if (vistoria.normal) {
-	        atual = randomize(
-	          horaSaida(manha, tarde, timeDiff(atual, mediaNormal))
-	        );
-	      } else {
-	        atual = randomize(horaSaida(manha, tarde, timeDiff(atual, 2)));
-	      }
-	      return vistoria;
-	    });
-	  }
-	  return vistorias;
-	}
-
-	export default {
-		transitions: { fade },
-	  data() {
-	    return {
-	      config: false,
-	      vistorias: [],
-	      manha: {
-	        ativado: true,
-	        inicio: "08:40",
-	        fim: "11:20"
-	      },
-	      tarde: {
-	        ativado: true,
-	        inicio: "14:30",
-	        fim: "17:20"
-	      }
-	    };
-	  },
-	  helpers: {},
-	  computed: {
-	    showConfig: ({ config }) => (config ? "show" : "hide"),
-	    showContent: ({ config }) => (!config ? "show" : "hide"),
-	    normais: ({ vistorias }) => vistorias.filter(obj => obj.normal).length,
-	    fechadas: ({ vistorias }) =>
-	      vistorias.filter(obj => obj.normal == false).length,
-	    media: ({ vistorias, manha, tarde }) => media(vistorias, manha, tarde),
-	    update: ({ vistorias, manha, tarde }) => update(vistorias, manha, tarde)
-	  },
-	  methods: {
-	    config() {
-	      const { config, vistorias, manha, tarde } = this.get();
-
-	      if (config) {
-	        this.set({ config: false });
-	      } else {
-	        this.set({ config: true });
-	      }
-	      this.set({ vistorias: vistorias });
-	    },
-
-	    add(type) {
-	      const { config, vistorias, manha, tarde } = this.get();
-
-	      let horaEntrada = horaInicio(manha, tarde);
-	      if (vistorias.length > 0) {
-	        let vistoriaAnterior = vistorias[vistorias.length - 1];
-	        if (vistoriaAnterior.normal) {
-	          horaEntrada = timeDiff(vistoriaAnterior.hora, 15);
-	        } else {
-	          horaEntrada = timeDiff(vistoriaAnterior.hora, 2);
-	        }
-	      }
-
-	      // Registra a vistoria
-	      this.set({
-	        vistorias: vistorias.concat({
-	          id: vistorias.length,
-	          normal: type,
-	          hora: horaEntrada
-	        })
-	      });
-	    },
-
-	    change(id) {
-	      const { config, vistorias, ..._ } = this.get();
-	      this.set({
-	        vistorias: vistorias.map(vistoria => {
-	          if (vistoria.id == id) {
-	            vistoria.normal = !vistoria.normal;
-	          }
-	          return vistoria;
-	        })
-	      });
-	    },
-
-	    remove(id) {
-	      const { config, vistorias, ..._ } = this.get();
-
-	      this.set({
-	        vistorias: vistorias.filter(obj => obj.id != id)
-	      });
-	    }
-	  }
+	import { fade } from 'svelte/transition';
+	import MenuButton from "../components/MenuButton.svelte";
+	let showConfig = false;
+	let normais = 0;
+	let fechadas = 0;
+	let recuperadas = 0;
+	let vistorias = [
+		{tipo: "n", hora: "08:00"},
+		{tipo: "f", hora: "08:15"},
+		{tipo: "n", hora: "08:20"},
+		{tipo: "n", hora: "08:35"}
+	];
+	let manha = {
+	  ativado: true,
+	  inicio: "08:40",
+	  fim: "11:20"
 	};
+	let tarde = {
+	  ativado: true,
+	  inicio: "14:30",
+	  fim: "17:20"
+	};
+
+	function add(tipo, hora) {
+		vistorias.push({tipo: tipo, hora: hora});
+	}
 </script>
 
 <style>
-	button {
-	  background-color: transparent;
-	  border: none;
-	}
-
 	table {
 	  width: 100%;
 	  border-collapse: collapse;
@@ -320,31 +159,12 @@
 	  display: block;
 	}
 
-	div > .icon,
-	button > .icon {
-	  font-size: 62px;
-	}
-
 	td > .icon {
 	  font-size: 1.2em;
 	}
 
 	.center {
 	  text-align: center;
-	}
-
-	button {
-	  margin: 0px 10px 0px 10px;
-	  vertical-align: middle;
-		touch-action: manipulation;
-	}
-
-	.success {
-	  color: #32b643;
-	}
-
-	.warning {
-	  color: #e85600;
 	}
 
 	.warning-msg {
@@ -369,26 +189,5 @@
 
 	legend {
 	  font-size: 1.4em;
-	}
-
-	/* Button Badge */
-	button.badge {
-	  position: relative;
-	}
-
-	button.badge:before {
-	  content: attr(data-count);
-	  width: 20px;
-	  height: 20px;
-	  line-height: 20px;
-	  text-align: center;
-	  display: block;
-	  border-radius: 50%;
-	  background: rgb(67, 151, 232);
-	  border: 1px solid #ddd;
-	  color: #fff;
-	  position: absolute;
-	  bottom: 10px;
-	  right: 4px;
 	}
 </style>

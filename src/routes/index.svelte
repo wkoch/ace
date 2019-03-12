@@ -4,8 +4,8 @@
 
 <div class="dock">
 	<MenuButton type="badge" count={normais} action="{() => vistorias = vistorias.concat({tipo: "n", hora: "00:00"})}" content="icon ion-md-checkmark success" />
-	<MenuButton type="badge" count={fechadas} action="{() => fechadas += 1}" content="icon ion-md-close warning" />
-	<MenuButton type="badge" count={recuperadas} action="{() => recuperadas += 1}" content="icon ion-md-repeat warning" />
+	<MenuButton type="badge" count={fechadas} action="{() => vistorias = vistorias.concat({tipo: "f", hora: "00:00"})}" content="icon ion-md-close warning" />
+	<MenuButton type="badge" count={recuperadas} action="{() => vistorias = vistorias.concat({tipo: "r", hora: "00:00"})}" content="icon ion-md-repeat warning" />
 	<MenuButton type="" count="" action="{() => null}" content="icon ion-md-refresh" />
 	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 </div>
@@ -77,8 +77,10 @@
 			<td>
 				{#if vistoria.tipo == "n"}
 				<button class="icon ion-md-checkmark-circle success" on:click=''></button>
-				{:else}
+				{:else if vistoria.tipo == "f"}
 				<button class="icon ion-md-close-circle warning" on:click=''></button>
+				{:else}
+				<button class="icon ion-md-repeat warning" on:click=''></button>
 				{/if}
 			</td>
 			<td>{vistoria.hora}</td>

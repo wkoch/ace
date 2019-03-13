@@ -72,3 +72,7 @@ label {
 .warning {
   color: #e85600;
 }
+
+.attention {
+  color: #FFB11B;
+}

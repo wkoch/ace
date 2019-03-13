@@ -16,7 +16,7 @@
 	}
 
 	button.badge {
-	  position: relative;
+		position: relative;
 	}
 
 	button.badge:before {
@@ -24,9 +24,8 @@
 	  width: 20px;
 	  height: 20px;
 	  line-height: 20px;
-	  text-align: center;
 	  display: block;
-	  border-radius: 50%;
+		border-radius: 50%;
 	  background: rgb(67, 151, 232);
 	  border: 1px solid #ddd;
 	  color: #fff;

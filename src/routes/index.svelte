@@ -1,21 +1,108 @@
+<script>
+	import { fade } from "svelte/transition";
+	import MenuButton from "../components/MenuButton.svelte";
+
+	// Data
+	let vistorias = [
+	  { tipo: "n", hora: "08:00", margem: 2 },
+	  { tipo: "f", hora: "08:15", margem: 3 },
+	  { tipo: "n", hora: "08:20", margem: 1 },
+	  { tipo: "r", hora: "08:35", margem: -2 }
+	];
+
+	// Config
+	let showConfig = false;
+	let manha = {
+	  ativado: true,
+	  inicio: "08:40",
+	  fim: "11:20"
+	};
+	let tarde = {
+	  ativado: true,
+	  inicio: "14:30",
+	  fim: "17:20"
+	};
+
+	// Computed
+	$: normais = vistorias.filter(obj => obj.tipo == "n").length;
+	$: fechadas = vistorias.filter(obj => obj.tipo == "f").length;
+	$: recuperadas = vistorias.filter(obj => obj.tipo == "r").length;
+	$: duracaoManha = manha.ativado ? getDuration(manha.inicio, manha.fim) : 0;
+	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
+	$: duracaoTotal = duracaoManha + duracaoTarde;
+	$: media = Math.trunc(
+	  (duracaoTotal - (fechadas + recuperadas) * 2) / (normais + recuperadas)
+	);
+
+	// Helpers
+	function timeObjAsStr(time) {
+	  time.h = String(time.h).padStart(2, "0");
+	  time.m = String(time.m).padStart(2, "0");
+	  return `${time.h}:${time.m}`;
+	}
+
+	function timeStrAsObj(time) {
+	  let [hours, minutes] = time.split(":");
+	  return { h: Number(hours), m: Number(minutes) };
+	}
+
+	function getDuration(start, finish) {
+	  start = timeStrAsObj(start);
+	  finish = timeStrAsObj(finish);
+	  // returns the duration in minutes between start and finish.
+	  return (finish.h - (start.h + 1)) * 60 + (60 - start.m) + finish.m;
+	}
+
+	function timeDiff(time, duration) {
+	  time = timeStrAsObj(time);
+	  if (time.m + duration >= 60) {
+	    let hours = Math.trunc((time.m + duration) / 60);
+	    time.h += hours;
+	    time.m = time.m + duration - hours * 60;
+	  } else if (time.m + duration < 0) {
+	    time.h -= 1;
+	    time.m = 60 + duration;
+	  } else {
+	    time.m += duration;
+	  }
+	  return timeObjAsStr(time);
+	}
+
+	function add(tipo) {
+	  let hora = "";
+	  if (vistorias.length == 0) {
+	    if (manha.ativado) {
+	      hora = manha.inicio;
+	    } else {
+	      hora = tarde.inicio;
+	    }
+	  } else {
+	    hora = timeDiff(vistorias[vistorias.length - 1].hora, 15);
+	  }
+		vistorias = vistorias.concat({ tipo: tipo, hora: hora, margem: (Math.trunc(Math.random() * 3) - 1) });
+	}
+</script>
+
+
+
 <svelte:head>
 	<title>Calculadora</title>
 </svelte:head>
 
 <div class="dock">
-	<MenuButton type="badge" count={normais} action="{() => vistorias = vistorias.concat({tipo: "n", hora: "00:00"})}" content="icon ion-md-checkmark success" />
-	<MenuButton type="badge" count={fechadas} action="{() => vistorias = vistorias.concat({tipo: "f", hora: "00:00"})}" content="icon ion-md-close warning" />
-	<MenuButton type="badge" count={recuperadas} action="{() => vistorias = vistorias.concat({tipo: "r", hora: "00:00"})}" content="icon ion-md-repeat warning" />
+	<MenuButton type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
+	<MenuButton type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
+	<MenuButton type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
 	<MenuButton type="" count="" action="{() => null}" content="icon ion-md-refresh" />
 	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 </div>
 
-<div class={showConfig? "show" : "hide"}>
+<div class={showConfig? "show" : "hide" }>
 	<h1>Configurações</h1>
 
-	<p><strong>Calculadora de Horas ACE <i>v3.3.0.</i></strong></p>
+	<p><strong>Calculadora de Horas ACE <i>v3.4.0.</i></strong></p>
 
-	{#if normais != 0}<p>Tempo médio por Vistoria N: media</p>{/if}
+	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {media}</p>{/if}
 
 	<div class="container">
 		<div>
@@ -63,7 +150,7 @@
 	{/if}
 </div>
 
-<div class={showConfig? "hide" : "show"}>
+<div class={showConfig? "hide" : "show" }>
 	<table>
 		<tr>
 			<th>Linha</th>
@@ -71,16 +158,16 @@
 			<th>Hora</th>
 			<th>Excluir</th>
 		</tr>
-		{#each vistorias as vistoria}
+		{#each vistorias as vistoria, id}
 		<tr transition:fade>
-			<td>1</td>
+			<td>{id+1}</td>
 			<td>
 				{#if vistoria.tipo == "n"}
 				<button class="icon ion-md-checkmark-circle success" on:click=''></button>
 				{:else if vistoria.tipo == "f"}
 				<button class="icon ion-md-close-circle warning" on:click=''></button>
 				{:else}
-				<button class="icon ion-md-repeat warning" on:click=''></button>
+				<button class="icon ion-md-repeat attention" on:click=''></button>
 				{/if}
 			</td>
 			<td>{vistoria.hora}</td>
@@ -102,34 +189,7 @@
 
 
 
-<script>
-	import { fade } from 'svelte/transition';
-	import MenuButton from "../components/MenuButton.svelte";
-	let showConfig = false;
-	let normais = 0;
-	let fechadas = 0;
-	let recuperadas = 0;
-	let vistorias = [
-		{tipo: "n", hora: "08:00"},
-		{tipo: "f", hora: "08:15"},
-		{tipo: "n", hora: "08:20"},
-		{tipo: "n", hora: "08:35"}
-	];
-	let manha = {
-	  ativado: true,
-	  inicio: "08:40",
-	  fim: "11:20"
-	};
-	let tarde = {
-	  ativado: true,
-	  inicio: "14:30",
-	  fim: "17:20"
-	};
 
-	function add(tipo, hora) {
-		vistorias.push({tipo: tipo, hora: hora});
-	}
-</script>
 
 <style>
 	table {

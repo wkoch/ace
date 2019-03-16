@@ -3,24 +3,20 @@
 	import MenuButton from "../components/MenuButton.svelte";
 
 	// Data
-	let vistorias = [
-	  { tipo: "n", hora: "08:00", margem: 2 },
-	  { tipo: "f", hora: "08:15", margem: 3 },
-	  { tipo: "n", hora: "08:20", margem: 1 },
-	  { tipo: "r", hora: "08:35", margem: -2 }
-	];
+	let vistorias = [];
 
 	// Config
 	let showConfig = false;
+	let locked = false;
 	let manha = {
 	  ativado: true,
 	  inicio: "08:40",
-	  fim: "11:20"
+	  fim: "11:25"
 	};
 	let tarde = {
 	  ativado: true,
 	  inicio: "14:30",
-	  fim: "17:20"
+	  fim: "17:25"
 	};
 
 	// Computed
@@ -68,18 +64,73 @@
 	  return timeObjAsStr(time);
 	}
 
-	function add(tipo) {
-	  let hora = "";
+	function horaEntre(h, a, b) {
+	  a = timeStrAsObj(a);
+	  b = timeStrAsObj(b);
+	  h = timeStrAsObj(h);
+
+	  if ((h.h > a.h && h.h < b.h) || (h.h == a.h && h.m >= a.h && h.h < b.h)) {
+	    return true;
+	  } else {
+	    return false;
+	  }
+	}
+
+	function proximoHorario(duracao) {
 	  if (vistorias.length == 0) {
 	    if (manha.ativado) {
-	      hora = manha.inicio;
+	      return manha.inicio;
 	    } else {
-	      hora = tarde.inicio;
+	      return tarde.inicio;
 	    }
 	  } else {
-	    hora = timeDiff(vistorias[vistorias.length - 1].hora, 15);
+	    let ultimaVistoria = vistorias[vistorias.length - 1].hora;
+	    let proximaVistoria = timeDiff(ultimaVistoria, duracao);
+	    if (
+	      (manha.ativado && !tarde.ativado) ||
+	      (!manha.ativado && tarde.ativado)
+	    ) {
+	      return proximaVistoria;
+	    } else {
+	      if (horaEntre(proximaVistoria, manha.inicio, manha.fim)) {
+	        return proximaVistoria;
+	      } else if (horaEntre(proximaVistoria, manha.fim, tarde.inicio)) {
+	        return tarde.inicio;
+	      } else {
+	        return proximaVistoria;
+	      }
+	    }
 	  }
-		vistorias = vistorias.concat({ tipo: tipo, hora: hora, margem: (Math.trunc(Math.random() * 3) - 1) });
+	}
+
+	// Button Actions
+	function add(tipo) {
+	  if (!locked) {
+	    let duracao = tipo == "f" ? 2 : 15;
+	    let margem = tipo == "f" ? 2 : 3;
+	    let hora = proximoHorario(duracao);
+	    vistorias = vistorias.concat({
+	      tipo: tipo,
+	      hora: hora,
+	      margem: Math.trunc(Math.random() * margem) - 1
+	    });
+	  }
+	}
+
+	function changeTo(id, tipo) {
+	  if (!locked) {
+	    vistorias[id].tipo = tipo;
+	  }
+	}
+
+	function remove(id) {
+		if (!locked) {
+			vistorias = [...vistorias.slice(0, id), ...vistorias.slice(id + 1)]; // Alternative to splice with assignment.
+		}
+	}
+
+	function updateAll() {
+		// implement
 	}
 </script>
 
@@ -93,7 +144,11 @@
 	<MenuButton type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
 	<MenuButton type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
 	<MenuButton type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
-	<MenuButton type="" count="" action="{() => null}" content="icon ion-md-refresh" />
+	{#if locked == true}
+	<MenuButton type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
+	{:else}
+	<MenuButton type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
+	{/if}
 	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 </div>
 
@@ -163,32 +218,19 @@
 			<td>{id+1}</td>
 			<td>
 				{#if vistoria.tipo == "n"}
-				<button class="icon ion-md-checkmark-circle success" on:click=''></button>
+				<button class="icon ion-md-checkmark-circle success" on:click='{() => changeTo(id, "f")}'></button>
 				{:else if vistoria.tipo == "f"}
-				<button class="icon ion-md-close-circle warning" on:click=''></button>
+				<button class="icon ion-md-close-circle warning" on:click='{() => changeTo(id, "r")}'></button>
 				{:else}
-				<button class="icon ion-md-repeat attention" on:click=''></button>
+				<button class="icon ion-md-repeat attention" on:click='{() => changeTo(id, "n")}'></button>
 				{/if}
 			</td>
-			<td>{vistoria.hora}</td>
-			<td><button class="icon ion-md-trash" on:click=''></button></td>
+			<td>{timeDiff(vistoria.hora, vistoria.margem)}</td>
+			<td><button class="icon ion-md-trash" on:click='{() => remove(id)}'></button></td>
 		</tr>
 		{/each}
 	</table>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <style>
@@ -251,5 +293,36 @@
 
 	legend {
 	  font-size: 1.4em;
+	}
+
+	button {
+	  background-color: transparent;
+	  border: none;
+	  margin: 0px 10px 0px 10px;
+	  vertical-align: middle;
+	  touch-action: manipulation;
+	}
+
+	.icon {
+	  font-size: 62px;
+	}
+
+	button.badge {
+	  position: relative;
+	}
+
+	button.badge:before {
+	  content: attr(data-count);
+	  width: 20px;
+	  height: 20px;
+	  line-height: 20px;
+	  display: block;
+	  border-radius: 50%;
+	  background: rgb(67, 151, 232);
+	  border: 1px solid #ddd;
+	  color: #fff;
+	  position: absolute;
+	  bottom: 10px;
+	  right: 4px;
 	}
 </style>

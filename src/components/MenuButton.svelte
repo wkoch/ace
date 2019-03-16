@@ -1,5 +1,5 @@
 <button class="{type || none}" data-count={count || 0} on:click="{action}">
-    <span class="{content}"></span>
+	<span class="{content}"></span>
 </button>
 
 <style>
@@ -16,7 +16,7 @@
 	}
 
 	button.badge {
-		position: relative;
+	  position: relative;
 	}
 
 	button.badge:before {
@@ -25,7 +25,7 @@
 	  height: 20px;
 	  line-height: 20px;
 	  display: block;
-		border-radius: 50%;
+	  border-radius: 50%;
 	  background: rgb(67, 151, 232);
 	  border: 1px solid #ddd;
 	  color: #fff;

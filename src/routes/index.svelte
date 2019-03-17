@@ -1,6 +1,7 @@
 <script>
 	import { fade } from "svelte/transition";
 	import MenuButton from "../components/MenuButton.svelte";
+	import { beforeUpdate, afterUpdate } from 'svelte';
 
 	// Data
 	let vistorias = [];
@@ -8,6 +9,7 @@
 	// Config
 	let showConfig = false;
 	let locked = false;
+	let horaAtual = "00:00";
 	let manha = {
 	  ativado: true,
 	  inicio: "08:40",
@@ -27,9 +29,8 @@
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
 	$: media = Math.trunc(
-	  (duracaoTotal - (fechadas + recuperadas) * 2) / (normais + recuperadas)
-	);
-
+	  (duracaoTotal - (fechadas + recuperadas) * 2) / (normais + recuperadas));
+	
 	// Helpers
 	function timeObjAsStr(time) {
 	  time.h = String(time.h).padStart(2, "0");
@@ -76,15 +77,15 @@
 	  }
 	}
 
-	function proximoHorario(duracao) {
-	  if (vistorias.length == 0) {
+	function proximoHorario(lista, duracao) {
+	  if (lista.length == 0) {
 	    if (manha.ativado) {
 	      return manha.inicio;
 	    } else {
 	      return tarde.inicio;
-	    }
+			}
 	  } else {
-	    let ultimaVistoria = vistorias[vistorias.length - 1].hora;
+	    let ultimaVistoria = lista[lista.length - 1].hora;
 	    let proximaVistoria = timeDiff(ultimaVistoria, duracao);
 	    if (
 	      (manha.ativado && !tarde.ativado) ||
@@ -107,31 +108,48 @@
 	function add(tipo) {
 	  if (!locked) {
 	    let duracao = tipo == "f" ? 2 : 15;
-	    let margem = tipo == "f" ? 2 : 3;
-	    let hora = proximoHorario(duracao);
+			let margem = tipo == "f" ? 2 : 3;
+	    let hora = proximoHorario(vistorias, duracao);
 	    vistorias = vistorias.concat({
 	      tipo: tipo,
 	      hora: hora,
 	      margem: Math.trunc(Math.random() * margem) - 1
 	    });
-	  }
+		}
 	}
 
 	function changeTo(id, tipo) {
 	  if (!locked) {
 	    vistorias[id].tipo = tipo;
-	  }
+		}
 	}
 
 	function remove(id) {
-		if (!locked) {
-			vistorias = [...vistorias.slice(0, id), ...vistorias.slice(id + 1)]; // Alternative to splice with assignment.
+	  if (!locked) {
+	    vistorias = [...vistorias.slice(0, id), ...vistorias.slice(id + 1)]; // Alternative to splice with assignment.
 		}
 	}
 
 	function updateAll() {
-		// implement
+		if (!locked) {
+			let novoVistorias = [];
+
+			for (var vistoria of vistorias) {
+				let duracao = vistoria.tipo == "f" ? 2 : media;
+				novoVistorias = novoVistorias.concat({
+					tipo: vistoria.tipo,
+					hora: proximoHorario(novoVistorias, duracao),
+					margem: vistoria.margem
+				});
+			}
+			vistorias = novoVistorias;
+			console.log(novoVistorias);
+		}
 	}
+
+	beforeUpdate(() => {
+		updateAll();
+	});
 </script>
 
 
@@ -150,12 +168,13 @@
 	<MenuButton type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
 	{/if}
 	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
+	<!-- <MenuButton type="" count="" action="{() => updateAll()}" content="icon ion-md-refresh" /> -->
 </div>
 
 <div class={showConfig? "show" : "hide" }>
 	<h1>Configurações</h1>
 
-	<p><strong>Calculadora de Horas ACE <i>v3.4.0.</i></strong></p>
+	<p><strong>Calculadora de Horas ACE <i>v4.0.0.</i></strong></p>
 
 	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {media}</p>{/if}
 

@@ -29,7 +29,7 @@
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
 	$: media = Math.trunc(
-	  (duracaoTotal - (fechadas + recuperadas) * 2) / (normais + recuperadas)
+	  (duracaoTotal - fechadas * 2) / (normais + recuperadas)
 	);
 
 	// Helpers
@@ -146,21 +146,33 @@
 	function updateAll() {
 	  if (!locked) {
 	    let novoVistorias = [];
-	    let recuperados = [];
+	    // let recuperados = [];
 
 	    if (recuperadas > 0) {
-	      recuperados = vistorias.filter(obj => obj.tipo == "r");
-	    }
+	      let recuperados = vistorias.filter(obj => obj.tipo == "r");
+	      let outras = vistorias.filter(obj => obj.tipo == "f" || obj.tipo == "n");
+	      let vs = outras.concat(recuperados);
 
-	    for (var vistoria of vistorias) {
-	      novoVistorias = novoVistorias.concat({
-	        id: vistoria.id,
-	        tipo: vistoria.tipo,
-	        hora: proximoHorario(novoVistorias),
-	        margem: vistoria.margem
-	      });
+	      for (var vistoria of vs) {
+	        novoVistorias = novoVistorias.concat({
+	          id: vistoria.id,
+	          tipo: vistoria.tipo,
+	          hora: proximoHorario(novoVistorias),
+	          margem: vistoria.margem
+	        });
+				}
+	      vistorias = novoVistorias.sort((a, b) => a.id - b.id);
+	    } else {
+	      for (var vistoria of vistorias) {
+	        novoVistorias = novoVistorias.concat({
+	          id: vistoria.id,
+	          tipo: vistoria.tipo,
+	          hora: proximoHorario(novoVistorias),
+	          margem: vistoria.margem
+	        });
+				}
+	      vistorias = novoVistorias;
 	    }
-	    vistorias = novoVistorias;
 	  }
 	}
 
@@ -249,20 +261,28 @@
 			<th>Hora</th>
 			<th>Excluir</th>
 		</tr>
-		{#each vistorias as vistoria}
+		{#each vistorias as vistoria, index}
+		{#if vistoria.id == 20 || vistoria.id == 40 || vistoria.id == 60}
+		<tr>
+			<th>Linha</th>
+			<th>Tipo</th>
+			<th>Hora</th>
+			<th>Excluir</th>
+		</tr>
+		{/if}
 		<tr transition:fade>
 			<td>{vistoria.id+1}</td>
 			<td>
 				{#if vistoria.tipo == "n"}
-				<button class="icon ion-md-checkmark-circle success" on:click='{() => changeTo(vistoria.id, "f")}'></button>
+				<button class="icon ion-md-checkmark-circle success" on:click='{() => changeTo(index, "f")}'></button>
 				{:else if vistoria.tipo == "f"}
-				<button class="icon ion-md-close-circle warning" on:click='{() => changeTo(vistoria.id, "r")}'></button>
+				<button class="icon ion-md-close-circle warning" on:click='{() => changeTo(index, "r")}'></button>
 				{:else}
-				<button class="icon ion-md-repeat attention" on:click='{() => changeTo(vistoria.id, "n")}'></button>
+				<button class="icon ion-md-repeat attention" on:click='{() => changeTo(index, "n")}'></button>
 				{/if}
 			</td>
 			<td>{timeDiff(vistoria.hora, vistoria.margem)}</td>
-			<td><button class="icon ion-md-trash" on:click='{() => remove(vistoria.id)}'></button></td>
+			<td><button class="icon ion-md-trash" on:click='{() => remove(index)}'></button></td>
 		</tr>
 		{/each}
 	</table>

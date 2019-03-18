@@ -336,6 +336,7 @@
 
 	.dock {
 	  position: fixed;
+		z-index: 999;
 	  bottom: 0px;
 	  right: 0px;
 	  left: 0px;

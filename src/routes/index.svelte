@@ -28,12 +28,11 @@
 	$: duracaoManha = manha.ativado ? getDuration(manha.inicio, manha.fim) : 0;
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
-	$: media = Math.trunc(
-	  (duracaoTotal - fechadas * 2) / (normais + recuperadas)
-	);
+	$: media = (duracaoTotal - fechadas * 2) / (normais + recuperadas);
 
 	// Helpers
 	function timeObjAsStr(time) {
+		time.m = Math.trunc(time.m);
 	  time.h = String(time.h).padStart(2, "0");
 	  time.m = String(time.m).padStart(2, "0");
 	  return `${time.h}:${time.m}`;
@@ -205,7 +204,7 @@
 
 	<p><strong>Calculadora de Horas ACE <i>v4.0.0.</i></strong></p>
 
-	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {media}</p>{/if}
+	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {Math.trunc(media)}</p>{/if}
 
 	<div class="container">
 		<div>

@@ -77,7 +77,7 @@
 	  }
 	}
 
-	function proximoHorario(lista, duracao) {
+	function proximoHorario(lista) {
 	  if (lista.length == 0) {
 	    if (manha.ativado) {
 	      return manha.inicio;
@@ -85,20 +85,22 @@
 	      return tarde.inicio;
 			}
 	  } else {
-	    let ultimaVistoria = lista[lista.length - 1].hora;
-	    let proximaVistoria = timeDiff(ultimaVistoria, duracao);
+			let ultimaVistoria = lista[lista.length - 1].hora;
+			let ultimoTipo = lista[lista.length - 1].tipo;
+			let duracao = ultimoTipo == "f" ? 2 : media;
+	    let essaVistoria = timeDiff(ultimaVistoria, duracao);
 	    if (
 	      (manha.ativado && !tarde.ativado) ||
 	      (!manha.ativado && tarde.ativado)
 	    ) {
-	      return proximaVistoria;
+	      return essaVistoria;
 	    } else {
-	      if (horaEntre(proximaVistoria, manha.inicio, manha.fim)) {
-	        return proximaVistoria;
-	      } else if (horaEntre(proximaVistoria, manha.fim, tarde.inicio)) {
+	      if (horaEntre(essaVistoria, manha.inicio, manha.fim)) {
+	        return essaVistoria;
+	      } else if (horaEntre(essaVistoria, manha.fim, tarde.inicio)) {
 	        return tarde.inicio;
 	      } else {
-	        return proximaVistoria;
+	        return essaVistoria;
 	      }
 	    }
 	  }
@@ -107,12 +109,11 @@
 	// Button Actions
 	function add(tipo) {
 	  if (!locked) {
-	    let duracao = tipo == "f" ? 2 : 15;
+			// let duracao = tipo == "f" ? 2 : media;
 			let margem = tipo == "f" ? 2 : 3;
-	    let hora = proximoHorario(vistorias, duracao);
 	    vistorias = vistorias.concat({
 	      tipo: tipo,
-	      hora: hora,
+	      hora: "00:00",
 	      margem: Math.trunc(Math.random() * margem) - 1
 	    });
 		}
@@ -138,7 +139,7 @@
 				let duracao = vistoria.tipo == "f" ? 2 : media;
 				novoVistorias = novoVistorias.concat({
 					tipo: vistoria.tipo,
-					hora: proximoHorario(novoVistorias, duracao),
+					hora: proximoHorario(novoVistorias),
 					margem: vistoria.margem
 				});
 			}

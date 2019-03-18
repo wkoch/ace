@@ -187,13 +187,15 @@
 </svelte:head>
 
 <div class="dock">
-	<MenuButton type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
-	<MenuButton type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
-	<MenuButton type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
-	{#if locked == true}
-	<MenuButton type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
-	{:else}
-	<MenuButton type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
+	{#if showConfig == false}
+		<MenuButton type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
+		<MenuButton type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
+		<MenuButton type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
+	{/if}
+	{#if showConfig == true && locked == true}
+		<MenuButton type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
+	{:else if  showConfig == true && locked == false}
+		<MenuButton type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
 	{/if}
 	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 	<!-- <MenuButton type="" count="" action="{() => updateAll()}" content="icon ion-md-refresh" /> -->
@@ -202,7 +204,7 @@
 <div class={showConfig? "show" : "hide" }>
 	<h1>Configurações</h1>
 
-	<p><strong>Calculadora de Horas ACE <i>v4.0.0.</i></strong></p>
+	<p><strong>Calculadora de Horas ACE <i>v4.1.0.</i></strong></p>
 
 	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {Math.trunc(media)}</p>{/if}
 

@@ -1,7 +1,7 @@
 <script>
 	import { fade } from "svelte/transition";
 	import MenuButton from "../components/MenuButton.svelte";
-	import { beforeUpdate, afterUpdate } from 'svelte';
+	import { beforeUpdate, afterUpdate } from "svelte";
 
 	// Data
 	let vistorias = [];
@@ -29,8 +29,9 @@
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
 	$: media = Math.trunc(
-	  (duracaoTotal - (fechadas + recuperadas) * 2) / (normais + recuperadas));
-	
+	  (duracaoTotal - (fechadas + recuperadas) * 2) / (normais + recuperadas)
+	);
+
 	// Helpers
 	function timeObjAsStr(time) {
 	  time.h = String(time.h).padStart(2, "0");
@@ -83,11 +84,11 @@
 	      return manha.inicio;
 	    } else {
 	      return tarde.inicio;
-			}
+	    }
 	  } else {
-			let ultimaVistoria = lista[lista.length - 1].hora;
-			let ultimoTipo = lista[lista.length - 1].tipo;
-			let duracao = ultimoTipo == "f" ? 2 : media;
+	    let ultimaVistoria = lista[lista.length - 1].hora;
+	    let ultimoTipo = lista[lista.length - 1].tipo;
+	    let duracao = ultimoTipo == "f" ? 2 : media;
 	    let essaVistoria = timeDiff(ultimaVistoria, duracao);
 	    if (
 	      (manha.ativado && !tarde.ativado) ||
@@ -106,50 +107,65 @@
 	  }
 	}
 
+	function updateIDs(lista) {
+	  let id = 0;
+	  for (var item of lista) {
+	    item.id = id;
+	    id += 1;
+	  }
+	  return lista;
+	}
+
 	// Button Actions
 	function add(tipo) {
 	  if (!locked) {
-			// let duracao = tipo == "f" ? 2 : media;
-			let margem = tipo == "f" ? 2 : 3;
+	    let margem = tipo == "f" ? 2 : 3;
 	    vistorias = vistorias.concat({
+	      id: vistorias.length,
 	      tipo: tipo,
 	      hora: "00:00",
 	      margem: Math.trunc(Math.random() * margem) - 1
 	    });
-		}
+	  }
 	}
 
 	function changeTo(id, tipo) {
 	  if (!locked) {
 	    vistorias[id].tipo = tipo;
-		}
+	  }
 	}
 
 	function remove(id) {
 	  if (!locked) {
-	    vistorias = [...vistorias.slice(0, id), ...vistorias.slice(id + 1)]; // Alternative to splice with assignment.
-		}
+	    // vistorias = [...vistorias.slice(0, id), ...vistorias.slice(id + 1)]; // Alternative to splice with assignment.
+	    vistorias.splice(id, 1);
+	    vistorias = updateIDs(vistorias);
+	  }
 	}
 
 	function updateAll() {
-		if (!locked) {
-			let novoVistorias = [];
+	  if (!locked) {
+	    let novoVistorias = [];
+	    let recuperados = [];
 
-			for (var vistoria of vistorias) {
-				let duracao = vistoria.tipo == "f" ? 2 : media;
-				novoVistorias = novoVistorias.concat({
-					tipo: vistoria.tipo,
-					hora: proximoHorario(novoVistorias),
-					margem: vistoria.margem
-				});
-			}
-			vistorias = novoVistorias;
-			console.log(novoVistorias);
-		}
+	    if (recuperadas > 0) {
+	      recuperados = vistorias.filter(obj => obj.tipo == "r");
+	    }
+
+	    for (var vistoria of vistorias) {
+	      novoVistorias = novoVistorias.concat({
+	        id: vistoria.id,
+	        tipo: vistoria.tipo,
+	        hora: proximoHorario(novoVistorias),
+	        margem: vistoria.margem
+	      });
+	    }
+	    vistorias = novoVistorias;
+	  }
 	}
 
 	beforeUpdate(() => {
-		updateAll();
+	  updateAll();
 	});
 </script>
 
@@ -233,20 +249,20 @@
 			<th>Hora</th>
 			<th>Excluir</th>
 		</tr>
-		{#each vistorias as vistoria, id}
+		{#each vistorias as vistoria}
 		<tr transition:fade>
-			<td>{id+1}</td>
+			<td>{vistoria.id+1}</td>
 			<td>
 				{#if vistoria.tipo == "n"}
-				<button class="icon ion-md-checkmark-circle success" on:click='{() => changeTo(id, "f")}'></button>
+				<button class="icon ion-md-checkmark-circle success" on:click='{() => changeTo(vistoria.id, "f")}'></button>
 				{:else if vistoria.tipo == "f"}
-				<button class="icon ion-md-close-circle warning" on:click='{() => changeTo(id, "r")}'></button>
+				<button class="icon ion-md-close-circle warning" on:click='{() => changeTo(vistoria.id, "r")}'></button>
 				{:else}
-				<button class="icon ion-md-repeat attention" on:click='{() => changeTo(id, "n")}'></button>
+				<button class="icon ion-md-repeat attention" on:click='{() => changeTo(vistoria.id, "n")}'></button>
 				{/if}
 			</td>
 			<td>{timeDiff(vistoria.hora, vistoria.margem)}</td>
-			<td><button class="icon ion-md-trash" on:click='{() => remove(id)}'></button></td>
+			<td><button class="icon ion-md-trash" on:click='{() => remove(vistoria.id)}'></button></td>
 		</tr>
 		{/each}
 	</table>

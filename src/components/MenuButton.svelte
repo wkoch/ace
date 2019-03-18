@@ -1,4 +1,11 @@
-<button class="{type || none}" data-count={count || 0} on:click="{action}">
+<script>
+	export let type = '';
+	export let count = 0;
+	export let action = '';
+	export let content = '';
+</script>
+
+<button class="{type}" data-count={count} on:click="{action}">
 	<span class="{content}"></span>
 </button>
 

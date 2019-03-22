@@ -1,11 +1,12 @@
 <script>
-	export let type = '';
+	export let name = "";
+	export let type = "";
 	export let count = 0;
-	export let action = '';
-	export let content = '';
+	export let action = "";
+	export let content = "";
 </script>
 
-<button class="{type}" data-count={count} on:click="{action}">
+<button id="{name}" class="{type} data-{count}" data-count={count} on:click="{action}">
 	<span class="{content}"></span>
 </button>
 

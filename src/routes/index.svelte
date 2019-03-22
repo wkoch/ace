@@ -106,16 +106,16 @@
 
 <div class="dock">
 	{#if showConfig == false}
-		<MenuButton type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
-		<MenuButton type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
-		<MenuButton type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
+		<MenuButton name="normal" type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
+		<MenuButton name="fechada" type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
+		<MenuButton name="recuperada" type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
 	{/if}
 	{#if showConfig == true && locked == true}
-		<MenuButton type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
+		<MenuButton name="travar" type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
 	{:else if  showConfig == true && locked == false}
-		<MenuButton type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
+		<MenuButton name="destravar" type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
 	{/if}
-	<MenuButton type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
+	<MenuButton name="config" type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 	<!-- <MenuButton type="" count="" action="{() => updateAll()}" content="icon ion-md-refresh" /> -->
 </div>
 
@@ -190,18 +190,18 @@
 		</tr>
 		{/if}
 		<tr transition:fade>
-			<td>{vistoria.id+1}</td>
-			<td>
+			<td class="linha linha-{vistoria.id+1}">{vistoria.id+1}</td>
+			<td class="tipo">
 				{#if vistoria.tipo == "n"}
-				<button class="icon ion-md-checkmark-circle success" on:click='{() => changeTo(index, "f")}'></button>
+				<button class="icon ion-md-checkmark-circle success normal" on:click='{() => changeTo(index, "f")}'></button>
 				{:else if vistoria.tipo == "f"}
-				<button class="icon ion-md-close-circle warning" on:click='{() => changeTo(index, "r")}'></button>
+				<button class="icon ion-md-close-circle warning fechada" on:click='{() => changeTo(index, "r")}'></button>
 				{:else}
-				<button class="icon ion-md-repeat attention" on:click='{() => changeTo(index, "n")}'></button>
+				<button class="icon ion-md-repeat attention recuperada" on:click='{() => changeTo(index, "n")}'></button>
 				{/if}
 			</td>
-			<td>{timeDiff(vistoria.hora, vistoria.margem)}</td>
-			<td><button class="icon ion-md-trash" on:click='{() => remove(index)}'></button></td>
+			<td class="hora">{timeDiff(vistoria.hora, vistoria.margem)}</td>
+			<td class="excluir"><button class="icon ion-md-trash excluir" on:click='{() => remove(index)}'></button></td>
 		</tr>
 		{/each}
 	</table>

@@ -1,6 +1,11 @@
 <script>
 	import { fade } from "svelte/transition";
-	import { getDuration, updateIDs, proximoHorario, timeDiff } from '../modules/helpers.js';
+	import {
+	  getDuration,
+	  updateIDs,
+	  proximoHorario,
+	  timeDiff
+	} from "../modules/helpers.js";
 	import MenuButton from "../components/MenuButton.svelte";
 	import { beforeUpdate, afterUpdate } from "svelte";
 
@@ -40,8 +45,8 @@
 	      tipo: tipo,
 	      hora: "00:00",
 	      margem: Math.trunc(Math.random() * margem) - 1
-			});
-			console.log(margem);
+	    });
+	    console.log(margem);
 	  }
 	}
 
@@ -76,7 +81,7 @@
 	          hora: proximoHorario(novoVistorias, manha, tarde, media),
 	          margem: vistoria.margem
 	        });
-				}
+	      }
 	      vistorias = novoVistorias.sort((a, b) => a.id - b.id);
 	    } else {
 	      for (var vistoria of vistorias) {
@@ -86,7 +91,7 @@
 	          hora: proximoHorario(novoVistorias, manha, tarde, media),
 	          margem: vistoria.margem
 	        });
-				}
+	      }
 	      vistorias = novoVistorias;
 	    }
 	  }
@@ -111,9 +116,9 @@
 		<MenuButton name="recuperada" type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
 	{/if}
 	{#if showConfig == true && locked == true}
-		<MenuButton name="travar" type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
+		<MenuButton name="destravar" type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
 	{:else if  showConfig == true && locked == false}
-		<MenuButton name="destravar" type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
+		<MenuButton name="travar" type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
 	{/if}
 	<MenuButton name="config" type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
 	<!-- <MenuButton type="" count="" action="{() => updateAll()}" content="icon ion-md-refresh" /> -->
@@ -131,18 +136,18 @@
 			<fieldset>
 				<legend>Manhã</legend>
 				<label>Ativado
-					<input type="checkbox" bind:checked={manha.ativado}>
+					<input type="checkbox" bind:checked={manha.ativado} data-cy="manha-checkbox">
 				</label>
 				<br>
 				<br>
 				<div class="container">
 					<label>Início:</label>
-					<input type="time" bind:value={manha.inicio}>
+					<input type="time" bind:value={manha.inicio} data-cy="manha-inicio">
 				</div>
 				<br>
 				<div class="container">
 					<label>Fim:</label>
-					<input type="time" bind:value={manha.fim}>
+					<input type="time" bind:value={manha.fim} data-cy="manha-fim">
 				</div>
 			</fieldset>
 		</div>
@@ -151,24 +156,24 @@
 			<fieldset>
 				<legend>Tarde</legend>
 				<label>Ativado
-					<input type="checkbox" bind:checked={tarde.ativado}>
+					<input type="checkbox" bind:checked={tarde.ativado} data-cy="tarde-checkbox">
 				</label>
 				<br>
 				<br>
 				<div class="container">
 					<label>Início:</label>
-					<input type="time" bind:value={tarde.inicio}>
+					<input type="time" bind:value={tarde.inicio} data-cy="tarde-inicio">
 				</div>
 				<br>
 				<div class="container">
 					<label>Fim:</label>
-					<input type="time" bind:value={tarde.fim}>
+					<input type="time" bind:value={tarde.fim} data-cy="tarde-fim">
 				</div>
 			</fieldset>
 		</div>
 	</div>
 	{#if !(manha.ativado || tarde.ativado)}
-	<p class=warning-msg>Erro. Não há período ativo. Ative ao menos um dos períodos.</p>
+	<p class=warning-msg data-cy="erro">Erro. Não há período ativo. Ative ao menos um dos períodos.</p>
 	{/if}
 </div>
 
@@ -181,7 +186,7 @@
 			<th>Excluir</th>
 		</tr>
 		{#each vistorias as vistoria, index}
-		{#if vistoria.id == 20 || vistoria.id == 40 || vistoria.id == 60}
+		{#if [20, 40, 60, 80, 100, 120, 140, 160].includes(vistoria.id)}
 		<tr>
 			<th>Linha</th>
 			<th>Tipo</th>
@@ -189,19 +194,19 @@
 			<th>Excluir</th>
 		</tr>
 		{/if}
-		<tr transition:fade>
-			<td class="linha linha-{vistoria.id+1}">{vistoria.id+1}</td>
-			<td class="tipo">
+		<tr data-cy="linha-{vistoria.id+1}" transition:fade>
+			<td data-cy="linha-{vistoria.id+1}">{vistoria.id+1}</td>
+			<td data-cy="tipo">
 				{#if vistoria.tipo == "n"}
-				<button class="icon ion-md-checkmark-circle success normal" on:click='{() => changeTo(index, "f")}'></button>
+				<button class="icon ion-md-checkmark-circle success" data-cy="normal" on:click='{() => changeTo(index, "f")}'></button>
 				{:else if vistoria.tipo == "f"}
-				<button class="icon ion-md-close-circle warning fechada" on:click='{() => changeTo(index, "r")}'></button>
+				<button class="icon ion-md-close-circle warning" data-cy="fechada" on:click='{() => changeTo(index, "r")}'></button>
 				{:else}
-				<button class="icon ion-md-repeat attention recuperada" on:click='{() => changeTo(index, "n")}'></button>
+				<button class="icon ion-md-repeat attention" data-cy="recuperada" on:click='{() => changeTo(index, "n")}'></button>
 				{/if}
 			</td>
-			<td class="hora">{timeDiff(vistoria.hora, vistoria.margem)}</td>
-			<td class="excluir"><button class="icon ion-md-trash excluir" on:click='{() => remove(index)}'></button></td>
+			<td data-cy="hora">{timeDiff(vistoria.hora, vistoria.margem)}</td>
+			<td data-cy="excluir"><button class="icon ion-md-trash" data-cy="excluir" on:click='{() => remove(index)}'></button></td>
 		</tr>
 		{/each}
 	</table>
@@ -256,7 +261,7 @@
 
 	.dock {
 	  position: fixed;
-		z-index: 999;
+	  z-index: 999;
 	  bottom: 0px;
 	  right: 0px;
 	  left: 0px;

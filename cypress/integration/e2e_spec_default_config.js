@@ -195,4 +195,26 @@ describe("E2E: Tela inicial, config padrão", () => {
     // fim da tarde às 17h
     cy.get("tr[data-cy=linha-25] td[data-cy=hora]").contains("17:");
   });
+
+  it("checa o horário final de 10 a 30 vistorias", () => {
+    // adiociona 10 vistorias normais
+    cy.visitas("normal", 10);
+    cy.visitasChecadas("normal", 20, "17");
+  });
+
+  it("checa o horário final de 10 a 30 vistorias com fechadas", () => {
+    cy.visitas("normal", 5);
+    cy.visitas("fechada", 2);
+    cy.visitas("normal", 5);
+    cy.visitasChecadas("normal", 3, "17");
+    cy.visitasChecadas("fechada", 2, "17");
+    cy.visitasChecadas("normal", 2, "17");
+    cy.visitasChecadas("fechada", 2, "17");
+    cy.visitasChecadas("normal", 5, "17");
+    cy.visitasChecadas("fechada", 2, "17");
+    cy.visitasChecadas("normal", 5, "17");
+    cy.visitasChecadas("fechada", 2, "17");
+    cy.visitasChecadas("normal", 5, "17");
+    cy.visitasChecadas("fechada", 2, "17");
+  });
 });

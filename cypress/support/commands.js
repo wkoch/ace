@@ -43,3 +43,10 @@ Cypress.Commands.add("dataCount", (data) => {
     cy.get("div.dock button#fechada").should("have.class", `data-${data.f}`);
     cy.get("div.dock button#recuperada").should("have.class", `data-${data.r}`);
 });
+
+Cypress.Commands.add("visitasChecadas", (tipo, quantia, hora) => {
+  for (let index = 0; index < quantia; index++) {
+    cy.get(`div.dock button#${tipo}`).click();
+    cy.get("tr").last().get("td[data-cy=hora]").contains(`${hora}:`);
+  }
+});

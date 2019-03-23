@@ -2,7 +2,7 @@
 	import { fade } from "svelte/transition";
 	import {
 	  getDuration,
-	  updateIDs,
+	  atualizaIDs,
 	  proximoHorario,
 	  timeDiff
 	} from "../modules/helpers.js";
@@ -19,12 +19,12 @@
 	let manha = {
 	  ativado: true,
 	  inicio: "08:40",
-	  fim: "11:25"
+	  fim: "11:20"
 	};
 	let tarde = {
 	  ativado: true,
 	  inicio: "14:30",
-	  fim: "17:25"
+	  fim: "17:15"
 	};
 
 	// Computed
@@ -34,14 +34,14 @@
 	$: duracaoManha = manha.ativado ? getDuration(manha.inicio, manha.fim) : 0;
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
-	$: media = (duracaoTotal - fechadas * 2) / (normais + recuperadas);
+	$: media = Math.round((duracaoTotal - fechadas * 2) / (normais + recuperadas-1)+0.6);
 
 	// Button Actions
 	function add(tipo) {
 	  if (!locked) {
 	    let margem = tipo == "f" ? 2 : 3;
 	    vistorias = vistorias.concat({
-	      id: vistorias.length,
+	      id: vistorias.length+1,
 	      tipo: tipo,
 	      hora: "00:00",
 	      margem: Math.trunc(Math.random() * margem) - 1
@@ -58,9 +58,8 @@
 
 	function remove(id) {
 	  if (!locked) {
-	    // vistorias = [...vistorias.slice(0, id), ...vistorias.slice(id + 1)]; // Alternative to splice with assignment.
 	    vistorias.splice(id, 1);
-	    vistorias = updateIDs(vistorias);
+	    vistorias = atualizaIDs(vistorias);
 	  }
 	}
 
@@ -127,9 +126,9 @@
 <div class={showConfig? "show" : "hide" }>
 	<h1>Configurações</h1>
 
-	<p><strong>Calculadora de Horas ACE <i>v4.1.0.</i></strong></p>
+	<p><strong>Calculadora de Horas ACE <i>v4.2.0.</i></strong></p>
 
-	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {Math.trunc(media)}</p>{/if}
+	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {media}</p>{/if}
 
 	<div class="container">
 		<div>
@@ -194,8 +193,8 @@
 			<th>Excluir</th>
 		</tr>
 		{/if}
-		<tr data-cy="linha-{vistoria.id+1}" transition:fade>
-			<td data-cy="linha-{vistoria.id+1}">{vistoria.id+1}</td>
+		<tr data-cy="linha-{vistoria.id}" transition:fade>
+			<td data-cy="linha-{vistoria.id}">{vistoria.id}</td>
 			<td data-cy="tipo">
 				{#if vistoria.tipo == "n"}
 				<button class="icon ion-md-checkmark-circle success" data-cy="normal" on:click='{() => changeTo(index, "f")}'></button>

@@ -84,7 +84,7 @@ describe("E2E: Tela inicial, config padrão", () => {
       .eq(10)
       .contains(10);
     cy.get("tr")
-      .eq(20)
+      .eq(21)
       .contains(20);
     cy.get("tr")
       .eq(25)
@@ -101,72 +101,72 @@ describe("E2E: Tela inicial, config padrão", () => {
 
     // segundo título
     cy.get("tr")
-      .eq(21)
+      .eq(20)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(21)
+      .eq(20)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(21)
+      .eq(20)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(21)
+      .eq(20)
       .contains("th", "Excluir");
 
     // terceiro título
     cy.get("tr")
-      .eq(42)
+      .eq(41)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(42)
+      .eq(41)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(42)
+      .eq(41)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(42)
+      .eq(41)
       .contains("th", "Excluir");
 
     // quarto título
     cy.get("tr")
-      .eq(63)
+      .eq(62)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(63)
+      .eq(62)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(63)
+      .eq(62)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(63)
+      .eq(62)
       .contains("th", "Excluir");
 
     // quinto título
     cy.get("tr")
-      .eq(84)
+      .eq(83)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(84)
+      .eq(83)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(84)
+      .eq(83)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(84)
+      .eq(83)
       .contains("th", "Excluir");
 
     // ultimo título
     cy.get("tr")
-      .eq(126)
+      .eq(125)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(126)
+      .eq(125)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(126)
+      .eq(125)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(126)
+      .eq(125)
       .contains("th", "Excluir");
   });
 

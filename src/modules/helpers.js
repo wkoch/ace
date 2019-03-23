@@ -32,12 +32,17 @@ export function timeDiff(time, duration) {
   return timeObjAsStr(time);
 }
 
-export function horaEntre(h, a, b) {
-  a = timeStrAsObj(a);
-  b = timeStrAsObj(b);
-  h = timeStrAsObj(h);
+export function horarioEmMinutos(hora) {
+  let h = timeStrAsObj(hora);
+  return h.h * 60 + h.m;
+}
 
-  if ((h.h > a.h && h.h < b.h) || (h.h == a.h && h.m >= a.h && h.h < b.h)) {
+export function horaEntre(h, a, b) {
+  h = horarioEmMinutos(h);
+  a = horarioEmMinutos(a);
+  b = horarioEmMinutos(b);
+
+  if (a <= h && h <= b) {
     return true;
   } else {
     return false;
@@ -73,8 +78,8 @@ export function proximoHorario(lista, manha, tarde, media) {
   }
 }
 
-export function updateIDs(lista) {
-  let id = 0;
+export function atualizaIDs(lista) {
+  let id = 1;
   for (var item of lista) {
     item.id = id;
     id += 1;

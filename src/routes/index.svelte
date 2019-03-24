@@ -14,6 +14,7 @@
 
 	// Config
 	let showConfig = false;
+	let horariosAleatórios = true;
 	let locked = false;
 	let horaAtual = "00:00";
 	let manha = {
@@ -34,7 +35,7 @@
 	$: duracaoManha = manha.ativado ? getDuration(manha.inicio, manha.fim) : 0;
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
-	$: media = Math.round((duracaoTotal - fechadas * 2) / (normais + recuperadas-1)+0.6);
+	$: media = (duracaoTotal - fechadas * 2) / (normais + recuperadas);
 
 	// Button Actions
 	function add(tipo) {
@@ -113,6 +114,11 @@
 		<MenuButton name="normal" type="badge" count={normais} action="{() => add("n")}" content="icon ion-md-checkmark success" />
 		<MenuButton name="fechada" type="badge" count={fechadas} action="{() => add("f")}" content="icon ion-md-close warning" />
 		<MenuButton name="recuperada" type="badge" count={recuperadas} action="{() => add("r")}" content="icon ion-md-repeat attention" />
+	{/if}
+	{#if showConfig == true && horariosAleatórios == true }
+		<MenuButton name="rand" type="" count="" action="{() => horariosAleatórios = false}" content="icon ion-md-flash attention" />
+	{:else if showConfig == true && horariosAleatórios == false }
+		<MenuButton name="precise" type="" count="" action="{() => horariosAleatórios = true}" content="icon ion-md-flash-off success" />
 	{/if}
 	{#if showConfig == true && locked == true}
 		<MenuButton name="destravar" type="" count="" action="{() => locked = false}" content="icon ion-md-lock warning" />
@@ -204,7 +210,7 @@
 				<button class="icon ion-md-repeat attention" data-cy="recuperada" on:click='{() => changeTo(index, "n")}'></button>
 				{/if}
 			</td>
-			<td data-cy="hora">{timeDiff(vistoria.hora, vistoria.margem)}</td>
+			<td data-cy="hora">{#if horariosAleatórios == true}{timeDiff(vistoria.hora, vistoria.margem)}{:else}{vistoria.hora}{/if}</td>
 			<td data-cy="excluir"><button class="icon ion-md-trash" data-cy="excluir" on:click='{() => remove(index)}'></button></td>
 		</tr>
 		{/each}

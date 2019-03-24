@@ -50,6 +50,7 @@ export function horaEntre(h, a, b) {
 }
 
 export function proximoHorario(lista, manha, tarde, media) {
+  let sobra =0;
   if (lista.length == 0) {
     if (manha.ativado) {
       return manha.inicio;
@@ -59,7 +60,7 @@ export function proximoHorario(lista, manha, tarde, media) {
   } else {
     let ultimaVistoria = lista[lista.length - 1].hora;
     let ultimoTipo = lista[lista.length - 1].tipo;
-    let duracao = ultimoTipo == "f" ? 2 : media;
+    let duracao = ultimoTipo == "f" ? 3 : media;
     let essaVistoria = timeDiff(ultimaVistoria, duracao);
     if (
       (manha.ativado && !tarde.ativado) ||
@@ -70,7 +71,8 @@ export function proximoHorario(lista, manha, tarde, media) {
       if (horaEntre(essaVistoria, manha.inicio, manha.fim)) {
         return essaVistoria;
       } else if (horaEntre(essaVistoria, manha.fim, tarde.inicio)) {
-        return tarde.inicio;
+        sobra = timeStrAsObj(essaVistoria).m - timeStrAsObj(manha.fim).m;
+        return timeDiff(tarde.inicio, sobra);
       } else {
         return essaVistoria;
       }

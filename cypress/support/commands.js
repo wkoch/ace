@@ -44,13 +44,17 @@ Cypress.Commands.add("dataCount", data => {
   cy.get("div.dock button#recuperada").should("have.class", `data-${data.r}`);
 });
 
-Cypress.Commands.add("visitasChecadas", (tipo, quantia, hora) => {
+Cypress.Commands.add("visitasChecadas", (tipo, quantia, manha, tarde) => {
   for (let index = 0; index < quantia; index++) {
     cy.get(`div.dock button#${tipo}`).click();
     cy.get("tr")
       .last()
       .get("td[data-cy=hora]")
-      .contains(`${hora}:`);
+      .contains(manha);
+    cy.get("tr")
+      .last()
+      .get("td[data-cy=hora]")
+      .contains(tarde);
   }
 });
 
@@ -61,4 +65,11 @@ Cypress.Commands.add("horaPrecisa", () => {
   cy.get(`div.dock button#rand`).click();
   // fecha painel config
   cy.get(`div.dock button#config`).click();
+});
+
+Cypress.Commands.add("checaGrupo", (hora, minutos) => {
+  for (const min of minutos) {
+    cy.get("tr td[data-cy=hora]").contains(`${hora}:${min}`);
+  }
+  
 });

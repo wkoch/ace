@@ -20,13 +20,14 @@
 	let manha = {
 	  ativado: true,
 	  inicio: "08:40",
-	  fim: "11:15"
+	  fim: "11:20"
 	};
 	let tarde = {
 	  ativado: true,
 	  inicio: "14:30",
-	  fim: "17:25"
+	  fim: "17:20"
 	};
+	let sobra = 0;
 
 	// Computed
 	$: normais = vistorias.filter(obj => obj.tipo == "n").length;
@@ -35,7 +36,7 @@
 	$: duracaoManha = manha.ativado ? getDuration(manha.inicio, manha.fim) : 0;
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
-	$: media = (duracaoTotal - fechadas * 2) / (normais + recuperadas)+1;
+	$: media = (duracaoTotal+sobra - fechadas * 3) / (normais + recuperadas-1);
 
 	// Button Actions
 	function add(tipo) {
@@ -126,13 +127,13 @@
 		<MenuButton name="travar" type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
 	{/if}
 	<MenuButton name="config" type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
-	<!-- <MenuButton type="" count="" action="{() => updateAll()}" content="icon ion-md-refresh" /> -->
+	{media}
 </div>
 
 <div class={showConfig? "show" : "hide" }>
 	<h1>Configurações</h1>
 
-	<p><strong>Calculadora de Horas ACE <i>v4.2.0.</i></strong></p>
+	<p><strong>Calculadora de Horas ACE <i>v4.3.0.</i></strong></p>
 
 	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {media}</p>{/if}
 

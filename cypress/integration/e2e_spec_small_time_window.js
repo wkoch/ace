@@ -8,10 +8,10 @@ describe("E2E: Teste com pequena janela de horários", () => {
     cy.dataCount({ n: 0, f: 0, r: 0 });
 
     // adiociona 20 vistorias normais e 5 fechadas
-    cy.visitas("normal", 10);
+    cy.visitas("normal", 11);
 
     // checa quantidade correta
-    cy.dataCount({ n: 10, f: 0, r: 0 });
+    cy.dataCount({ n: 11, f: 0, r: 0 });
 
     // abre painel de config
     cy.get(`div.dock button#config`).click();
@@ -38,8 +38,9 @@ describe("E2E: Teste com pequena janela de horários", () => {
     cy.get("tr[data-cy=linha-7] td[data-cy=hora]").contains("09:36");
     cy.get("tr[data-cy=linha-8] td[data-cy=hora]").contains("09:42");
     cy.get("tr[data-cy=linha-9] td[data-cy=hora]").contains("09:48");
-    // última vistoria
     cy.get("tr[data-cy=linha-10] td[data-cy=hora]").contains("09:54");
+    // última vistoria
+    cy.get("tr[data-cy=linha-11] td[data-cy=hora]").contains("10:00");
   });
 
   it("recalcula os horários da tarde numa janela de 1 hora", () => {
@@ -47,10 +48,10 @@ describe("E2E: Teste com pequena janela de horários", () => {
     cy.dataCount({ n: 0, f: 0, r: 0 });
 
     // adiociona 20 vistorias normais e 5 fechadas
-    cy.visitas("normal", 10);
+    cy.visitas("normal", 11);
 
     // checa quantidade correta
-    cy.dataCount({ n: 10, f: 0, r: 0 });
+    cy.dataCount({ n: 11, f: 0, r: 0 });
 
     // abre painel de config
     cy.get(`div.dock button#config`).click();
@@ -77,7 +78,8 @@ describe("E2E: Teste com pequena janela de horários", () => {
     cy.get("tr[data-cy=linha-7] td[data-cy=hora]").contains("15:36");
     cy.get("tr[data-cy=linha-8] td[data-cy=hora]").contains("15:42");
     cy.get("tr[data-cy=linha-9] td[data-cy=hora]").contains("15:48");
-    // última vistoria
     cy.get("tr[data-cy=linha-10] td[data-cy=hora]").contains("15:54");
+    // última vistoria
+    cy.get("tr[data-cy=linha-11] td[data-cy=hora]").contains("16:00");
   });
 });

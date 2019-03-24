@@ -20,12 +20,12 @@
 	let manha = {
 	  ativado: true,
 	  inicio: "08:40",
-	  fim: "11:20"
+	  fim: "11:15"
 	};
 	let tarde = {
 	  ativado: true,
 	  inicio: "14:30",
-	  fim: "17:15"
+	  fim: "17:25"
 	};
 
 	// Computed
@@ -35,7 +35,7 @@
 	$: duracaoManha = manha.ativado ? getDuration(manha.inicio, manha.fim) : 0;
 	$: duracaoTarde = tarde.ativado ? getDuration(tarde.inicio, tarde.fim) : 0;
 	$: duracaoTotal = duracaoManha + duracaoTarde;
-	$: media = (duracaoTotal - fechadas * 2) / (normais + recuperadas);
+	$: media = (duracaoTotal - fechadas * 2) / (normais + recuperadas)+1;
 
 	// Button Actions
 	function add(tipo) {

@@ -127,7 +127,6 @@
 		<MenuButton name="travar" type="" count="" action="{() => locked = true}" content="icon ion-md-unlock success" />
 	{/if}
 	<MenuButton name="config" type="" count="" action="{() => showConfig = !showConfig}" content="icon ion-md-cog" />
-	{media}
 </div>
 
 <div class={showConfig? "show" : "hide" }>

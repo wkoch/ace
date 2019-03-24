@@ -61,12 +61,10 @@ describe("E2E: Tela inicial, config padrão", () => {
     cy.visita("recuperada");
     cy.visita("normal");
     cy.visita("fechada");
-    cy.visita("recuperada");
-    cy.visita("recuperada");
+    cy.visitas("recuperada", 2);
     cy.visita("fechada");
     cy.visita("normal");
-    cy.visita("fechada");
-    cy.visita("fechada");
+    cy.visitas("fechada", 2);
     cy.visitas("normal", 10);
 
     cy.horaPrecisa();
@@ -89,7 +87,7 @@ describe("E2E: Tela inicial, config padrão", () => {
     cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:40");
     cy.get("tr[data-cy=linha-10] td[data-cy=hora]").contains("17:");
     cy.get("tr td[data-cy=hora]").contains("11:");
-    cy.get("tr td[data-cy=hora]").contains("14:3");
+    cy.get("tr td[data-cy=hora]").contains("14:");
   });
 
   it("checa o horário de um dia cheio", () => {
@@ -134,7 +132,13 @@ describe("E2E: Tela inicial, config padrão", () => {
     cy.visitas("normal", 4);
     cy.visitas("fechada", 1);
     cy.visitas("normal", 5);
+    cy.visitas("fechada", 1);
+    cy.visitas("normal", 3);
     cy.visitasChecadas("normal", 3, "11:", "17:");
+    cy.visitasChecadas("fechada", 2, "11:", "17:");
+    cy.visitasChecadas("normal", 2, "11:", "17:");
+    cy.visitasChecadas("fechada", 2, "11:", "17:");
+    cy.visitasChecadas("normal", 4, "11:", "17:");
     cy.visitasChecadas("fechada", 2, "11:", "17:");
     cy.visitasChecadas("normal", 2, "11:", "17:");
     cy.visitasChecadas("fechada", 2, "11:", "17:");

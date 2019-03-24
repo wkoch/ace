@@ -8,19 +8,21 @@ describe("E2E: Alteração de configurações", () => {
     cy.dataCount({ n: 0, f: 0, r: 0 });
 
     // adiociona 20 vistorias normais e 5 fechadas
-    cy.visitas("normal", 25);
+    cy.visitas("normal", 22);
 
     // checa quantidade correta
-    cy.dataCount({ n: 25, f: 0, r: 0 });
+    cy.dataCount({ n: 22, f: 0, r: 0 });
+
+    cy.horaPrecisa();
 
     // primeira vistoria às 08h
-    cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:");
+    cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:40");
     // fim da manhã às 11h
-    cy.get("tr[data-cy=linha-12] td[data-cy=hora]").contains("11:");
+    cy.get("tr[data-cy=linha-11] td[data-cy=hora]").contains("11:10");
     // início da tarde às 14h
-    cy.get("tr[data-cy=linha-13] td[data-cy=hora]").contains("14:");
+    cy.get("tr[data-cy=linha-12] td[data-cy=hora]").contains("14:30");
     // fim da tarde às 17h
-    cy.get("tr[data-cy=linha-25] td[data-cy=hora]").contains("17:");
+    cy.get("tr[data-cy=linha-22] td[data-cy=hora]").contains("17:00");
 
     // abre painel de config
     cy.get(`div.dock button#config`).click();
@@ -33,9 +35,9 @@ describe("E2E: Alteração de configurações", () => {
 
     // checa novos horários, todos durante a manhã
     // primeira vistoria às 08h
-    cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:");
+    cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:40");
     // última vistoria às 11h
-    cy.get("tr[data-cy=linha-25] td[data-cy=hora]").contains("11:");
+    cy.get("tr[data-cy=linha-22] td[data-cy=hora]").contains("11:07");
   });
 
   it("recalcula os horários da tarde quando não há período da manhã", () => {

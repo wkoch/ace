@@ -15,6 +15,8 @@ describe("E2E: Tela inicial, config padrão", () => {
     // Tudo zerado
     cy.dataCount({ n: 0, f: 0, r: 0 });
 
+    cy.horaPrecisa();
+
     // adiciona 1 e checa tudo
     cy.visita("normal");
     cy.get("td[data-cy=linha-1]").contains(1);
@@ -23,7 +25,7 @@ describe("E2E: Tela inicial, config padrão", () => {
       .should("have.attr", "data-cy")
       .and("include", "normal");
     cy.dataCount({ n: 1, f: 0, r: 0 });
-    cy.get("td[data-cy=hora]").contains("08:");
+    cy.get("td[data-cy=hora]").contains("08:40");
 
     // troca para fechada e checa
     cy.get("button[data-cy=normal]").click();
@@ -75,6 +77,8 @@ describe("E2E: Tela inicial, config padrão", () => {
     cy.visita("fechada");
     cy.visitas("normal", 10);
 
+    cy.horaPrecisa();
+
     // checa tudo
     cy.dataCount({ n: 17, f: 4, r: 3 });
     cy.get("tr")
@@ -90,9 +94,11 @@ describe("E2E: Tela inicial, config padrão", () => {
       .eq(25)
       .contains(24);
 
-    cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:");
-    cy.get("tr[data-cy=linha-10] td[data-cy=hora]").contains("17:");
-    cy.get("tr[data-cy=linha-24] td[data-cy=hora]").contains("16:");
+    cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:40");
+    cy.get("tr[data-cy=linha-10] td[data-cy=hora]").contains("17:15");
+    cy.get("tr[data-cy=linha-18] td[data-cy=hora]").contains("11:10");
+    cy.get("tr[data-cy=linha-18] td[data-cy=hora]").contains("14:30");
+    cy.get("tr[data-cy=linha-24] td[data-cy=hora]").contains("16:06");
   });
 
   it("checa a existência do divisor de páginas", () => {

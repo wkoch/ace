@@ -38,15 +38,27 @@ Cypress.Commands.add("visitas", (tipo, quantia) => {
 //     cy.get(`div.dock button#${tipo}`).should("have.class", `data-${valor}`);
 // });
 
-Cypress.Commands.add("dataCount", (data) => {
-    cy.get("div.dock button#normal").should("have.class", `data-${data.n}`);
-    cy.get("div.dock button#fechada").should("have.class", `data-${data.f}`);
-    cy.get("div.dock button#recuperada").should("have.class", `data-${data.r}`);
+Cypress.Commands.add("dataCount", data => {
+  cy.get("div.dock button#normal").should("have.class", `data-${data.n}`);
+  cy.get("div.dock button#fechada").should("have.class", `data-${data.f}`);
+  cy.get("div.dock button#recuperada").should("have.class", `data-${data.r}`);
 });
 
 Cypress.Commands.add("visitasChecadas", (tipo, quantia, hora) => {
   for (let index = 0; index < quantia; index++) {
     cy.get(`div.dock button#${tipo}`).click();
-    cy.get("tr").last().get("td[data-cy=hora]").contains(`${hora}:`);
+    cy.get("tr")
+      .last()
+      .get("td[data-cy=hora]")
+      .contains(`${hora}:`);
   }
+});
+
+Cypress.Commands.add("horaPrecisa", () => {
+  // abre painel de config
+  cy.get(`div.dock button#config`).click();
+  // desativa a aleatoriedade
+  cy.get(`div.dock button#rand`).click();
+  // fecha painel config
+  cy.get(`div.dock button#config`).click();
 });

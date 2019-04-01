@@ -1,5 +1,7 @@
 .DS_Store
 node_modules
 yarn-error.log
-/cypress/screenshots/
-/__sapper__/
+__sapper__
+.gauge
+gauge/logs
+gauge/reports

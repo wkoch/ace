@@ -118,14 +118,14 @@ describe("E2E: Tela inicial, config padrão", () => {
     cy.get("tr[data-cy=linha-25] td[data-cy=hora]").contains("17:");
   });
 
-  it("checa o horário final de 15 a 30 vistorias", () => {
+  it("checa o horário final de 15 a 25 vistorias", () => {
     cy.horaPrecisa();
     // adiociona 15 vistorias normais
     cy.visitas("normal", 15);
-    cy.visitasChecadas("normal", 15, "11:", "17:");
+    cy.visitasChecadas("normal", 10, "11:", "17:");
   });
 
-  it("checa o horário final de 15 a 30 vistorias com fechadas", () => {
+  it("checa o horário final de 15 a 26 vistorias com fechadas", () => {
     cy.horaPrecisa();
     cy.visitas("normal", 3);
     cy.visitas("fechada", 2);
@@ -141,8 +141,6 @@ describe("E2E: Tela inicial, config padrão", () => {
     cy.visitasChecadas("normal", 4, "11:", "17:");
     cy.visitasChecadas("fechada", 2, "11:", "17:");
     cy.visitasChecadas("normal", 2, "11:", "17:");
-    cy.visitasChecadas("fechada", 2, "11:", "17:");
-    cy.visitasChecadas("normal", 4, "11:", "17:");
     cy.visitasChecadas("fechada", 2, "11:", "17:");
   });
 });

@@ -17,72 +17,72 @@ describe("E2E: Tela inicial, config padrão", () => {
 
     // segundo título
     cy.get("tr")
-      .eq(20)
+      .eq(21)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(20)
+      .eq(21)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(20)
+      .eq(21)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(20)
+      .eq(21)
       .contains("th", "Excluir");
 
     // terceiro título
     cy.get("tr")
-      .eq(41)
+      .eq(42)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(41)
+      .eq(42)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(41)
+      .eq(42)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(41)
+      .eq(42)
       .contains("th", "Excluir");
 
     // quarto título
     cy.get("tr")
-      .eq(62)
+      .eq(63)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(62)
+      .eq(63)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(62)
+      .eq(63)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(62)
+      .eq(63)
       .contains("th", "Excluir");
 
     // quinto título
     cy.get("tr")
-      .eq(83)
+      .eq(84)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(83)
+      .eq(84)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(83)
+      .eq(84)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(83)
+      .eq(84)
       .contains("th", "Excluir");
 
     // ultimo título
     cy.get("tr")
-      .eq(125)
+      .eq(105)
       .contains("th", "Linha");
     cy.get("tr")
-      .eq(125)
+      .eq(105)
       .contains("th", "Tipo");
     cy.get("tr")
-      .eq(125)
+      .eq(105)
       .contains("th", "Hora");
     cy.get("tr")
-      .eq(125)
+      .eq(105)
       .contains("th", "Excluir");
   });
 });

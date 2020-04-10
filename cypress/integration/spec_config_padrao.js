@@ -78,7 +78,7 @@ describe("E2E: Tela inicial, config padrão", () => {
       .eq(10)
       .contains(10);
     cy.get("tr")
-      .eq(21)
+      .eq(20)
       .contains(20);
     cy.get("tr")
       .eq(25)

@@ -132,7 +132,7 @@
 <div class={showConfig? "show" : "hide" }>
 	<h1>Configurações</h1>
 
-	<p><strong>Calculadora de Horas ACE <i>v4.3.0.</i></strong></p>
+	<p><strong>Calculadora de Horas ACE <i>v4.4.0.</i></strong></p>
 
 	{#if normais+recuperadas != 0}<p>Tempo médio por Vistoria realizada: {media}</p>{/if}
 
@@ -191,7 +191,7 @@
 			<th>Excluir</th>
 		</tr>
 		{#each vistorias as vistoria, index}
-		{#if [20, 40, 60, 80, 100, 120, 140, 160].includes(vistoria.id)}
+		{#if [21, 41, 61, 81, 101, 121, 141, 161].includes(vistoria.id)}
 		<tr>
 			<th>Linha</th>
 			<th>Tipo</th>

@@ -50,6 +50,8 @@ describe("E2E: Alteração de configurações", () => {
     // checa quantidade correta
     cy.dataCount({ n: 25, f: 0, r: 0 });
 
+    cy.horaPrecisa();
+
     // primeira vistoria às 08h
     cy.get("tr[data-cy=linha-1] td[data-cy=hora]").contains("08:");
     // fim da manhã às 11h
@@ -143,7 +145,6 @@ describe("E2E: Alteração de configurações", () => {
     cy.get("tr td[data-cy=hora]").contains("14:");
     // fim da tarde às 17h
     cy.get("tr td[data-cy=hora]").last().contains("17:");
-    
 
     // abre painel de config
     cy.get(`div.dock button#config`).click();
@@ -160,7 +161,6 @@ describe("E2E: Alteração de configurações", () => {
 
     // fecha painel de config
     cy.get(`div.dock button#config`).click();
-
 
     // checa que nada mudou
     cy.dataCount({ n: 25, f: 0, r: 0 });
@@ -190,5 +190,5 @@ describe("E2E: Alteração de configurações", () => {
     cy.get("tr td[data-cy=hora]").contains("15:");
     // fim da tarde às 17h
     cy.get("tr td[data-cy=hora]").last().contains("18:");
-  })
+  });
 });

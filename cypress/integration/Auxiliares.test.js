@@ -1,4 +1,4 @@
-import { comparaPorHoraInicial, horarioDoDia, horaEntre, processaIntervalos, estaContidoEm, adicionaChuva } from "../../src/modulos/Helpers";
+import { comparaPorHoraInicial, horarioDoDia, horaEntre, processaIntervalos, estaContidoEm, adicionaChuva } from "../../src/modulos/Auxiliares";
 
 describe("comparaPorHoraInicial()", () => {
     context("Testa se o valor é igual, menor ou maior que outros dois", () => {

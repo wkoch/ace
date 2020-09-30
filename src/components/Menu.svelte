@@ -1,5 +1,5 @@
 <script>
-  let config = { ativo: false, bloqueado: false, aleatoriedade: false };
+  let config = { ativo: true, bloqueado: false, aleatoriedade: false };
   let manha = { ativo: true, inicio: false, fim: false };
   let tarde = { ativo: true, inicio: false, fim: false };
   let exibirMenu = config.ativo ? "is-active" : "";
@@ -25,13 +25,10 @@
           <div class="column is-large"><strong>Manhã</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
-              <input
-                class="is-small is-rounded switch is-primary"
-                id="manhaAtivado"
-                type="checkbox"
-                name="manhaAtivado"
-                checked={manha.ativo} />
-              <label for="manhaAtivado" />
+              <label class="small switch is-rounded">
+                <input type="checkbox" value="false" id="manhaAtivado" />
+                <span class="check" />
+              </label>
             </div>
           </div>
         </div>
@@ -74,13 +71,10 @@
           <div class="column is-large"><strong>Tarde</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
-              <input
-                class="is-small is-rounded switch is-primary"
-                id="tardeAtivado"
-                type="checkbox"
-                name="tardeAtivado"
-                checked={tarde.ativo} />
-              <label for="tardeAtivado" />
+              <label class="small switch is-rounded">
+                <input type="checkbox" value="false" id="tardeAtivado" />
+                <span class="check" />
+              </label>
             </div>
           </div>
         </div>
@@ -123,12 +117,16 @@
           <div class="column is-large"><strong>Aleatoriedade</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
-              <input
+              <label class="switch is-rounded">
+                <input type="checkbox" value="false" id="aleatoriedade" />
+                <span class="check" />
+              </label>
+              <!-- <input
                 class="is-small is-rounded switch is-primary"
                 id="aleatoriedade"
                 type="checkbox"
                 name="aleatoriedade"
-                bind:checked={config.aleatoriedade} />
+                bind:checked={config.aleatoriedade} /> -->
               <label for="aleatoriedade" />
             </div>
           </div>
@@ -137,13 +135,17 @@
           <div class="column is-large"><strong>Bloqueio</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
-              <input
+              <label class="small switch is-rounded">
+                <input type="checkbox" value="false" id="bloqueio" />
+                <span class="check" />
+              </label>
+              <!-- <input
                 class="is-small is-rounded switch is-danger"
                 id="bloqueio"
                 type="checkbox"
                 name="bloqueio"
                 bind:checked={config.bloqueado} />
-              <label for="bloqueio" />
+              <label for="bloqueio" /> -->
             </div>
           </div>
         </div>

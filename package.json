@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bulma": "^0.9.1",
+    "bulma-switch-control": "^1.1.1",
     "compression": "^1.7.1",
     "polka": "next",
     "sirv": "^1.0.0",

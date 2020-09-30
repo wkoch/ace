@@ -1,46 +1,99 @@
+<script>
+	import { fade } from "svelte/transition";
+
+	// Dados e Ajustes
+	import { Ajustes } from "../modulos/Ajustes.js";
+	import {
+		Geral,
+		Manha,
+		Tarde,
+		NORMAL,
+		FECHADA,
+		RECUPERADA,
+		modal,
+	} from "../modulos/Dados.js";
+
+	// Componentes
+	import Barra from "./../components/Barra.svelte";
+	import Botao from "./../components/Botao.svelte";
+	import Conteudo from "./../components/Conteudo.svelte";
+	import Modal from "../components/Modal.svelte";
+
+	// Funções
+	// import { beforeUpdate, afterUpdate } from "svelte";
+	// import {
+	// 	atualizaIDs,
+	// 	proximoHorario,
+	// 	contaNormais,
+	// 	contaFechadas,
+	// 	contaRecuperadas,
+	// 	calculaPeriodos,
+	// } from "../modulos/Auxiliares.js";
+
+	// Temporario
+	function add(tipo) {
+		Geral.vistorias = Geral.vistorias.concat({
+			id: Geral.vistorias.length + 1,
+			tipo: tipo,
+			inicio: "10:00",
+			fim: "10:15",
+		});
+	}
+
+	// Computado
+	// $: chuvas = Geral.chuvas.length;
+	// Manhã
+	// $: Manha.normais = contaNormais(Manha.vistorias);
+	// $: Manha.fechadas = contaFechadas(Manha.vistorias);
+	// $: Manha.recuperadas = contaRecuperadas(Manha.vistorias);
+	// Tarde
+	// $: Tarde.normais = contaNormais(Tarde.vistorias);
+	// $: Tarde.fechadas = contaFechadas(Tarde.vistorias);
+	// $: Tarde.recuperadas = contaRecuperadas(Tarde.vistorias);
+	// Geral
+	$: normais = 0;
+	$: fechadas = 0;
+	$: recuperadas = 0;
+	$: total = 1;
+	// $: Geral.periodos = calculaPeriodos(
+	// 	Geral.periodos,
+	// 	Manha,
+	// 	Tarde,
+	// 	Geral.chuvas
+	// );
+	// $: duracaoManha = Manha.ativo ? getDuration(Manha.inicio, Manha.fim) : 0;
+	// $: duracaoTarde = tarde.ativo ? getDuration(tarde.inicio, tarde.fim) : 0;
+	// $: duracaoTotal = duracaoManha + duracaoTarde;
+	// $: media = (duracaoTotal+sobra - fechadas * 3) / (normais + recuperadas-1);
+</script>
+
 <style>
-	h1, figure, p {
-		text-align: center;
-		margin: 0 auto;
-	}
-
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
-
-	figure {
-		margin: 0 0 1em 0;
-	}
-
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
-
-	p {
-		margin: 1em auto;
-	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
-	}
 </style>
 
-<svelte:head>
-	<title>Sapper project template</title>
-</svelte:head>
+<Conteudo bind:vistorias={Geral.vistorias} {total}>
+	<Modal bind:ativo={modal.ativo} bind:chuvas={Geral.chuvas} />
+</Conteudo>
 
-<h1>Great success!</h1>
-
-<figure>
-	<img alt='Success Kid' src='successkid.jpg'>
-	<figcaption>Have fun with Sapper!</figcaption>
-</figure>
-
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>
+<Barra>
+	<Botao
+		classe="is-inverted is-link"
+		id="chuva"
+		icone="umbrella"
+		onclick={() => (modal.ativo = true)} />
+	<Botao
+		classe="is-inverted is-success"
+		id="normal"
+		distintivo={normais}
+		icone="check-circle"
+		onclick={() => add(NORMAL)} />
+	<Botao
+		classe="is-inverted is-danger"
+		id="fechada"
+		distintivo={fechadas}
+		icone="times-circle" />
+	<Botao
+		classe="is-inverted is-primary"
+		id="recuperada"
+		distintivo={recuperadas}
+		icone="recycle" />
+</Barra>

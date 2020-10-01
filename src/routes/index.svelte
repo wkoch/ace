@@ -12,6 +12,7 @@
 		RECUPERADA,
 		modal,
 	} from "../modulos/Dados.js";
+	import {} from "../modulos/Auxiliares.js";
 
 	// Componentes
 	import Barra from "./../components/Barra.svelte";

@@ -1,4 +1,13 @@
-import { comparaPorHoraInicial, horarioDoDia, horaEntre, processaIntervalos, estaContidoEm, adicionaChuva } from "../../src/modulos/Auxiliares";
+import {
+    comparaPorHoraInicial,
+    horarioDoDia,
+    horaEntre,
+    processaIntervalos,
+    estaContidoEm,
+    adicionaChuva,
+    subtraiIntervalos,
+    identificaPeriodos
+} from "../../src/modulos/Auxiliares";
 
 describe("comparaPorHoraInicial()", () => {
     context("Testa se o valor é igual, menor ou maior que outros dois", () => {
@@ -261,21 +270,122 @@ describe("adicionaChuva()", () => {
     })
 })
 
-// describe("()", () => {
-//     context(".", () => {
-//         it("", () => {
-//             expect().to.equal();
-//         })
-//     })
-// })
+describe("subtraiIntervalos()", () => {
+    context("Subtrai os intervalos dentro do dia", () => {
+        it("Nenhum intervalo", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [];
+            let resultado = [{ inicio: 8, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Apenas intervalo do almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "almoço", inicio: 11, fim: 14 }];
+            let resultado = [{ inicio: 8, fim: 11 }, { inicio: 14, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Apenas uma chuva", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 11, fim: 14 }];
+            let resultado = [{ inicio: 8, fim: 11 }, { inicio: 14, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Almoço e uma chuva", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 9, fim: 10 }, { tipo: "almoço", inicio: 11, fim: 14 }];
+            let resultado = [{ inicio: 8, fim: 9 }, { inicio: 10, fim: 11 }, { inicio: 14, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Almoço e duas chuvas", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 9, fim: 10 }, { tipo: "almoço", inicio: 11, fim: 14 }, { tipo: "chuva", inicio: 15, fim: 16 }];
+            let resultado = [{ inicio: 8, fim: 9 }, { inicio: 10, fim: 11 }, { inicio: 14, fim: 15 }, { inicio: 16, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+    })
+    context("Subtrai os intervalos intercedendo o dia", () => {
+        it("Chuva começando o dia, sem almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 5, fim: 9 }];
+            let resultado = [{ inicio: 9, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Chuva começando o dia, com almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 5, fim: 10 }, { tipo: "almoço", inicio: 11, fim: 14 }];
+            let resultado = [{ inicio: 10, fim: 11 }, { inicio: 14, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Chuva terminando o dia, sem almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 15, fim: 20 }];
+            let resultado = [{ inicio: 8, fim: 15 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Chuva terminando o dia, com almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "almoço", inicio: 11, fim: 14 }, { tipo: "chuva", inicio: 15, fim: 20 }];
+            let resultado = [{ inicio: 8, fim: 11 }, { inicio: 14, fim: 15 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+    })
+    context("Ignora os intervalos fora do horário do dia", () => {
+        it("Chuva antes do dia", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 5, fim: 7 }];
+            let resultado = [{ inicio: 8, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Chuva antes do dia, com almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 5, fim: 7 }, { tipo: "almoço", inicio: 11, fim: 14 }];
+            let resultado = [{ inicio: 8, fim: 11 }, { inicio: 14, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Chuva além do dia, sem almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "chuva", inicio: 18, fim: 20 }];
+            let resultado = [{ inicio: 8, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+        it("Chuva além do dia, com almoço", () => {
+            let dia = { inicio: 8, fim: 17 };
+            let intervalos = [{ tipo: "almoço", inicio: 11, fim: 14 }, { tipo: "chuva", inicio: 18, fim: 20 }];
+            let resultado = [{ inicio: 8, fim: 11 }, { inicio: 14, fim: 17 }];
+            expect(subtraiIntervalos(dia, intervalos)).to.deep.equal(resultado);
+        })
+    })
+})
 
-// describe("()", () => {
-//     context(".", () => {
-//         it("", () => {
-//             expect().to.equal();
-//         })
-//     })
-// })
+describe("identificaPeriodos()", () => {
+    context("Identifica os períodos da manhã e da tarde.", () => {
+        let manhaAtivo = { ativo: true, inicio: 8, fim: 12 };
+        let tardeAtivo = { ativo: true, inicio: 13, fim: 17 };
+        let manhaInativo = { ativo: false, inicio: 8, fim: 12 };
+        let tardeInativo = { ativo: false, inicio: 13, fim: 17 };
+
+        it("Marca período da Manhã", () => {
+            let momentos = [{ periodo: "Manhã", inicio: 9, fim: 10 }];
+            let resultado = [{ periodo: "Manhã", inicio: 9, fim: 10 }];
+            expect(identificaPeriodos(momentos, manhaAtivo, tardeInativo)).to.deep.equal(resultado);
+        })
+        it("Marca período da Tarde", () => {
+            let momentos = [{ periodo: "Tarde", inicio: 15, fim: 17 }];
+            let resultado = [{ periodo: "Tarde", inicio: 15, fim: 17 }];
+            expect(identificaPeriodos(momentos, manhaInativo, tardeAtivo)).to.deep.equal(resultado);
+        })
+        it("Marca períodos da Manhã e Tarde", () => {
+            let momentos = [{ periodo: "Manhã", inicio: 9, fim: 10 }, { periodo: "Tarde", inicio: 15, fim: 17 }];
+            let resultado = [{ periodo: "Manhã", inicio: 9, fim: 10 }, { periodo: "Tarde", inicio: 15, fim: 17 }];
+            expect(identificaPeriodos(momentos, manhaAtivo, tardeAtivo)).to.deep.equal(resultado);
+        })
+        it("Marca vários períodos da Manhã e Tarde", () => {
+            let momentos = [{ periodo: "Manhã", inicio: 9, fim: 10 }, { periodo: "Manhã", inicio: 11, fim: 12 }, { periodo: "Tarde", inicio: 14, fim: 15 }, { periodo: "Manhã", inicio: 16, fim: 17 }];
+            let resultado = [{ periodo: "Manhã", inicio: 8, fim: 9 }, { periodo: "Manhã", inicio: 10, fim: 11 }, { periodo: "Tarde", inicio: 13, fim: 14 }, { periodo: "Tarde", inicio: 15, fim: 16 }];
+            expect(identificaPeriodos(momentos, manhaAtivo, tardeAtivo)).to.deep.equal(resultado);
+        })
+    })
+})
 
 // describe("()", () => {
 //     context(".", () => {

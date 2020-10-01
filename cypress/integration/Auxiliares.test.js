@@ -6,7 +6,8 @@ import {
     estaContidoEm,
     adicionaChuva,
     subtraiIntervalos,
-    identificaPeriodos
+    identificaPeriodos,
+    processaPeriodos
 } from "../../src/modulos/Auxiliares";
 
 describe("comparaPorHoraInicial()", () => {
@@ -386,6 +387,38 @@ describe("identificaPeriodos()", () => {
         })
     })
 })
+
+describe("processaPeriodos()", () => {
+    let manhaAtivo = { ativo: true, inicio: 8, fim: 12 };
+    let tardeAtivo = { ativo: true, inicio: 13, fim: 17 };
+    let manhaInativo = { ativo: false, inicio: 8, fim: 12 };
+    let tardeInativo = { ativo: false, inicio: 13, fim: 17 };
+
+    context("Faz todo o processamento de Períodos", () => {
+        it("Manhã e Tarde", () => {
+            let resultado = [{ periodo: 'Manhã', inicio: 8, fim: 12 }, { periodo: 'Tarde', inicio: 13, fim: 17 }];
+            expect(processaPeriodos(manhaAtivo, tardeAtivo, [])).to.deep.equal(resultado);
+        })
+
+        // FIXME Adicionar mais testes
+    })
+})
+
+// describe("()", () => {
+//     context(".", () => {
+//         it("", () => {
+//             expect().to.equal();
+//         })
+//     })
+// })
+
+// describe("()", () => {
+//     context(".", () => {
+//         it("", () => {
+//             expect().to.equal();
+//         })
+//     })
+// })
 
 // describe("()", () => {
 //     context(".", () => {

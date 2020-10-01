@@ -1,14 +1,18 @@
 /** @typedef {number} Número */
 /** @typedef {string} Texto */
 /** @typedef {Número} Hora */
-/** @typedef {{ tipo: ("chuva" | "almoço"), inicio: Número, fim: Número }} Intervalo */
-/** @typedef {Array<{ tipo: ("chuva" | "almoço"), inicio: Número, fim: Número }>} Intervalos */
-/** @typedef {{ inicio: Número, fim: Número }} Momento */
+/** @typedef {{ tipo: ("chuva" | "almoço"), inicio: Hora, fim: Hora }} Intervalo */
+/** @typedef {Array<{ tipo: ("chuva" | "almoço"), inicio: Hora, fim: Hora }>} Intervalos */
+/** @typedef {{ inicio: Hora, fim: Hora }} Momento */
 /** @typedef {Array<Momento>} Momentos */
-/** @typedef {{ periodo: ("Manhã" | "Tarde"), inicio: Número, fim: Número }} Período */
+/** @typedef {{ periodo: ("Manhã" | "Tarde"), inicio: Hora, fim: Hora }} Período */
 /** @typedef {Array<Período>} Períodos */
-/** @typedef {{ ativo: boolean, periodo: ("Manhã" | "Tarde"), inicio: Número, fim: Número }} Manhã */
-/** @typedef {{ ativo: boolean, periodo: ("Manhã" | "Tarde"), inicio: Número, fim: Número }} Tarde */
+/** @typedef {{ index: Número, periodo: ("Manhã" | "Tarde"), tipo: string, inicio: Hora, fim: Hora }} Vistoria */
+/** @typedef {Array<Vistoria>} Vistorias */
+/** @typedef {{ tipo: string }} TipoVistoria */
+/** @typedef {Array<TipoVistoria>} TipoVistorias */
+/** @typedef {{ ativo: boolean, periodo: ("Manhã" | "Tarde"), inicio: Hora, fim: Hora }} Manhã */
+/** @typedef {{ ativo: boolean, periodo: ("Manhã" | "Tarde"), inicio: Hora, fim: Hora }} Tarde */
 /** @typedef {Intervalo | Momento | Período | Manhã | Tarde} Tempo */
 
 /** @type {(a: Tempo, b: Tempo ) => Número} */
@@ -19,14 +23,12 @@ export function comparaPorHoraInicial(a, b) {
     /** @type {Hora} */
     const elementoB = b.inicio;
 
-    /** @type {Número} */
-    let comparacao = 0;
     if (elementoA > elementoB) {
-        comparacao = 1;
+        return 1;
     } else if (elementoA < elementoB) {
-        comparacao = -1;
+        return -1;
     }
-    return comparacao;
+    return 0;
 }
 
 /** @type {(manha: Manhã, tarde: Tarde) => Momento} */
@@ -157,7 +159,7 @@ export function adicionaChuva(chuvas, novo) {
         novoChuvas.push(novo);
     }
 
-    return (chuvas = novoChuvas.sort(comparaPorHoraInicial));
+    return novoChuvas.sort(comparaPorHoraInicial);
 }
 
 /** @type {(dia: Momento, intervalos: Intervalos) => Momentos} */
@@ -225,26 +227,86 @@ export function identificaPeriodos(momentos, manha, tarde) {
     return novoPeriodos;
 }
 
-/** @type {(manha: Manhã, tarde: Tarde) => Períodos} */
-export function processaPeriodos(manha, tarde) {
+/** @type {(manha: Manhã, tarde: Tarde, chuvas: Intervalos) => Períodos} */
+export function processaPeriodos(manha, tarde, chuvas) {
     // Pega o horário de trabalho total do dia
     /** @type {Momento} */
-    let dia = horarioDoDia(manha, tarde);
+    const dia = horarioDoDia(manha, tarde);
 
     /** @type {Intervalos} */
-    let chuvas = [{ tipo: "chuva", inicio: 9, fim: 10 }];
-
-    /** @type {Intervalos} */
-    let intervalos = processaIntervalos(chuvas, manha, tarde);
+    const intervalos = processaIntervalos(chuvas, manha, tarde);
 
     // gera os periodos sem intervalos
     /** @type {Momentos} */
-    let momentos = subtraiIntervalos(dia, intervalos);
+    const momentos = subtraiIntervalos(dia, intervalos);
 
     /** @type {Períodos} */
-    let periodos = identificaPeriodos(momentos, manha, tarde);
-    console.table(periodos);
+    const periodos = identificaPeriodos(momentos, manha, tarde);
+
     return periodos;
 }
 
-processaPeriodos({ ativo: true, periodo: "Manhã", inicio: 8, fim: 12 }, { ativo: true, periodo: "Tarde", inicio: 13, fim: 17 });
+/** @type {(vistorias: TipoVistorias, tipo: Texto) => TipoVistorias} */
+export function adicionaVistoria(vistorias, tipo) {
+    return [...vistorias, { tipo: tipo }];
+}
+
+/** @type {(periodos: Períodos) => Hora} */
+export function duracaoTotalPeriodos(periodos) {
+    /** @type {Hora} */
+    let duracaoTotal = 0;
+
+    periodos.forEach(periodo => {
+        duracaoTotal += periodo.fim - periodo.inicio;
+    });
+
+    return duracaoTotal;
+}
+
+/** @type {(periodos: Períodos, normais: Número, fechadas: Número, recuperadas: Número) => Hora} */
+export function mediaGeral(periodos, normais, fechadas, recuperadas) {
+    /** @type {Hora} */
+    const duracaoTotal = duracaoTotalPeriodos(periodos);
+
+    return (duracaoTotal - fechadas * 3) / (normais + recuperadas - 1); // FIXME Extrair o 3 para Dados
+}
+
+/** @type {(vistoria: TipoVistoria | Vistoria, media: Número) => Hora} */
+export function duracaoDaVistoria(vistoria, media) {
+    if (vistoria.tipo == "FECHADA") {
+        return 3; // FIXME Extrair Tempos e String para Dados
+    } else if (vistoria.tipo == "NORMAL" || vistoria.tipo == "RECUPERADA") {
+        return media;
+    }
+}
+
+/** @type {(vistorias: Vistorias, periodos: Períodos, media: Número) => Vistorias} */
+export function divideVistoriasEntrePeríodos(vistorias, periodos, media) {
+    /** @type {Vistorias} */
+    let novoVistorias = [];
+    /** @type {Número} */
+    let contador = 0;
+
+    periodos.forEach(periodo => {
+        /** @type {Hora} */
+        let ultimoHorario = periodo.inicio;
+
+        if (horaEntre(ultimoHorario, periodo)) {
+            vistorias.forEach(vistoria => {
+                /** @type {Hora} */
+                let proximoHorario = ultimoHorario + duracaoDaVistoria(vistoria, media);
+                novoVistorias.push({
+                    index: contador,
+                    periodo: periodo.periodo,
+                    tipo: vistoria.tipo,
+                    inicio: ultimoHorario,
+                    fim: proximoHorario
+                })
+                contador += 1;
+                ultimoHorario = proximoHorario;
+            });
+        }
+    });
+
+    return novoVistorias;
+}

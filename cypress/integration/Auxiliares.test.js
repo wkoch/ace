@@ -381,7 +381,7 @@ describe("identificaPeriodos()", () => {
         })
         it("Marca vários períodos da Manhã e Tarde", () => {
             let momentos = [{ periodo: "Manhã", inicio: 9, fim: 10 }, { periodo: "Manhã", inicio: 11, fim: 12 }, { periodo: "Tarde", inicio: 14, fim: 15 }, { periodo: "Manhã", inicio: 16, fim: 17 }];
-            let resultado = [{ periodo: "Manhã", inicio: 8, fim: 9 }, { periodo: "Manhã", inicio: 10, fim: 11 }, { periodo: "Tarde", inicio: 13, fim: 14 }, { periodo: "Tarde", inicio: 15, fim: 16 }];
+            let resultado = [{ periodo: "Manhã", inicio: 9, fim: 10 }, { periodo: "Manhã", inicio: 11, fim: 12 }, { periodo: "Tarde", inicio: 14, fim: 15 }, { periodo: "Tarde", inicio: 16, fim: 17 }];
             expect(identificaPeriodos(momentos, manhaAtivo, tardeAtivo)).to.deep.equal(resultado);
         })
     })

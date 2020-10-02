@@ -10,8 +10,6 @@
  */
 
 import { horaEntre } from "./Horarios";
-import { duracaoTotalPeriodos } from "./Periodos";
-import { TEMPO } from "../data/Dados";
 
 
 /** @type {(objeto1: Tempo, objeto2: Tempo) => boolean} */
@@ -20,13 +18,7 @@ export function estaContidoEm(objeto1, objeto2) {
 }
 
 
-/** @type {(periodos: Períodos, normais: Número, fechadas: Número, recuperadas: Número) => Hora} */
-export function mediaGeral(periodos, normais, fechadas, recuperadas) {
-    /** @type {Hora} */
-    const duracaoTotal = duracaoTotalPeriodos(periodos);
 
-    return (duracaoTotal - fechadas * TEMPO.FECHADAS) / (normais + recuperadas - 1);
-}
 
 
 

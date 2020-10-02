@@ -2,7 +2,7 @@
 	import { fade } from "svelte/transition";
 
 	// Dados e Ajustes
-	import { Ajustes } from "../modulos/Ajustes.js";
+	import { Ajustes } from "../data/Ajustes.js";
 	import {
 		Geral,
 		Manha,
@@ -11,8 +11,8 @@
 		FECHADA,
 		RECUPERADA,
 		modal,
-	} from "../modulos/Dados.js";
-	import {} from "../modulos/Auxiliares.js";
+	} from "../data/Dados.js";
+	import {} from "../lib/Auxiliares.js";
 
 	// Componentes
 	import Barra from "./../components/Barra.svelte";
@@ -29,7 +29,7 @@
 	// 	contaFechadas,
 	// 	contaRecuperadas,
 	// 	calculaPeriodos,
-	// } from "../modulos/Auxiliares.js";
+	// } from "../lib/Auxiliares.js";
 
 	// Temporario
 	function add(tipo) {

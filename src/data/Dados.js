@@ -11,7 +11,14 @@ export let modal = { ativo: false };
 export const NORMAL = "normal";
 export const FECHADA = "fechada";
 export const RECUPERADA = "recuperada";
-
+export const TEMPO = {
+    FECHADAS: 3
+}
+export const TIPO = {
+    NORMAL: "N",
+    FECHADA: "F",
+    RECUPERADA: "R"
+}
 
 // DADOS DA MANHÃ
 export let Manha = {

@@ -1,5 +1,4 @@
 /**
- * @typedef { import("./Tipos").Número } Número
  * @typedef { import("./Tipos").Hora } Hora
  * @typedef { import("./Tipos").Manhã } Manhã
  * @typedef { import("./Tipos").Tarde } Tarde

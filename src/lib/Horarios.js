@@ -1,18 +1,28 @@
 /**
- * @typedef { import("./Tipos").Número } Número
  * @typedef { import("./Tipos").Hora } Hora
  * @typedef { import("./Tipos").Manhã } Manhã
  * @typedef { import("./Tipos").Tarde } Tarde
+ * @typedef { import("./Tipos").Horário } Horário
  * @typedef { import("./Tipos").Momento } Momento
  * @typedef { import("./Tipos").Intervalos } Intervalos
  * @typedef { import("./Tipos").Tempo } Tempo
  */
 
+/** @type {(horario: string) => Horário} */
+export function horarioTextoParaObjeto(horario) {
+    let [horas, minutos] = horario.split(":");
+    return { horas: Number(horas), minutos: Number(minutos) };
+}
 
-/** @type {(a: Tempo, b: Tempo) => Número} */
+/** @type {(horario: string) => number} */
+export function horarioEmMinutos(horario) {
+    let { horas, minutos } = horarioTextoParaObjeto(horario);
+    return horas * 60 + minutos;
+}
+
+
+/** @type {(a: Tempo, b: Tempo) => number} */
 export function comparaPorHoraInicial(a, b) {
-    // Eliminar, trocar por comparaPor
-
     /** @type {Hora} */
     const elementoA = a.inicio;
     /** @type {Hora} */

@@ -1,100 +1,78 @@
 <script>
+	/**
+	 * @typedef { import("../lib/Tipos").Manhã } Manhã
+	 * @typedef { import("../lib/Tipos").Tarde } Tarde
+	 * @typedef { import("../lib/Tipos").Períodos } Períodos
+	 * @typedef { import("../lib/Tipos").Vistorias } Vistorias
+	 * @typedef { import("../lib/Tipos").Intervalos } Intervalos
+	 */
 	import { fade } from "svelte/transition";
-
-	// Dados e Ajustes
-	import { Ajustes } from "../data/Ajustes.js";
-	import {
-		Geral,
-		Manha,
-		Tarde,
-		NORMAL,
-		FECHADA,
-		RECUPERADA,
-		modal,
-	} from "../data/Dados.js";
-	import {} from "../lib/Auxiliares.js";
 
 	// Componentes
 	import Barra from "./../components/Barra.svelte";
 	import Botao from "./../components/Botao.svelte";
 	import Conteudo from "./../components/Conteudo.svelte";
+	import Menu from "./../components/Menu.svelte";
 	import Modal from "../components/Modal.svelte";
 
-	// Funções
-	// import { beforeUpdate, afterUpdate } from "svelte";
-	// import {
-	// 	atualizaIDs,
-	// 	proximoHorario,
-	// 	contaNormais,
-	// 	contaFechadas,
-	// 	contaRecuperadas,
-	// 	calculaPeriodos,
-	// } from "../lib/Auxiliares.js";
+	// Dados e Ajustes
+	import { Ajustes } from "../data/Ajustes.js";
+	import { TEXTO } from "../data/Constantes.js";
 
-	// Temporario
-	function add(tipo) {
-		Geral.vistorias = Geral.vistorias.concat({
-			id: Geral.vistorias.length + 1,
-			tipo: tipo,
-			inicio: "10:00",
-			fim: "10:15",
-		});
-	}
+	// DADOS GERAIS
+	/** @type {Vistorias} */
+	let vistorias = [];
 
-	// Computado
-	// $: chuvas = Geral.chuvas.length;
-	// Manhã
-	// $: Manha.normais = contaNormais(Manha.vistorias);
-	// $: Manha.fechadas = contaFechadas(Manha.vistorias);
-	// $: Manha.recuperadas = contaRecuperadas(Manha.vistorias);
-	// Tarde
-	// $: Tarde.normais = contaNormais(Tarde.vistorias);
-	// $: Tarde.fechadas = contaFechadas(Tarde.vistorias);
-	// $: Tarde.recuperadas = contaRecuperadas(Tarde.vistorias);
-	// Geral
-	$: normais = 0;
-	$: fechadas = 0;
-	$: recuperadas = 0;
-	$: total = 1;
-	// $: Geral.periodos = calculaPeriodos(
-	// 	Geral.periodos,
-	// 	Manha,
-	// 	Tarde,
-	// 	Geral.chuvas
-	// );
-	// $: duracaoManha = Manha.ativo ? getDuration(Manha.inicio, Manha.fim) : 0;
-	// $: duracaoTarde = tarde.ativo ? getDuration(tarde.inicio, tarde.fim) : 0;
-	// $: duracaoTotal = duracaoManha + duracaoTarde;
-	// $: media = (duracaoTotal+sobra - fechadas * 3) / (normais + recuperadas-1);
+	/** @type {Períodos} */
+	let periodos = [];
+
+	/** @type {Intervalos} */
+	let chuvas = [];
+
+	/** @type {boolean} */
+	export let estadoMenu = false;
+
+	/** @type {boolean} */
+	export let estadoModal = false;
+
+	// Bibliotecas
+	import {} from "../lib/Auxiliares.js";
+	import MenuButton from "../components/MenuButton.svelte";
+
+	// Variáveis Computadas Reativamente
+	$: relatorio = [];
+	$: total = relatorio.length;
 </script>
 
 <style>
 </style>
 
-<Conteudo bind:vistorias={Geral.vistorias} {total}>
-	<Modal bind:ativo={modal.ativo} bind:chuvas={Geral.chuvas} />
+<Conteudo {relatorio} {total}>
+	<Modal bind:estadoModal bind:chuvas />
 </Conteudo>
 
 <Barra>
 	<Botao
 		classe="is-inverted is-link"
-		id="chuva"
+		id={TEXTO.CHUVA}
+		distintivo={chuvas.length}
 		icone="umbrella"
-		onclick={() => (modal.ativo = true)} />
+		onclick={() => (estadoModal = true)} />
 	<Botao
 		classe="is-inverted is-success"
-		id="normal"
-		distintivo={normais}
+		id={TEXTO.NORMAL}
+		distintivo={relatorio.length}
 		icone="check-circle"
-		onclick={() => add(NORMAL)} />
+		onclick={() => (relatorio = [...relatorio, { tipo: TEXTO.NORMAL, inicio: 600, fim: 700 }])} />
 	<Botao
 		classe="is-inverted is-danger"
-		id="fechada"
-		distintivo={fechadas}
+		id={TEXTO.FECHADA}
+		distintivo={0}
 		icone="times-circle" />
 	<Botao
 		classe="is-inverted is-primary"
-		id="recuperada"
-		distintivo={recuperadas}
+		id={TEXTO.RECUPERADA}
+		distintivo={0}
 		icone="recycle" />
+	<Menu bind:estadoMenu />
 </Barra>

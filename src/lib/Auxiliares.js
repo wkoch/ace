@@ -1,12 +1,5 @@
 /**
- * @typedef { import("./Tipos").Número } Número
- * @typedef { import("./Tipos").Hora } Hora
  * @typedef { import("./Tipos").Tempo } Tempo
- * @typedef { import("./Tipos").Períodos } Períodos
- * @typedef { import("./Tipos").Intervalos } Intervalos
- * @typedef { import("./Tipos").Vistoria } Vistoria
- * @typedef { import("./Tipos").Vistorias } Vistorias
- * @typedef { import("./Tipos").TipoVistoria } TipoVistoria
  */
 
 import { horaEntre } from "./Horarios";

@@ -1,18 +1,21 @@
 <script>
-  let config = { ativo: true, bloqueado: false, aleatoriedade: false };
-  let manha = { ativo: true, inicio: false, fim: false };
-  let tarde = { ativo: true, inicio: false, fim: false };
-  let exibirMenu = config.ativo ? "is-active" : "";
+  import { TEXTO } from "../../src/data/Constantes";
+
+  /** @type {boolean} */
+  export let estadoMenu = false;
+
+  /** @type {string} */
+  $: exibirMenu = estadoMenu ? "is-active" : "";
 </script>
 
 <div class="is-right dropdown is-up {exibirMenu}">
   <div class="dropdown-trigger">
     <button
       class="is-large button is-white"
-      id="Menu"
+      id={TEXTO.MENU}
       aria-controls="config"
       aria-haspopup="true"
-      on:click={() => (config.ativo = !config.ativo)}>
+      on:click={() => (estadoMenu = !estadoMenu)}>
       <span class="is-large icon">
         <i class="fas fa-ellipsis-v" aria-hidden="true" />
       </span>
@@ -22,18 +25,18 @@
     <div class="dropdown-content">
       <div class="dropdown-item">
         <div class="columns is-mobile is-vcentered">
-          <div class="column is-large"><strong>Manhã</strong></div>
+          <div class="column is-large"><strong>{TEXTO.MANHÃ}</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
               <label class="small switch is-rounded">
-                <input type="checkbox" value="false" id="manhaAtivado" />
+                <input type="checkbox" value="false" id="manhaAtivo" />
                 <span class="check" />
               </label>
             </div>
           </div>
         </div>
         <div class="columns is-mobile is-vcentered">
-          <div class="column has-text-right">Entrada</div>
+          <div class="column has-text-right">{TEXTO.ENTRADA}</div>
           <div class="column is-narrow">
             <div class="field">
               <p class="control has-icons-left">
@@ -41,7 +44,7 @@
                   class="is-small is-rounded input"
                   id="ManhaEntrada"
                   type="time"
-                  value={manha.inicio} />
+                  value="" />
                 <span class="is-small icon is-left">
                   <i class="fas fa-clock" />
                 </span>
@@ -50,7 +53,7 @@
           </div>
         </div>
         <div class="columns is-mobile is-vcentered">
-          <div class="column has-text-right">Saída</div>
+          <div class="column has-text-right">{TEXTO.SAÍDA}</div>
           <div class="column is-narrow">
             <div class="field">
               <p class="control has-icons-left">
@@ -58,7 +61,7 @@
                   class="is-small is-rounded input"
                   id="ManhaSaida"
                   type="time"
-                  value={manha.fim} />
+                  value="" />
                 <span class="is-small icon is-left">
                   <i class="fas fa-clock" />
                 </span>
@@ -68,18 +71,18 @@
         </div>
         <hr class="dropdown-divider" />
         <div class="columns is-mobile is-vcentered">
-          <div class="column is-large"><strong>Tarde</strong></div>
+          <div class="column is-large"><strong>{TEXTO.TARDE}</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
               <label class="small switch is-rounded">
-                <input type="checkbox" value="false" id="tardeAtivado" />
+                <input type="checkbox" value="false" id="tardeAtivo" />
                 <span class="check" />
               </label>
             </div>
           </div>
         </div>
         <div class="columns is-mobile is-vcentered">
-          <div class="column has-text-right">Entrada</div>
+          <div class="column has-text-right">{TEXTO.ENTRADA}</div>
           <div class="column is-narrow">
             <div class="field">
               <p class="control has-icons-left">
@@ -87,7 +90,7 @@
                   class="is-small is-rounded input"
                   id="TardeEntrada"
                   type="time"
-                  value={tarde.inicio} />
+                  value="" />
                 <span class="is-small icon is-left">
                   <i class="fas fa-clock" />
                 </span>
@@ -96,7 +99,7 @@
           </div>
         </div>
         <div class="columns is-mobile is-vcentered">
-          <div class="column has-text-right">Saída</div>
+          <div class="column has-text-right">{TEXTO.SAÍDA}</div>
           <div class="column is-narrow">
             <div class="field">
               <p class="control has-icons-left">
@@ -104,7 +107,7 @@
                   class="is-small is-rounded input"
                   id="TardeSaida"
                   type="time"
-                  value={tarde.fim} />
+                  value="" />
                 <span class="is-small icon is-left">
                   <i class="fas fa-clock" />
                 </span>
@@ -114,38 +117,26 @@
         </div>
         <hr class="dropdown-divider" />
         <div class="columns is-mobile is-vcentered">
-          <div class="column is-large"><strong>Aleatoriedade</strong></div>
+          <div class="column is-large">
+            <strong>{TEXTO.ALEATORIEDADE}</strong>
+          </div>
           <div class="column is-narrow">
             <div class="field is-right">
-              <label class="switch is-rounded">
-                <input type="checkbox" value="false" id="aleatoriedade" />
+              <label class="small switch is-rounded">
+                <input type="checkbox" value="false" id={TEXTO.ALEATORIEDADE} />
                 <span class="check" />
               </label>
-              <!-- <input
-                class="is-small is-rounded switch is-primary"
-                id="aleatoriedade"
-                type="checkbox"
-                name="aleatoriedade"
-                bind:checked={config.aleatoriedade} /> -->
-              <label for="aleatoriedade" />
             </div>
           </div>
         </div>
         <div class="columns is-mobile is-vcentered">
-          <div class="column is-large"><strong>Bloqueio</strong></div>
+          <div class="column is-large"><strong>{TEXTO.BLOQUEIO}</strong></div>
           <div class="column is-narrow">
             <div class="field is-right">
               <label class="small switch is-rounded">
-                <input type="checkbox" value="false" id="bloqueio" />
+                <input type="checkbox" value="false" id={TEXTO.BLOQUEIO} />
                 <span class="check" />
               </label>
-              <!-- <input
-                class="is-small is-rounded switch is-danger"
-                id="bloqueio"
-                type="checkbox"
-                name="bloqueio"
-                bind:checked={config.bloqueado} />
-              <label for="bloqueio" /> -->
             </div>
           </div>
         </div>

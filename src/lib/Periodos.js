@@ -1,6 +1,5 @@
 /**
  * @typedef { import("./Tipos").Hora } Hora
- * @typedef { import("./Tipos").Número } Número
  * @typedef { import("./Tipos").Manhã } Manhã
  * @typedef { import("./Tipos").Tarde } Tarde
  * @typedef { import("./Tipos").Momento } Momento
@@ -9,7 +8,7 @@
  * @typedef { import("./Tipos").Intervalos } Intervalos
  */
 
-import { TEMPO } from "../data/Dados";
+import { TEMPO } from "../data/Constantes";
 import { horarioDoDia } from "./Horarios";
 import { estaContidoEm } from "./Auxiliares";
 import { processaIntervalos, subtraiIntervalos } from "./Intervalos";
@@ -74,7 +73,7 @@ export function duracaoTotalPeriodos(periodos) {
 }
 
 
-/** @type {(periodos: Períodos, normais: Número, fechadas: Número, recuperadas: Número) => Hora} */
+/** @type {(periodos: Períodos, normais: number, fechadas: number, recuperadas: number) => Hora} */
 export function mediaGeral(periodos, normais, fechadas, recuperadas) {
     /** @type {Hora} */
     const duracaoTotal = duracaoTotalPeriodos(periodos);

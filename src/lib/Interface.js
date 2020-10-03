@@ -1,5 +1,4 @@
 /**
- * @typedef { import("./Tipos").Texto } Texto
  * @typedef { import("./Tipos").TipoVistorias } TipoVistorias
  * @typedef { import("./Tipos").Intervalo } Intervalo
  * @typedef { import("./Tipos").Intervalos } Intervalos
@@ -64,7 +63,7 @@ export function adicionaChuva(chuvas, novo) {
 }
 
 
-/** @type {(vistorias: TipoVistorias, tipo: Texto) => TipoVistorias} */
+/** @type {(vistorias: TipoVistorias, tipo: string) => TipoVistorias} */
 export function adicionaVistoria(vistorias, tipo) {
     return [...vistorias, { tipo: tipo }];
 }

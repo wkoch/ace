@@ -1,5 +1,4 @@
 <script>
-  import Menu from "./../components/Menu.svelte";
 </script>
 
 <style>
@@ -16,8 +15,7 @@
   <nav class="is-fixed-bottom navbar sombra is-centered">
     <div class="container is-centered flex">
       <div class="is-centered buttons full-width">
-        <slot></slot>
-        <Menu />
+        <slot />
       </div>
     </div>
   </nav>

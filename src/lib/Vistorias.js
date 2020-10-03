@@ -1,17 +1,16 @@
 /**
  * @typedef { import("./Tipos").Hora } Hora
- * @typedef { import("./Tipos").Número } Número
  * @typedef { import("./Tipos").Vistoria } Vistoria
  * @typedef { import("./Tipos").Vistorias } Vistorias
  * @typedef { import("./Tipos").TipoVistoria } TipoVistoria
  * @typedef { import("./Tipos").Períodos } Períodos
  */
 
-import { TEMPO, TIPO } from "../data/Dados";
+import { TEMPO, TIPO } from "../data/Constantes";
 import { horaEntre } from "./Horarios";
 
 
-/** @type {(vistoria: TipoVistoria | Vistoria, media: Número) => Hora} */
+/** @type {(vistoria: TipoVistoria | Vistoria, media: number) => Hora} */
 export function duracaoDaVistoria(vistoria, media) {
     if (vistoria.tipo == TIPO.FECHADA) {
         return TEMPO.FECHADAS;
@@ -22,11 +21,11 @@ export function duracaoDaVistoria(vistoria, media) {
 
 
 
-/** @type {(vistorias: Vistorias, periodos: Períodos, media: Número) => Vistorias} */
+/** @type {(vistorias: Vistorias, periodos: Períodos, media: number) => Vistorias} */
 export function divideVistoriasEntrePeríodos(vistorias, periodos, media) {
     /** @type {Vistorias} */
     let novoVistorias = [];
-    /** @type {Número} */
+    /** @type {number} */
     let contador = 0;
 
     periodos.forEach(periodo => {

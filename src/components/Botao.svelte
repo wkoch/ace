@@ -1,10 +1,21 @@
 <script>
+  // Variáveis
+  /** @type {string} */
   export let id = "";
+
+  /** @type {string} */
   export let classe = "";
+
+  /** @type {string} */
   export let icone = "";
+
+  /** @type {number} */
   export let distintivo = 0;
+
+  /** @type {any} */
   export let onclick;
 
+  // Computado
   $: badge = distintivo > 0 ? true : false;
 </script>
 
@@ -30,9 +41,11 @@
 </style>
 
 <button
-  class="is-large button {classe}" class:badge
+  class="is-large button {classe}"
+  class:badge
   {id}
-  data-badge={distintivo} on:click={onclick}>
+  data-badge={distintivo}
+  on:click={onclick}>
   <span class="icon is-size-2">
     <i class="fas fa-{icone}" aria-hidden="true" />
   </span>

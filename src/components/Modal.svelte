@@ -4,50 +4,59 @@
    */
 
   import { TEXTO } from "../../src/data/Constantes";
-  import { horarioEmMinutos } from "../lib/Horarios";
+  import { minutosEmTexto, horárioEmMinutos } from "../lib/Horários";
 
   /** @type {boolean} */
-  export let estadoModal;
+  export let modal = false;
 
   /** @type {Intervalos} */
   export let chuvas;
 
   /** @type {string} */
-  let inicio;
+  let início = "";
 
   /** @type {string} */
-  let fim;
+  let fim = "";
 
   /** @type {boolean} */
-  let erro = false;
+  let erroMenor = false;
+
+  /** @type {boolean} */
+  let erroVazio = false;
 
   function redefinir() {
-    inicio = "";
+    início = "";
     fim = "";
-    erro = false;
+    erroMenor = false;
+    erroVazio = false;
   }
 
   function cancelar() {
-    estadoModal = false;
+    modal = false;
     redefinir();
   }
 
   function salvar() {
-    if (inicio == "" || fim == "") {
-      erro = true;
+    if (início == "" || fim == "") {
+      // ERRO: Campos de horário precisam ser preenchidos
+      erroVazio = true;
+    } else if (horárioEmMinutos(fim) < horárioEmMinutos(início)) {
+      // ERRO: Final deve ser maior que Inicial
+      erroMenor = true;
     } else {
+      // Salva o bloco
       let novoChuvas = chuvas;
       novoChuvas.push({
         tipo: TEXTO.CHUVA,
-        inicio: horarioEmMinutos(inicio),
-        fim: horarioEmMinutos(fim),
+        início: horárioEmMinutos(início),
+        fim: horárioEmMinutos(fim),
       });
-      chuvas = { ...novoChuvas };
+      chuvas = [...novoChuvas];
       cancelar();
     }
   }
 
-  $: exibir = estadoModal ? "is-active" : "";
+  $: exibir = modal ? "is-active" : "";
 </script>
 
 <style>
@@ -72,14 +81,14 @@
       <br />
       <div class="columns is-mobile">
         <div class="column has-text-weight-bold">
-          <label for="inicio">{TEXTO.INÍCIO}</label>
+          <label for={TEXTO.INÍCIO}>{TEXTO.INÍCIO}</label>
           <div class="field">
             <p class="control has-icons-left">
               <input
                 class="is-small is-rounded input"
-                id="inicio"
+                id={TEXTO.INÍCIO}
                 type="time"
-                bind:value={inicio} />
+                bind:value={início} />
               <span class="is-small icon is-left">
                 <i class="fas fa-clock" />
               </span>
@@ -87,12 +96,12 @@
           </div>
         </div>
         <div class="column has-text-weight-bold">
-          <label for="fim">{TEXTO.FIM}</label>
+          <label for={TEXTO.FIM}>{TEXTO.FIM}</label>
           <div class="field">
             <p class="control has-icons-left">
               <input
                 class="is-small is-rounded input"
-                id="fim"
+                id={TEXTO.FIM}
                 type="time"
                 bind:value={fim} />
               <span class="is-small icon is-left">
@@ -102,9 +111,14 @@
           </div>
         </div>
       </div>
-      {#if erro}
+      {#if erroVazio}
         <article class="message is-danger">
-          <div class="message-body">{TEXTO.MODAL.ERRO}</div>
+          <div class="message-body">{TEXTO.MODAL.ERROVAZIO}</div>
+        </article>
+      {/if}
+      {#if erroMenor}
+        <article class="message is-danger">
+          <div class="message-body">{TEXTO.MODAL.ERROMENOR}</div>
         </article>
       {/if}
     </section>

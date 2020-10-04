@@ -24,12 +24,14 @@ export let VERSÃO = "5.0.0";
  * INÍCIO: "Início",
  * MANHÃ: "Manhã",
  * MENU: "Menu",
- * MODAL: {ERRO: string, TEXTO: string, TÍTULO: string},
+ * MODAL: {ERROMENOR: string, ERROVAZIO: string, TEXTO: string, TÍTULO: string},
  * NORMAL: "Normal",
+ * OPÇÕES: "Opções",
  * RECUPERADA: "Recuperada",
  * SAÍDA: "Saída",
  * SALVAR: "Salvar",
  * TARDE: "Tarde",
+ * TÉRMINO: "Término",
  * TIPO: "Tipo",
  * }} */
 export let TEXTO = {
@@ -52,15 +54,18 @@ export let TEXTO = {
     MANHÃ: "Manhã",
     MENU: "Menu",
     MODAL: {
-        ERRO: "Preencha os dois horários.",
+        ERROMENOR: "Horário final deve ser maior que o inicial.",
+        ERROVAZIO: "Preencha os dois horários.",
         TEXTO: "Marque o horário do período de chuva:",
         TÍTULO: "Registrar Chuva",
     },
     NORMAL: "Normal",
+    OPÇÕES: "Opções",
     RECUPERADA: "Recuperada",
     SAÍDA: "Saída",
     SALVAR: "Salvar",
     TARDE: "Tarde",
+    TÉRMINO: "Término",
     TIPO: "Tipo",
 }
 
@@ -69,14 +74,26 @@ export const TEMPO = {
     FECHADAS: 3
 }
 
+export const TIPO = {
+    FECHADA: TEXTO.FECHADA,
+    NORMAL: TEXTO.NORMAL,
+    RECUPERADA: TEXTO.RECUPERADA
+}
+
+export const ÍCONE = {
+    CHUVA: "umbrella",
+    FECHADA: "times-circle",
+    NORMAL: "check-circle",
+    RECUPERADA: "recycle",
+}
 
 
 // DADOS DA MANHÃ
 /** @type {Manhã} */
 export let Manha = {
-    periodo: "Manhã",
+    período: "Manhã",
     ativo: true,
-    inicio: 520,
+    início: 520,
     fim: 680
 }
 
@@ -84,8 +101,8 @@ export let Manha = {
 // DADOS DA TARDE
 /** @type {Tarde} */
 export let Tarde = {
-    periodo: "Tarde",
+    período: "Tarde",
     ativo: true,
-    inicio: 860,
+    início: 860,
     fim: 1040
 }

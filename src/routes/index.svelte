@@ -2,77 +2,89 @@
 	/**
 	 * @typedef { import("../lib/Tipos").Manhã } Manhã
 	 * @typedef { import("../lib/Tipos").Tarde } Tarde
+	 * @typedef { import("../lib/Tipos").Relatórios } Relatórios
 	 * @typedef { import("../lib/Tipos").Períodos } Períodos
-	 * @typedef { import("../lib/Tipos").Vistorias } Vistorias
+	 * @typedef { import("../lib/Tipos").Vistoria } Vistoria
+	 * @typedef { import("../lib/Tipos").TipoVistorias } TipoVistorias
 	 * @typedef { import("../lib/Tipos").Intervalos } Intervalos
 	 */
-	import { fade } from "svelte/transition";
+
+	// Bibliotecas
+	// import {} from "../lib/Auxiliares";
+	import { adicionaVistoria } from "../lib/Interface";
+	// import { fade } from "svelte/transition";
 
 	// Componentes
 	import Barra from "./../components/Barra.svelte";
-	import Botao from "./../components/Botao.svelte";
-	import Conteudo from "./../components/Conteudo.svelte";
+	import Botão from "../components/Botão.svelte";
+	import Conteúdo from "../components/Conteúdo.svelte";
 	import Menu from "./../components/Menu.svelte";
 	import Modal from "../components/Modal.svelte";
 
 	// Dados e Ajustes
 	import { Ajustes } from "../data/Ajustes.js";
-	import { TEXTO } from "../data/Constantes.js";
+	import { TEXTO, TIPO, ÍCONE } from "../data/Constantes.js";
 
-	// DADOS GERAIS
-	/** @type {Vistorias} */
-	let vistorias = [];
+	// DADOS GERAIS, APENAS A INTERFACE ALTERA ESSAS VARIÁVEIS
+	/** @type {TipoVistorias} */
+	let tipoVistorias = [];
 
 	/** @type {Períodos} */
-	let periodos = [];
+	let períodos = [];
 
 	/** @type {Intervalos} */
 	let chuvas = [];
 
 	/** @type {boolean} */
-	export let estadoMenu = false;
+	export let menu = false;
 
 	/** @type {boolean} */
-	export let estadoModal = false;
+	export let modal = false;
 
-	// Bibliotecas
-	import {} from "../lib/Auxiliares.js";
-	import MenuButton from "../components/MenuButton.svelte";
+	function novaVisita(tipo) {
+		tipoVistorias = adicionaVistoria(tipoVistorias, tipo);
+	}
 
 	// Variáveis Computadas Reativamente
-	$: relatorio = [];
-	$: total = relatorio.length;
+	/** @type {Relatórios} */
+	$: relatório = [];
+
+	/** @type {number} */
+	$: total = tipoVistorias.length;
 </script>
 
 <style>
 </style>
 
-<Conteudo {relatorio} {total}>
-	<Modal bind:estadoModal bind:chuvas />
-</Conteudo>
+<Conteúdo {relatório} {total}>
+	<Modal bind:modal bind:chuvas />
+</Conteúdo>
 
 <Barra>
-	<Botao
+	<Botão
 		classe="is-inverted is-link"
 		id={TEXTO.CHUVA}
 		distintivo={chuvas.length}
-		icone="umbrella"
-		onclick={() => (estadoModal = true)} />
-	<Botao
+		ícone={ÍCONE.CHUVA}
+		onclick={() => (modal = true)} />
+	<Botão
 		classe="is-inverted is-success"
 		id={TEXTO.NORMAL}
-		distintivo={relatorio.length}
-		icone="check-circle"
-		onclick={() => (relatorio = [...relatorio, { tipo: TEXTO.NORMAL, inicio: 600, fim: 700 }])} />
-	<Botao
+		distintivo={relatório.length}
+		ícone={ÍCONE.NORMAL}
+		onclick={() => novaVisita(TIPO.NORMAL)} />
+	<Botão
 		classe="is-inverted is-danger"
 		id={TEXTO.FECHADA}
 		distintivo={0}
-		icone="times-circle" />
-	<Botao
+		ícone={ÍCONE.FECHADA}
+		onclick={() => novaVisita(TIPO.FECHADA)} />
+	<Botão
 		classe="is-inverted is-primary"
 		id={TEXTO.RECUPERADA}
 		distintivo={0}
-		icone="recycle" />
-	<Menu bind:estadoMenu />
+		ícone={ÍCONE.RECUPERADA}
+		onclick={() => novaVisita(TIPO.RECUPERADA)} />
+
+	<Menu bind:menu />
 </Barra>

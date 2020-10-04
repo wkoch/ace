@@ -4,9 +4,10 @@
    */
 
   import { TEXTO } from "../data/Constantes.js";
+  import { minutosEmTexto } from "../lib/Horários";
 
   /** @type {Relatórios} */
-  export let relatorio;
+  export let relatório;
 
   /** @type {number} */
   export let total = 0;
@@ -38,21 +39,21 @@
             </tr>
           </thead>
           <tbody>
-            {#each relatorio as item, indice}
+            {#each relatório as item, indice}
               {#if item.tipo == TEXTO.CHUVA || item.tipo == TEXTO.ALMOÇO}
                 <tr>
                   <th>{indice}</th>
                   <td>{item.tipo}</td>
-                  <td>{item.inicio}</td>
-                  <td>{item.fim}</td>
+                  <td>{minutosEmTexto(item.início)}</td>
+                  <td>{minutosEmTexto(item.fim)}</td>
                   <td>Editar/Excluir</td>
                 </tr>
               {:else}
                 <tr>
                   <th>{indice}</th>
                   <td>{item.tipo}</td>
-                  <td>{item.inicio}</td>
-                  <td>{item.fim}</td>
+                  <td>{minutosEmTexto(item.início)}</td>
+                  <td>{minutosEmTexto(item.fim)}</td>
                   <td>Editar/Excluir</td>
                 </tr>
               {/if}

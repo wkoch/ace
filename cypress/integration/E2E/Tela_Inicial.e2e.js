@@ -1,4 +1,4 @@
-import { TEXTO } from "../../src/data/Constantes";
+import { TEXTO } from "../../../src/data/Constantes";
 
 describe("E2E: Tela inicial, Configuração padrão", () => {
     beforeEach(() => {
@@ -68,6 +68,32 @@ describe("E2E: Tela inicial, Configuração padrão", () => {
     });
 });
 
+describe("E2E: Tela inicial, Adiciona período de chuva", () => {
+    beforeEach(() => {
+        cy.visit("/");
+    });
+
+    it("Adiciona um período de chuva", () => {
+        cy.get("button#" + TEXTO.CHUVA).should("have.attr", "data-badge", 0);
+        // Abre Modal
+        cy.get("button#" + TEXTO.CHUVA).click();
+        // Digita horários
+        cy.get("input#" + TEXTO.INÍCIO).type("09:00");
+        cy.get("input#" + TEXTO.FIM).type("10:45");
+        // Salva
+        cy.get("button#" + TEXTO.SALVAR).click();
+        // Resultado
+        cy.get("button#" + TEXTO.CHUVA).should("have.attr", "data-badge", 1);
+        // Outros botões devem ter o distintivo zerado
+        cy.get("button#" + TEXTO.FECHADA).should("have.attr", "data-badge", 0);
+        cy.get("button#" + TEXTO.NORMAL).should("have.attr", "data-badge", 0);
+        cy.get("button#" + TEXTO.RECUPERADA).should("have.attr", "data-badge", 0);
+        // Bloco de chuva deve estar visível
+        cy.contains("09:00");
+        cy.contains("10:45");
+    });
+});
+
 describe("E2E: Tela inicial, Adiciona Vistorias", () => {
     beforeEach(() => {
         cy.visit("/");
@@ -77,6 +103,6 @@ describe("E2E: Tela inicial, Adiciona Vistorias", () => {
         // cy.get("button#" + TEXTO.NORMAL).should("have.attr", "data-badge", 0);
         // cy.get("button#" + TEXTO.NORMAL).click();
         // cy.get("button#" + TEXTO.NORMAL).should("have.attr", "data-badge", 1);
-        cy.adicionaVistorias(TEXTO.NORMAL, 5);
+        cy.adicionaVistorias(TEXTO.NORMAL, 1);
     });
 });

@@ -2,10 +2,10 @@
   import { TEXTO } from "../../src/data/Constantes";
 
   /** @type {boolean} */
-  export let estadoMenu = false;
+  export let menu = false;
 
   /** @type {string} */
-  $: exibirMenu = estadoMenu ? "is-active" : "";
+  $: exibirMenu = menu ? "is-active" : "";
 </script>
 
 <div class="is-right dropdown is-up {exibirMenu}">
@@ -15,7 +15,7 @@
       id={TEXTO.MENU}
       aria-controls="config"
       aria-haspopup="true"
-      on:click={() => (estadoMenu = !estadoMenu)}>
+      on:click={() => (menu = !menu)}>
       <span class="is-large icon">
         <i class="fas fa-ellipsis-v" aria-hidden="true" />
       </span>

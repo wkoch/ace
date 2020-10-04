@@ -7,7 +7,7 @@
   export let classe = "";
 
   /** @type {string} */
-  export let icone = "";
+  export let ícone = "";
 
   /** @type {number} */
   export let distintivo = 0;
@@ -47,6 +47,6 @@
   data-badge={distintivo}
   on:click={onclick}>
   <span class="icon is-size-2">
-    <i class="fas fa-{icone}" aria-hidden="true" />
+    <i class="fas fa-{ícone}" aria-hidden="true" />
   </span>
 </button>

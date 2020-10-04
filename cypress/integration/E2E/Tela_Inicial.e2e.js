@@ -41,57 +41,6 @@ describe("E2E: Tela inicial, Configuração padrão", () => {
         // Não deve conter
         cy.menuOculto();
     });
-
-    it("Botão de chuva abre um Modal", () => {
-        // Modal oculto
-        cy.modalOculto();
-
-        // Clica no botão adicionar chuva para ativar o Modal.
-        cy.get("button#" + TEXTO.CHUVA).click();
-        // Modal aparece
-        cy.modalVisivel();
-
-        // Fecha modal no X
-        cy.get("button#" + TEXTO.FECHAR).click();
-        // Modal oculto
-        cy.modalOculto();
-
-        // Clica no botão adicionar chuva para ativar o Modal.
-        cy.get("button#" + TEXTO.CHUVA).click();
-        // Modal aparece
-        cy.modalVisivel();
-
-        // Fecha modal no Cancelar
-        cy.get("button#" + TEXTO.CANCELAR).click();
-        // Modal oculto
-        cy.modalOculto();
-    });
-});
-
-describe("E2E: Tela inicial, Adiciona período de chuva", () => {
-    beforeEach(() => {
-        cy.visit("/");
-    });
-
-    it("Adiciona um período de chuva", () => {
-        cy.get("button#" + TEXTO.CHUVA).should("have.attr", "data-badge", 0);
-        // Abre Modal
-        cy.get("button#" + TEXTO.CHUVA).click();
-        // Digita horários
-        cy.get("input#" + TEXTO.INÍCIO).type("09:00");
-        cy.get("input#" + TEXTO.FIM).type("10:45");
-        // Salva
-        cy.get("button#" + TEXTO.SALVAR).click();
-        // Resultado
-        cy.get("button#" + TEXTO.CHUVA).should("have.attr", "data-badge", 1);
-        // Outros botões devem ter o distintivo zerado
-        cy.get("button#" + TEXTO.FECHADA).should("have.attr", "data-badge", 0);
-        cy.get("button#" + TEXTO.NORMAL).should("have.attr", "data-badge", 0);
-        cy.get("button#" + TEXTO.RECUPERADA).should("have.attr", "data-badge", 0);
-        // Bloco de chuva deve estar visível
-        cy.contains("09:00");
-        cy.contains("10:45");
-    });
 });
 
 describe("E2E: Tela inicial, Adiciona Vistorias", () => {

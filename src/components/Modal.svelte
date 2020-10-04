@@ -19,43 +19,65 @@
   let fim = "";
 
   /** @type {boolean} */
-  let erroMenor = false;
-
-  /** @type {boolean} */
-  let erroVazio = false;
+  let tentouSalvarVazio = false;
 
   function redefinir() {
     início = "";
     fim = "";
-    erroMenor = false;
-    erroVazio = false;
+    tentouSalvarVazio = false;
+    modal = false;
   }
 
   function cancelar() {
-    modal = false;
     redefinir();
   }
 
   function salvar() {
     if (início == "" || fim == "") {
       // ERRO: Campos de horário precisam ser preenchidos
-      erroVazio = true;
-    } else if (horárioEmMinutos(fim) < horárioEmMinutos(início)) {
-      // ERRO: Final deve ser maior que Inicial
-      erroMenor = true;
+      tentouSalvarVazio = true;
     } else {
       // Salva o bloco
       let novoChuvas = chuvas;
       novoChuvas.push({
         tipo: TEXTO.CHUVA,
-        início: horárioEmMinutos(início),
-        fim: horárioEmMinutos(fim),
+        início: inícioMinutos,
+        fim: fimMinutos,
       });
       chuvas = [...novoChuvas];
       cancelar();
     }
   }
 
+  // Valores Computados
+
+  /** @type {number} */
+  $: inícioMinutos = horárioEmMinutos(início);
+
+  /** @type {number} */
+  $: fimMinutos = horárioEmMinutos(fim);
+
+  /** @type {boolean} */
+  $: camposVazios = início == "" && fim == "";
+
+  /** @type {boolean} */
+  $: campoVazio = início == "" || fim == "";
+
+  /** @type {boolean} */
+  $: erroIguais = !camposVazios && inícioMinutos == fimMinutos;
+
+  /** @type {boolean} */
+  $: erroMenor = !(início == "" || fim == "") && fimMinutos < inícioMinutos;
+
+  /** @type {boolean} */
+  $: erroVazio = tentouSalvarVazio && campoVazio ? true : false;
+
+  // Desabilita o botão salvar caso exista um erro
+  /** @type {boolean} */
+  $: disabled = erroMenor || erroVazio || erroIguais ? true : false;
+
+  // Lógica de exibição do Modal
+  /** @type {string} */
   $: exibir = modal ? "is-active" : "";
 </script>
 
@@ -121,12 +143,18 @@
           <div class="message-body">{TEXTO.MODAL.ERROMENOR}</div>
         </article>
       {/if}
+      {#if erroIguais}
+        <article class="message is-danger">
+          <div class="message-body">{TEXTO.MODAL.ERROIGUAIS}</div>
+        </article>
+      {/if}
     </section>
     <footer class="modal-card-foot">
       <button
         id={TEXTO.SALVAR}
         class="button is-link"
-        on:click={salvar}>{TEXTO.SALVAR}</button>
+        on:click={salvar}
+        {disabled}>{TEXTO.SALVAR}</button>
       <button
         id={TEXTO.CANCELAR}
         class="button"

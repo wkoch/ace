@@ -1,58 +1,60 @@
 /**
  * @typedef { import("./Tipos").Hora } Hora
+ * @typedef { import("./Tipos").Intervalos } Intervalos
+ * @typedef { import("./Tipos").Períodos } Períodos
+ * @typedef { import("./Tipos").Relatórios } Relatórios
+ * @typedef { import("./Tipos").TipoVistoria } TipoVistoria
  * @typedef { import("./Tipos").Vistoria } Vistoria
  * @typedef { import("./Tipos").Vistorias } Vistorias
- * @typedef { import("./Tipos").TipoVistoria } TipoVistoria
- * @typedef { import("./Tipos").Períodos } Períodos
  */
 
-// import { TEMPO, TIPO } from "../data/Constantes";
-import { ordenaPorHoraInicial } from "./Horários";
+import { TEMPO, TIPO } from "../data/Constantes";
+import { horaEntre, ordenaPorHoraInicial } from "./Horários";
 
 
-// /** @type {(vistoria: TipoVistoria | Vistoria, media: number) => Hora} */
-// export function duracaoDaVistoria(vistoria, media) {
-//     if (vistoria.tipo == TIPO.FECHADA) {
-//         return TEMPO.FECHADAS;
-//     } else if (vistoria.tipo == TIPO.NORMAL || vistoria.tipo == TIPO.RECUPERADA) {
-//         return media;
-//     }
-// }
+/** @type {(vistoria: TipoVistoria | Vistoria, media: number) => Hora} */
+export function duraçãoDaVistoria(vistoria, media) {
+    if (vistoria.tipo == TIPO.FECHADA) {
+        return TEMPO.FECHADAS;
+    } else if (vistoria.tipo == TIPO.NORMAL || vistoria.tipo == TIPO.RECUPERADA) {
+        return media;
+    }
+}
 
 
 
-// /** @type {(vistorias: Vistorias, períodos: Períodos, media: number) => Vistorias} */
-// export function divideVistoriasEntrePeríodos(vistorias, períodos, media) {
-//     /** @type {Vistorias} */
-//     let novoVistorias = [];
-//     /** @type {number} */
-//     let contador = 0;
+/** @type {(vistorias: Vistorias, períodos: Períodos, media: number) => Vistorias} */
+export function divideVistoriasEntrePeríodos(vistorias, períodos, média) {
+    /** @type {Vistorias} */
+    let novoVistorias = [];
+    /** @type {number} */
+    let contador = 0;
 
-//     períodos.forEach(período => {
-//         /** @type {Hora} */
-//         let ultimoHorario = período.início;
+    períodos.forEach(período => {
+        /** @type {Hora} */
+        let ultimoHorário = período.início;
 
-//         if (horaEntre(ultimoHorario, período)) {
-//             vistorias.forEach(vistoria => {
-//                 /** @type {Hora} */
-//                 let proximoHorario = ultimoHorario + duracaoDaVistoria(vistoria, media);
-//                 novoVistorias.push({
-//                     id: contador,
-//                     período: período.período,
-//                     tipo: vistoria.tipo,
-//                     início: ultimoHorario,
-//                     fim: proximoHorario
-//                 })
-//                 contador += 1;
-//                 ultimoHorario = proximoHorario;
-//             });
-//         }
-//     });
+        if (horaEntre(ultimoHorário, período)) {
+            vistorias.forEach(vistoria => {
+                /** @type {Hora} */
+                let proximoHorário = ultimoHorário + duraçãoDaVistoria(vistoria, média);
+                novoVistorias.push({
+                    id: contador,
+                    período: período.período,
+                    tipo: vistoria.tipo,
+                    início: ultimoHorário,
+                    fim: proximoHorário
+                })
+                contador += 1;
+                ultimoHorário = proximoHorário;
+            });
+        }
+    });
 
-//     return novoVistorias;
-// }
+    return novoVistorias;
+}
 
-// /** @type {(vistorias: Vistorias, períodos: Períodos, media: number) => Vistorias} */
+/** @type {(vistorias: Vistorias, intervalos: Intervalos) => Relatórios} */
 export function geraRelatório(vistorias, intervalos) {
     return ordenaPorHoraInicial([...vistorias, ...intervalos]);
 }

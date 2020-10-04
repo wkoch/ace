@@ -37,27 +37,31 @@ export function horaEntre(h, a, b = 0) {
 
 
 /** @type {(manha: Manhã, tarde: Tarde) => Momento} */
-export function horárioDoDia(manha, tarde) {
-    if (manha.ativo && tarde.ativo) {
-        return { início: manha.início, fim: tarde.fim };
-    } else if (manha.ativo) {
-        return { início: manha.início, fim: manha.fim };
+export function horárioDoDia(manhã, tarde) {
+    if (manhã.ativo && tarde.ativo) {
+        return { início: manhã.início, fim: tarde.fim };
+    } else if (manhã.ativo) {
+        return { início: manhã.início, fim: manhã.fim };
     } else {
         return { início: tarde.início, fim: tarde.fim };
     }
 }
 
 
-/** @type {(horario: string) => number} */
-export function horárioEmMinutos(horario) {
-    let { horas, minutos } = horárioTextoParaObjeto(horario);
-    return horas * 60 + minutos;
+/** @type {(horário: string) => number} */
+export function horárioEmMinutos(horário) {
+    if (horário == "") {
+        return 0;
+    } else {
+        let { horas, minutos } = horárioTextoParaObjeto(horário);
+        return horas * 60 + minutos;
+    }
 }
 
 
-/** @type {(horario: string) => Horário} */
-export function horárioTextoParaObjeto(horario) {
-    let [horas, minutos] = horario.split(":");
+/** @type {(horário: string) => Horário} */
+export function horárioTextoParaObjeto(horário) {
+    let [horas, minutos] = horário.split(":");
     return { horas: Number(horas), minutos: Number(minutos) };
 }
 

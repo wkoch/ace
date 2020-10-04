@@ -2,37 +2,46 @@ import { TEXTO } from "../../src/data/Constantes";
 
 // Comandos de teste do Menu de Configurações
 Cypress.Commands.add("menuOculto", () => {
-    cy.get(TEXTO.MANHÃ).should("not.be.visible");
-    cy.get(TEXTO.TARDE).should("not.be.visible");
-    cy.get(TEXTO.ENTRADA).should("not.be.visible");
-    cy.get(TEXTO.SAÍDA).should("not.be.visible");
-    cy.get(TEXTO.ALEATORIEDADE).should("not.be.visible");
-    cy.get(TEXTO.BLOQUEIO).should("not.be.visible");
+    cy.contains(TEXTO.MANHÃ).should("not.be.visible");
+    cy.contains(TEXTO.TARDE).should("not.be.visible");
+    cy.contains(TEXTO.ENTRADA).should("not.be.visible");
+    cy.contains(TEXTO.SAÍDA).should("not.be.visible");
+    cy.contains(TEXTO.ALEATORIEDADE).should("not.be.visible");
+    cy.contains(TEXTO.BLOQUEIO).should("not.be.visible");
 });
 
 Cypress.Commands.add("menuVisivel", () => {
-    cy.contains(TEXTO.MANHÃ);
-    cy.contains(TEXTO.TARDE);
-    cy.contains(TEXTO.ENTRADA);
-    cy.contains(TEXTO.SAÍDA);
-    cy.contains(TEXTO.ALEATORIEDADE);
-    cy.contains(TEXTO.BLOQUEIO);
+    cy.contains(TEXTO.MANHÃ).should("be.visible");
+    cy.contains(TEXTO.TARDE).should("be.visible");
+    cy.contains(TEXTO.ENTRADA).should("be.visible");
+    cy.contains(TEXTO.SAÍDA).should("be.visible");
+    cy.contains(TEXTO.ALEATORIEDADE).should("be.visible");
+    cy.contains(TEXTO.BLOQUEIO).should("be.visible");
 });
 
 
 // Comandos de teste do Modal de registro de chuvas
 Cypress.Commands.add("modalOculto", () => {
-    cy.get(TEXTO.MODAL.TÍTULO).should("not.be.visible");
+    cy.contains(TEXTO.MODAL.TÍTULO).should("not.be.visible");
     cy.get("button#" + TEXTO.SALVAR).should("not.be.visible");
     cy.get("button#" + TEXTO.CANCELAR).should("not.be.visible");
 });
 
-Cypress.Commands.add("modalVisivel", () => {
-    cy.contains(TEXTO.MODAL.TÍTULO);
-    cy.contains(TEXTO.SALVAR);
-    cy.contains(TEXTO.CANCELAR);
+Cypress.Commands.add("modalVisível", () => {
+    cy.contains(TEXTO.MODAL.TÍTULO).should("be.visible");
+    cy.contains(TEXTO.SALVAR).should("be.visible");
+    cy.contains(TEXTO.CANCELAR).should("be.visible");
 });
 
+Cypress.Commands.add("adicionaChuva", (início, fim) => {
+    // Abre Modal
+    cy.get("button#" + TEXTO.CHUVA).click();
+    // Digita horários
+    cy.get("input#" + TEXTO.INÍCIO).type(início);
+    cy.get("input#" + TEXTO.FIM).type(fim);
+    // Salva
+    cy.get("button#" + TEXTO.SALVAR).click();
+});
 
 // Comandos de Adição de Vistorias
 Cypress.Commands.add("adicionaVistorias", (tipo, quantia) => {

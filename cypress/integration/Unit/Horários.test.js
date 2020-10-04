@@ -100,6 +100,9 @@ describe("horárioDoDia()", () => {
 
 describe("horárioEmMinutos()", () => {
     context("Converte um horário em Texto para horário em Minutos", () => {
+        it("Retorna 0 para string vazia", () => {
+            expect(horárioEmMinutos("")).to.equal(0);
+        });
         it("Converte 08:25 para 505", () => {
             expect(horárioEmMinutos("08:25")).to.equal(505);
         });

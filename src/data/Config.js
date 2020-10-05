@@ -1,6 +1,6 @@
 export let Ajustes = {
     menu: {
-        ativo: false
+        active: false
     },
     bloqueado: false,
     aleatoriedade: false,

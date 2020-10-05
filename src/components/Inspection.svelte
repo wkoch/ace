@@ -1,10 +1,10 @@
 <script>
-    import { ÍCONE, TIPO } from "../data/Constantes";
-    import { íconeDaVistoria } from "../lib/Auxiliares";
+    import { ICON, TEXT, TYPE } from "../data/Data";
+    import { inspectionIcon } from "../lib/Inspection";
 
-    export let vistoria;
+    export let inspection;
 
-    $: ícone = íconeDaVistoria(vistoria);
+    $: ícone = inspectionIcon(inspection);
 </script>
 
 <style>
@@ -18,7 +18,7 @@
             </span>
         </div>
         <div class="column" />
-        <p>Entrada:</p>
+        <p>{TEXT.ENTERED}:</p>
         <div class="column" />
         <div class="column" />
     </div>

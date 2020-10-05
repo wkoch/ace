@@ -1,68 +1,71 @@
 /**
- * @typedef { import("./Tipos").TipoVistorias } TipoVistorias
- * @typedef { import("./Tipos").Intervalo } Intervalo
- * @typedef { import("./Tipos").Intervalos } Intervalos
+ * @typedef { import("./Type").Type } Type
+ * @typedef { import("./Type").Schedules } Schedules
+ * @typedef { import("./Type").Interval } Interval
+ * @typedef { import("./Type").Intervals } Intervals
+ * @typedef { import("./Type").Inspections } Inspections
  */
 
-import { estáContidoEm } from "./Auxiliares";
-import { horaEntre, ordenaPorHoraInicial } from "./Horários";
+import { TEXT } from "../data/Data";
+import { contains, orderByStartSchedule } from "./Helpers"
+import { isScheduleBetween } from "./Time"
 
-/** @type {(chuvas: Intervalos, novo: Intervalo) => Intervalos} */
-export function adicionaChuva(chuvas, novo) {
-    /** @type {Intervalos} */
-    let novoChuvas = [];
+/** @type {(intervals: Intervals, newOne: Interval) => Schedules} */
+export function addRain(intervals, newOne) {
+    /** @type {Intervals} */
+    let newIntervals = [];
     /** @type {boolean} */
-    let intercede = false;
+    let overlaped = false;
 
-    if (chuvas.length > 0) {
-        chuvas.forEach(chuva => {
-            /** @type {Intervalos} */
-            let coincide = chuvas.filter(function (elemento) {
-                return elemento.fim == chuva.início;
+    if (intervals.length > 0) {
+        intervals.forEach(interval => {
+            /** @type {Intervals} */
+            let matched = intervals.filter(function (element) {
+                return element.end == interval.start;
             });
-            if (coincide.length > 0) {
-                // São sequenciais, melhor unir
-                coincide[0].fim = chuva.fim;
-                novoChuvas.push(coincide[0]);
+            if (matched.length > 0) {
+                // Join continuous blocks
+                matched[0].end = interval.end;
+                newIntervals.push(matched[0]);
             } else {
-                /** @type {Intervalo} */
-                let novoChuva = chuva;
-                // Unir interseções
-                if (estáContidoEm(novo, chuva)) {
-                    // Novo está dentro da chuva existente.
-                    novoChuvas.push(chuva);
-                    intercede = true;
-                } else if (estáContidoEm(chuva, novo)) {
-                    // Chuva existente está dentro da nova Chuva.
-                    novoChuvas.push(novo);
-                    intercede = true;
-                } else if (horaEntre(novo.início, chuva) && novo.fim > chuva.fim) {
-                    // Bloco começa dentro e termina depois da chuva existente.
-                    novoChuva.fim = novo.fim;
-                    novoChuvas.push(chuva);
-                    intercede = true;
-                } else if (novo.início < chuva.início && horaEntre(novo.fim, chuva)) {
-                    // Bloco começa antes e termina dentro da chuva existente.
-                    novoChuva.início = novo.início;
-                    novoChuvas.push(chuva);
-                    intercede = true;
+                /** @type {Interval} */
+                let newOneChuva = interval;
+                // Join intersecting blocks
+                if (contains(newOne, interval)) {
+                    // An existing interval already contains the New one.
+                    newIntervals.push(interval);
+                    overlaped = true;
+                } else if (contains(interval, newOne)) {
+                    // An existing interval is contained in the New one.
+                    newIntervals.push(newOne);
+                    overlaped = true;
+                } else if (isScheduleBetween(newOne.start, interval) && newOne.end > interval.end) {
+                    // New one begins before and ends after an existing interval.
+                    newOneChuva.end = newOne.end;
+                    newIntervals.push(interval);
+                    overlaped = true;
+                } else if (newOne.start < interval.start && isScheduleBetween(newOne.end, interval)) {
+                    // New one begins before and ends inside an existing interval.
+                    newOneChuva.start = newOne.start;
+                    newIntervals.push(interval);
+                    overlaped = true;
                 } else {
-                    // Não intercede, adiciona normalmente.
-                    novoChuvas.push(chuva);
+                    // New one doesn't overlap with existing intervals.
+                    newIntervals.push(interval);
                 }
             }
         });
     }
 
-    if (!intercede) {
-        novoChuvas.push(novo);
+    if (!overlaped) {
+        newIntervals.push(newOne);
     }
 
-    return ordenaPorHoraInicial(novoChuvas);
+    return orderByStartSchedule(newIntervals);
 }
 
 
-/** @type {(vistorias: TipoVistorias, tipo: string) => TipoVistorias} */
-export function adicionaVistoria(vistorias, tipo) {
-    return [...vistorias, { id: vistorias.length, tipo: tipo }];
+/** @type {(inspections: Inspections, type: Type) => Inspections} */
+export function addInspection(inspections, type) {
+    return [...inspections, { id: inspections.length, period: TEXT.MORNING, type: type, start: 0, end: 0 }];
 }

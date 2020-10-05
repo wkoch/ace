@@ -1,22 +1,28 @@
 <script>
+  import Icon from "./Icon.svelte";
+
   // Variáveis
   /** @type {string} */
   export let id = "";
 
   /** @type {string} */
-  export let classe = "";
+  export let classes = "";
 
   /** @type {string} */
-  export let ícone = "";
+  export let icon = "";
 
   /** @type {number} */
-  export let distintivo = 0;
+  export let count = 0;
+
+  /** @type {boolean} */
+  export let disabled = false;
 
   /** @type {any} */
-  export let onclick;
+  export let action;
 
   // Computado
-  $: badge = distintivo > 0 ? true : false;
+  /** @type {boolean} */
+  $: badge = count > 0 ? true : false;
 </script>
 
 <style>
@@ -41,12 +47,11 @@
 </style>
 
 <button
-  class="is-large button {classe}"
+  class="button {classes}"
   class:badge
   {id}
-  data-badge={distintivo}
-  on:click={onclick}>
-  <span class="icon is-size-2">
-    <i class="fas fa-{ícone}" aria-hidden="true" />
-  </span>
+  data-badge={count}
+  on:click={action}
+  {disabled}>
+  <slot />
 </button>

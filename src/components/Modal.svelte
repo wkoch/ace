@@ -1,84 +1,86 @@
 <script>
   /**
-   * @typedef { import("../lib/Tipos").Intervalos } Intervalos
+   * @typedef { import("../lib/Type").Interval } Interval
    */
 
-  import { TEXTO } from "../../src/data/Constantes";
-  import { minutosEmTexto, horárioEmMinutos } from "../lib/Horários";
+  import { TEXT } from "../data/Data";
+  import { minutesToText, timeInMinutes } from "../lib/Time";
 
   /** @type {boolean} */
   export let modal = false;
 
-  /** @type {Intervalos} */
-  export let chuvas;
+  /** @type {Interval} */
+  export let rains;
 
   /** @type {string} */
-  let início = "";
+  let start = "";
 
   /** @type {string} */
-  let fim = "";
+  let end = "";
 
   /** @type {boolean} */
-  let tentouSalvarVazio = false;
+  let savedEmpty = false;
 
-  function redefinir() {
-    início = "";
-    fim = "";
-    tentouSalvarVazio = false;
+  function reset() {
+    start = "";
+    end = "";
+    savedEmpty = false;
     modal = false;
   }
 
-  function cancelar() {
-    redefinir();
+  function cancel() {
+    reset();
   }
 
-  function salvar() {
-    if (início == "" || fim == "") {
-      // ERRO: Campos de horário precisam ser preenchidos
-      tentouSalvarVazio = true;
+  function save() {
+    if (start == "" || end == "") {
+      // ERROR: Both values are required.
+      savedEmpty = true;
     } else {
-      // Salva o bloco
-      let novoChuvas = chuvas;
-      novoChuvas.push({
-        tipo: TEXTO.CHUVA,
-        início: inícioMinutos,
-        fim: fimMinutos,
+      // Saves the rain block
+      let newrains = rains;
+      newrains.push({
+        type: TEXT.RAIN,
+        start: startSchedule,
+        end: endtime,
       });
-      chuvas = [...novoChuvas];
-      cancelar();
+      rains = [...newrains];
+      cancel();
     }
   }
 
   // Valores Computados
 
   /** @type {number} */
-  $: inícioMinutos = horárioEmMinutos(início);
+  $: startSchedule = timeInMinutes(start);
 
   /** @type {number} */
-  $: fimMinutos = horárioEmMinutos(fim);
+  $: endtime = timeInMinutes(end);
 
   /** @type {boolean} */
-  $: camposVazios = início == "" && fim == "";
+  $: emptyValues = start == "" && end == "";
 
   /** @type {boolean} */
-  $: campoVazio = início == "" || fim == "";
+  $: emptyValue = start == "" || end == "";
 
   /** @type {boolean} */
-  $: erroIguais = !camposVazios && inícioMinutos == fimMinutos;
+  $: sameValuesError = !emptyValues && startSchedule == endtime;
 
   /** @type {boolean} */
-  $: erroMenor = !(início == "" || fim == "") && fimMinutos < inícioMinutos;
+  $: invertedValuesError =
+    !(start == "" || end == "") && endtime < startSchedule;
 
   /** @type {boolean} */
-  $: erroVazio = tentouSalvarVazio && campoVazio ? true : false;
+  $: emptyValuesError = savedEmpty && emptyValue ? true : false;
 
-  // Desabilita o botão salvar caso exista um erro
+  // Disables the save button when any error is found.
   /** @type {boolean} */
-  $: disabled = erroMenor || erroVazio || erroIguais ? true : false;
+  $: disabled =
+    invertedValuesError || emptyValuesError || sameValuesError ? true : false;
 
   // Lógica de exibição do Modal
   /** @type {string} */
-  $: exibir = modal ? "is-active" : "";
+  $: visible = modal ? "is-active" : "";
 </script>
 
 <style>
@@ -87,30 +89,30 @@
   }
 </style>
 
-<div class="modal {exibir}">
+<div class="modal {visible}">
   <div class="modal-background" />
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">{TEXTO.MODAL.TÍTULO}</p>
+      <p class="modal-card-title">{TEXT.MODAL.TITLE}</p>
       <button
-        id={TEXTO.FECHAR}
+        id={TEXT.CLOSE}
         class="delete"
         aria-label="close"
-        on:click={cancelar} />
+        on:click={cancel} />
     </header>
     <section class="modal-card-body">
-      <p>{TEXTO.MODAL.TEXTO}</p>
+      <p>{TEXT.MODAL.TEXT}</p>
       <br />
       <div class="columns is-mobile">
         <div class="column has-text-weight-bold">
-          <label for={TEXTO.INÍCIO}>{TEXTO.INÍCIO}</label>
+          <label for={TEXT.START}>{TEXT.START}</label>
           <div class="field">
             <p class="control has-icons-left">
               <input
                 class="is-small is-rounded input"
-                id={TEXTO.INÍCIO}
+                id={TEXT.START}
                 type="time"
-                bind:value={início} />
+                bind:value={start} />
               <span class="is-small icon is-left">
                 <i class="fas fa-clock" />
               </span>
@@ -118,14 +120,14 @@
           </div>
         </div>
         <div class="column has-text-weight-bold">
-          <label for={TEXTO.FIM}>{TEXTO.FIM}</label>
+          <label for={TEXT.END}>{TEXT.END}</label>
           <div class="field">
             <p class="control has-icons-left">
               <input
                 class="is-small is-rounded input"
-                id={TEXTO.FIM}
+                id={TEXT.END}
                 type="time"
-                bind:value={fim} />
+                bind:value={end} />
               <span class="is-small icon is-left">
                 <i class="fas fa-clock" />
               </span>
@@ -133,32 +135,32 @@
           </div>
         </div>
       </div>
-      {#if erroVazio}
+      {#if emptyValuesError}
         <article class="message is-danger">
-          <div class="message-body">{TEXTO.MODAL.ERROVAZIO}</div>
+          <div class="message-body">{TEXT.MODAL.ERROR_EMPTY}</div>
         </article>
       {/if}
-      {#if erroMenor}
+      {#if invertedValuesError}
         <article class="message is-danger">
-          <div class="message-body">{TEXTO.MODAL.ERROMENOR}</div>
+          <div class="message-body">{TEXT.MODAL.ERROR_INVERTED}</div>
         </article>
       {/if}
-      {#if erroIguais}
+      {#if sameValuesError}
         <article class="message is-danger">
-          <div class="message-body">{TEXTO.MODAL.ERROIGUAIS}</div>
+          <div class="message-body">{TEXT.MODAL.ERROR_EQUAL}</div>
         </article>
       {/if}
     </section>
     <footer class="modal-card-foot">
       <button
-        id={TEXTO.SALVAR}
+        id={TEXT.SAVE}
         class="button is-link"
-        on:click={salvar}
-        {disabled}>{TEXTO.SALVAR}</button>
+        on:click={save}
+        {disabled}>{TEXT.SAVE}</button>
       <button
-        id={TEXTO.CANCELAR}
+        id={TEXT.CANCEL}
         class="button"
-        on:click={cancelar}>{TEXTO.CANCELAR}</button>
+        on:click={cancel}>{TEXT.CANCEL}</button>
     </footer>
   </div>
 </div>

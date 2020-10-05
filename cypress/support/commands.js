@@ -1,53 +1,53 @@
-import { TEXTO } from "../../src/data/Constantes";
+import { TEXT } from "../../src/data/Data";
 
 // Comandos de teste do Menu de Configurações
 Cypress.Commands.add("menuOculto", () => {
-    cy.contains(TEXTO.MANHÃ).should("not.be.visible");
-    cy.contains(TEXTO.TARDE).should("not.be.visible");
-    cy.contains(TEXTO.ENTRADA).should("not.be.visible");
-    cy.contains(TEXTO.SAÍDA).should("not.be.visible");
-    cy.contains(TEXTO.ALEATORIEDADE).should("not.be.visible");
-    cy.contains(TEXTO.BLOQUEIO).should("not.be.visible");
+    cy.contains(TEXT.MORNING).should("not.be.visible");
+    cy.contains(TEXT.AFTERNOON).should("not.be.visible");
+    cy.contains(TEXT.ENTERED).should("not.be.visible");
+    cy.contains(TEXT.EXITED).should("not.be.visible");
+    cy.contains(TEXT.RANDOM).should("not.be.visible");
+    cy.contains(TEXT.LOCK).should("not.be.visible");
 });
 
 Cypress.Commands.add("menuVisivel", () => {
-    cy.contains(TEXTO.MANHÃ).should("be.visible");
-    cy.contains(TEXTO.TARDE).should("be.visible");
-    cy.contains(TEXTO.ENTRADA).should("be.visible");
-    cy.contains(TEXTO.SAÍDA).should("be.visible");
-    cy.contains(TEXTO.ALEATORIEDADE).should("be.visible");
-    cy.contains(TEXTO.BLOQUEIO).should("be.visible");
+    cy.contains(TEXT.MORNING).should("be.visible");
+    cy.contains(TEXT.AFTERNOON).should("be.visible");
+    cy.contains(TEXT.ENTERED).should("be.visible");
+    cy.contains(TEXT.EXITED).should("be.visible");
+    cy.contains(TEXT.RANDOM).should("be.visible");
+    cy.contains(TEXT.LOCK).should("be.visible");
 });
 
 
 // Comandos de teste do Modal de registro de chuvas
 Cypress.Commands.add("modalOculto", () => {
-    cy.contains(TEXTO.MODAL.TÍTULO).should("not.be.visible");
-    cy.get("button#" + TEXTO.SALVAR).should("not.be.visible");
-    cy.get("button#" + TEXTO.CANCELAR).should("not.be.visible");
+    cy.contains(TEXT.MODAL.TITLE).should("not.be.visible");
+    cy.get("button#" + TEXT.SAVE).should("not.be.visible");
+    cy.get("button#" + TEXT.CANCEL).should("not.be.visible");
 });
 
 Cypress.Commands.add("modalVisível", () => {
-    cy.contains(TEXTO.MODAL.TÍTULO).should("be.visible");
-    cy.contains(TEXTO.SALVAR).should("be.visible");
-    cy.contains(TEXTO.CANCELAR).should("be.visible");
+    cy.contains(TEXT.MODAL.TITLE).should("be.visible");
+    cy.contains(TEXT.SAVE).should("be.visible");
+    cy.contains(TEXT.CANCEL).should("be.visible");
 });
 
-Cypress.Commands.add("adicionaChuva", (início, fim) => {
+Cypress.Commands.add("adicionaChuva", (start, end) => {
     // Abre Modal
-    cy.get("button#" + TEXTO.CHUVA).click();
+    cy.get("button#" + TEXT.RAIN).click();
     // Digita horários
-    cy.get("input#" + TEXTO.INÍCIO).type(início);
-    cy.get("input#" + TEXTO.FIM).type(fim);
+    cy.get("input#" + TEXT.START).type(start);
+    cy.get("input#" + TEXT.END).type(end);
     // Salva
-    cy.get("button#" + TEXTO.SALVAR).click();
+    cy.get("button#" + TEXT.SAVE).click();
 });
 
-// Comandos de Adição de Vistorias
-Cypress.Commands.add("adicionaVistorias", (tipo, quantia) => {
-    for (let index = 0; index < quantia; index++) {
-        cy.get(`button#${tipo}`).should("have.attr", "data-badge", index);
-        cy.get(`button#${tipo}`).click();
-        cy.get(`button#${tipo}`).should("have.attr", "data-badge", index + 1);
+// Comandos de Adição de Inspections
+Cypress.Commands.add("adicionaInspections", (type, n) => {
+    for (let index = 0; index < n; index++) {
+        cy.get(`button#${type}`).should("have.attr", "data-badge", index);
+        cy.get(`button#${type}`).click();
+        cy.get(`button#${type}`).should("have.attr", "data-badge", index + 1);
     }
 });

@@ -1,4 +1,4 @@
-import { TEXTO } from "../../../src/data/Constantes";
+import { TEXT } from "../../../src/data/Data";
 
 describe("E2E: Tela inicial, Configuração padrão", () => {
     beforeEach(() => {
@@ -7,9 +7,9 @@ describe("E2E: Tela inicial, Configuração padrão", () => {
 
     it("Tem o título correto", () => {
         // Deve conter
-        cy.contains("h1", TEXTO.CONTEÚDO.TÍTULO);
-        cy.contains("h2", TEXTO.CONTEÚDO.SUBTÍTULO);
-        cy.contains("p", TEXTO.CONTEÚDO.DESCRIÇÃO);
+        cy.contains(TEXT.CONTENT.TITLE);
+        cy.contains(TEXT.CONTENT.SUBTITLE);
+        cy.contains(TEXT.CONTENT.DESCRIPTION);
 
         // Não deve conter
         cy.menuOculto();
@@ -21,37 +21,34 @@ describe("E2E: Tela inicial, Configuração padrão", () => {
         cy.menuOculto();
 
         // Clica no botão de configuração para ativar o Menu.
-        cy.get("button#" + TEXTO.MENU).click();
+        cy.get("button#" + TEXT.MENU).click();
         // Menu deve aparecer e exibir:
         cy.menuVisivel();
 
         // Clica novamente para fechar o Menu.
-        cy.get("button#" + TEXTO.MENU).click();
+        cy.get("button#" + TEXT.MENU).click();
         // Não deve conter
         cy.menuOculto();
 
         // Testa duas vezes para garantir o funcionamento.
         // Clica no botão de configuração para ativar o Menu.
-        cy.get("button#" + TEXTO.MENU).click();
+        cy.get("button#" + TEXT.MENU).click();
         // Menu deve aparecer e exibir:
         cy.menuVisivel();
 
         // Clica novamente para fechar o Menu.
-        cy.get("button#" + TEXTO.MENU).click();
+        cy.get("button#" + TEXT.MENU).click();
         // Não deve conter
         cy.menuOculto();
     });
 });
 
-describe("E2E: Tela inicial, Adiciona Vistorias", () => {
+describe("E2E: Tela inicial, Adiciona Inspections", () => {
     beforeEach(() => {
         cy.visit("/");
     });
 
     it("Adiciona uma Vistoria Normal", () => {
-        // cy.get("button#" + TEXTO.NORMAL).should("have.attr", "data-badge", 0);
-        // cy.get("button#" + TEXTO.NORMAL).click();
-        // cy.get("button#" + TEXTO.NORMAL).should("have.attr", "data-badge", 1);
-        cy.adicionaVistorias(TEXTO.NORMAL, 1);
+        cy.adicionaInspections(TEXT.NORMAL, 1);
     });
 });

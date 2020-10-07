@@ -1,23 +1,26 @@
 {
   "name": "ace",
   "description": "Calculadora de Horas",
-  "version": "4.4.0",
-  "repository": "https://github.com/wkoch/ace",
   "license": "MIT",
+  "repository": "https://github.com/wkoch/ace",
+  "version": "6.0.0",
+  "author": "William Koch (http://wkoch.com.br)",
   "scripts": {
     "dev": "sapper dev",
-    "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
+    "dev:tailwindcss": "postcss static/tailwind.css -o static/main.css -w",
+    "build:tailwindcss": "postcss static/tailwind.css -o static/main.css",
+    "build": "npm run build:tailwindcss && sapper build --legacy",
+    "export": "npm run build:tailwindcss && sapper export --legacy",
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "test": "run-p --race dev cy:run"
   },
   "dependencies": {
+    "@fullhuman/postcss-purgecss": "latest",
     "compression": "latest",
     "polka": "next",
-    "sirv": "latest",
-    "svelte-transitions": "latest"
+    "sirv": "latest"
   },
   "devDependencies": {
     "@babel/core": "latest",
@@ -29,12 +32,16 @@
     "@rollup/plugin-commonjs": "latest",
     "@rollup/plugin-node-resolve": "latest",
     "@rollup/plugin-replace": "latest",
-    "cypress": "latest",
     "npm-run-all": "latest",
+    "postcss-cli": "latest",
+    "postcss-load-config": "latest",
+    "postcss": "latest",
+    "rollup-plugin-babel": "latest",
     "rollup-plugin-svelte": "latest",
     "rollup-plugin-terser": "latest",
     "rollup": "latest",
     "sapper": "latest",
-    "svelte": "latest"
+    "svelte": "latest",
+    "tailwindcss": "latest"
   }
 }

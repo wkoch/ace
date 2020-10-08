@@ -1,12 +1,16 @@
+<script>
+    export let modalVisible = false;
+</script>
+
 <tr>
     <td class="px-3 py-4 whitespace-no-wrap">
         <div class="text-lg leading-5 text-gray-900 text-center">1</div>
     </td>
     <td class="px-3 py-4 whitespace-no-wrap">
         <div class="flex items-center text-center">
-            <div class="flex-shrink-0 h-6 w-6 m-auto text-green-400">
+            <div class="flex-shrink-0 h-10 w-10 m-auto text-green-400">
                 <svg
-                    class="h-6 w-6"
+                    class="h-10 w-10"
                     stroke="currentColor"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -22,10 +26,13 @@
     <td class="px-3 py-4 whitespace-no-wrap">
         <div class="text-lg leading-5 text-gray-900 text-center">08:40</div>
     </td>
+    <td class="px-3 py-4 whitespace-no-wrap hidden md:table-cell">
+        <div class="text-lg leading-5 text-gray-900 text-center">09:55</div>
+    </td>
     <td
         class="px-3 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 text-center">
         <button
-            class="p-1 border-2 border-transparent text-orange-600 rounded-full hover:text-gray-700 focus:outline-none"
+            class="p-1 border-2 border-transparent text-indigo-600 rounded-full hover:indigo-gray-700 focus:outline-none"
             aria-label="Notifications">
             <svg
                 class="h-6 w-6"
@@ -43,7 +50,8 @@
         </button>
         <button
             class="p-1 border-2 border-transparent text-red-600 rounded-full hover:text-red-700 focus:outline-none"
-            aria-label="Notifications">
+            aria-label="Notifications"
+            on:click={() => (modalVisible = true)}>
             <svg
                 class="h-6 w-6"
                 stroke="currentColor"

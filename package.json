@@ -14,10 +14,31 @@
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "test": "run-p --race dev cy:run"
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.mjs$": "babel-jest",
+      "^.+\\.svelte$": "svelte-jester"
+    },
+    "transformIgnorePatterns": [
+      "src/node_modules/(?!@sapper)"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "mjs",
+      "svelte"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src/node_modules"
+    ],
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ]
   },
   "dependencies": {
-    "@fullhuman/postcss-purgecss": "latest",
     "compression": "latest",
     "polka": "next",
     "sirv": "latest"
@@ -28,11 +49,17 @@
     "@babel/plugin-transform-runtime": "latest",
     "@babel/preset-env": "latest",
     "@babel/runtime": "latest",
+    "@fullhuman/postcss-purgecss": "latest",
     "@rollup/plugin-babel": "latest",
     "@rollup/plugin-commonjs": "latest",
     "@rollup/plugin-node-resolve": "latest",
     "@rollup/plugin-replace": "latest",
+    "@types/jest": "latest",
+    "babel-jest": "latest",
+    "jest-playwright-preset": "latest",
+    "jest": "latest",
     "npm-run-all": "latest",
+    "playwright": "latest",
     "postcss-cli": "latest",
     "postcss-load-config": "latest",
     "postcss": "latest",
@@ -41,6 +68,7 @@
     "rollup-plugin-terser": "latest",
     "rollup": "latest",
     "sapper": "latest",
+    "svelte-jester": "latest",
     "svelte": "latest",
     "tailwindcss": "latest"
   }

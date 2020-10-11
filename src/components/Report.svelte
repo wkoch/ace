@@ -1,6 +1,23 @@
 <script>
+    /**
+     * @typedef { import("../lib/Types").Inspections } Inspections
+     * @typedef { import("../lib/Types").Periods } Periods
+     */
     import TableRow from "./TableRow.svelte";
-    export let modalVisible = false;
+    import ConfirmDelete from "./ConfirmDelete.svelte";
+    import { finalReport, makeReport } from "../lib/Inspections";
+
+    /** @type {Inspections} */
+    export let inspections;
+
+    /** @type {Periods} */
+    export let periods;
+
+    /** @type {Inspections} */
+    $: initialReport = makeReport(inspections, periods, 840000);
+
+    /** @type {Inspections} */
+    $: report = finalReport(initialReport, periods);
 </script>
 
 <section>
@@ -41,26 +58,11 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <TableRow bind:modalVisible />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
-                                <TableRow />
+                                {#if report.length > 0}
+                                    {#each report as inspection}
+                                        <TableRow {inspection} />
+                                    {/each}
+                                {/if}
                             </tbody>
                         </table>
                     </div>

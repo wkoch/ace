@@ -1,3 +1,22 @@
+/** @type {(time: number, start: number, end: number) => boolean} */
+export function isTimeBetween(time, start, end) {
+    return (time >= start && time <= end);
+}
+
+
+/** @type {(timeString: string) => number} */
+export function stringToTime(timeString) {
+    if (timeString == "" || timeString == "00:00") {
+        return 0;
+    } else {
+        const [h, m] = timeString.split(":");
+        const hour = Number(h) * 60 * 60 * 1000;
+        const minutes = Number(m) * 60 * 1000;
+        return hour + minutes;
+    }
+}
+
+
 /** @type {(time: number) => string} */
 export function timeToString(time) {
     if (time > 0) {
@@ -12,18 +31,4 @@ export function timeToString(time) {
     } else {
         return "00:00";
     }
-}
-
-/** @type {(timeString: string) => number} */
-export function stringToTime(timeString) {
-    const [h, m] = timeString.split(":");
-    const hour = Number(h) * 60 * 60 * 1000;
-    const minutes = Number(m) * 60 * 1000;
-    return hour + minutes;
-}
-
-
-/** @type {(time: number, start: number, end: number) => boolean} */
-export function isTimeBetween(time, start, end) {
-    return (time >= start && time <= end);
 }

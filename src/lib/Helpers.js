@@ -9,16 +9,11 @@
  */
 
 
-/** @type {(a: Inspection | Interval | Period, b: Inspection | Interval | Period) => number} */
-export function compareByStartTime(a, b) {
-    /** @type {number} */
-    const elementoA = a.start;
-    /** @type {number} */
-    const elementoB = b.start;
-
-    if (elementoA > elementoB) {
+/** @type {(first: Inspection | Interval | Period, second: Inspection | Interval | Period) => number} */
+export function compareByStartTime(first, second) {
+    if (first.start > second.start) {
         return 1;
-    } else if (elementoA < elementoB) {
+    } else if (first.start < second.start) {
         return -1;
     }
     return 0;

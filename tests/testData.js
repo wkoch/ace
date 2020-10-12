@@ -144,245 +144,245 @@ export const inspections = {
         list: [
             {
                 index: 0,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 1,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 2,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 3,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 4,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 5,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 6,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 7,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 8,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 9,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 10,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 11,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 12,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 13,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 14,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 15,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 16,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 17,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 18,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 19,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 20,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 21,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 22,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 23,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 24,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 25,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 26,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 27,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 28,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 29,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 30,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 31,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 32,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 33,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 34,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
@@ -396,245 +396,245 @@ export const inspections = {
         list: [
             {
                 index: 0,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 1,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 2,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 3,
-                type: "R",
+                type: TEXT.RECOVERED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 4,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 5,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 6,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 7,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 8,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 9,
-                type: "R",
+                type: TEXT.RECOVERED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 10,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 11,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 12,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 13,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 14,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 15,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 16,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 17,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 18,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 19,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 20,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 21,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 22,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 23,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 24,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 25,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 26,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 27,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 28,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 29,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 30,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 31,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 32,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 33,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 34,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
@@ -648,245 +648,245 @@ export const inspections = {
         list: [
             {
                 index: 0,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 1,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 2,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 3,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 4,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 5,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 6,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 7,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 8,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 9,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 10,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 11,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 12,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 13,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 14,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 15,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 16,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 17,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 18,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 19,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 20,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 21,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 22,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 23,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 24,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 25,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 26,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 27,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 28,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 29,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 30,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 31,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 32,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 33,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 34,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
@@ -910,245 +910,245 @@ export const report = {
         list: [
             {
                 index: 0,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "Manhã",
                 start: 0,
                 end: 0
             },
             {
                 index: 1,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 2,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 3,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 4,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 5,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 6,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 7,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 8,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 9,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 10,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 11,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 12,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 13,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 14,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 15,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 16,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 17,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 18,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 19,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 20,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 21,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 22,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 23,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 24,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 25,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 26,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 27,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 28,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 29,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 30,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 31,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 32,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 33,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 34,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
@@ -1162,245 +1162,245 @@ export const report = {
         list: [
             {
                 index: 0,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 1,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 2,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 3,
-                type: "R",
+                type: TEXT.RECOVERED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 4,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 5,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 6,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 7,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 8,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 9,
-                type: "R",
+                type: TEXT.RECOVERED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 10,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 11,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 12,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 13,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 14,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 15,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 16,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 17,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 18,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 19,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 20,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 21,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 22,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 23,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 24,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 25,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 26,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 27,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 28,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 29,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 30,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 31,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 32,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 33,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 34,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
@@ -1414,245 +1414,245 @@ export const report = {
         list: [
             {
                 index: 0,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 1,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 2,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 3,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 4,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 5,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 6,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 7,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 8,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 9,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 10,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 11,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 12,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 13,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 14,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 15,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 16,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 17,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 18,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 19,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 20,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 21,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 22,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 23,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 24,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 25,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 26,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 27,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 28,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 29,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 30,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 31,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 32,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 33,
-                type: "F",
+                type: TEXT.CLOSED,
                 period: "",
                 start: 0,
                 end: 0
             },
             {
                 index: 34,
-                type: "N",
+                type: TEXT.NORMAL,
                 period: "",
                 start: 0,
                 end: 0

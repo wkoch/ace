@@ -18,7 +18,7 @@ export function getAverage(inspections, periods) {
         totalSpan += period.span
     });
 
-    return (totalSpan - F * TIME.CLOSED) / N + R;
+    return (totalSpan - F * TIME.CLOSED) / (N + R);
 }
 
 /** @type {(inspections: Inspections, periods: Periods, average: number) => Inspections} */

@@ -12,6 +12,7 @@
     import Rain from "./Icons/Rain.svelte";
     import Notification from "./Notification.svelte";
     import { stringToTime } from "../lib/Time";
+    import { newInterval } from "../lib/Intervals";
 
     /** @type {boolean} */
     export let modalVisible = false;
@@ -73,14 +74,11 @@
         triedSaving = true;
 
         if (!error) {
-            rains = [
-                ...rains,
-                {
-                    type: TEXT.RAIN,
-                    start: start,
-                    end: end,
-                },
-            ];
+            rains = newInterval(rains, {
+                type: TEXT.RAIN,
+                start: start,
+                end: end,
+            });
             cancel();
         }
     }

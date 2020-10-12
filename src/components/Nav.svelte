@@ -28,13 +28,9 @@
             type: type,
             start: 0,
             end: 0,
-            nextInterval: TEXT.NONE,
+            nextInterval: null,
         };
         inspections = [...inspections, next];
-    }
-
-    function showModal() {
-        modalVisible = true;
     }
 </script>
 

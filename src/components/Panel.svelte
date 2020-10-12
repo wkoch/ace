@@ -36,7 +36,7 @@
         start: 31200000,
         end: 40800000,
         span: 9600000,
-        nextInterval: TEXT.LUNCH,
+        nextInterval: null,
     };
 
     // DADOS DA AFTERNOON
@@ -49,7 +49,7 @@
         start: 51600000,
         end: 62400000,
         span: 10800000,
-        nextInterval: TEXT.NONE,
+        nextInterval: null,
     };
 
     function save() {}

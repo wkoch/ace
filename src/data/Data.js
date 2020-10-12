@@ -39,14 +39,5 @@ export let TEXT = {
 
 /** @type {{CLOSED: number}} */
 export const TIME = {
-    CLOSED: 3
+    CLOSED: 180000 // 3 Minutos in miliseconds
 }
-
-// /** @type {TYPE} */
-// export const TYPE = {
-//     CLOSED: TEXT.CLOSED,
-//     LUNCH: TEXT.LUNCH,
-//     NORMAL: TEXT.NORMAL,
-//     RAIN: TEXT.RAIN,
-//     RECOVERED: TEXT.RECOVERED
-// }

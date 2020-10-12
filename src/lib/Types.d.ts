@@ -8,8 +8,8 @@ export type Intervals = Array<Interval>;
 // export type Moment = { start: number, end: number };
 // export type Moments = Array<Moment>;
 
-export type Morning = { active: boolean, name: TEXT_MORNING, startTime: string, endTime: string, start: number, end: number, span: number, nextInterval: string };
-export type Afternoon = { active: boolean, name: TEXT_AFTERNOON, startTime: string, endTime: string, start: number, end: number, span: number, nextInterval: string };
+export type Morning = { active: boolean, name: TEXT_MORNING, startTime: string, endTime: string, start: number, end: number, span: number, nextInterval: number | null };
+export type Afternoon = { active: boolean, name: TEXT_AFTERNOON, startTime: string, endTime: string, start: number, end: number, span: number, nextInterval: number | null };
 
 export type Period = Morning | Afternoon;
 export type Periods = Array<Period>;

@@ -15,7 +15,7 @@ export const periods = {
         start: 31200000,
         end: 40800000,
         span: 9600000,
-        nextInterval: TEXT.NONE
+        nextInterval: null
     },
     morningOff: {
         name: "Manhã",
@@ -25,7 +25,7 @@ export const periods = {
         start: 0,
         end: 0,
         span: 0,
-        nextInterval: TEXT.NONE
+        nextInterval: null
     },
     afternoonOn: {
         name: "Tarde",
@@ -35,7 +35,7 @@ export const periods = {
         start: 51600000,
         end: 62400000,
         span: 10800000,
-        nextInterval: TEXT.NONE
+        nextInterval: null
     },
     afternoonOff: {
         name: "Tarde",
@@ -45,7 +45,7 @@ export const periods = {
         start: 0,
         end: 0,
         span: 0,
-        nextInterval: TEXT.NONE
+        nextInterval: null
     }
 };
 

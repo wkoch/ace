@@ -1,6 +1,5 @@
 /**
- * @typedef { import("../lib/Types").Morning } Morning
- * @typedef { import("../lib/Types").Afternoon } Afternoon
+ * @typedef { import("../lib/Types").TYPE } TYPE
  * @typedef { import("../lib/Types").Period } Period
  * @typedef { import("../lib/Types").Periods } Periods
  * @typedef { import("../lib/Types").Interval } Interval
@@ -23,6 +22,18 @@ export function compareByStartTime(a, b) {
         return -1;
     }
     return 0;
+}
+
+
+/** @type {(list: Inspections, type: TYPE) => number} */
+export function countByType(list, type) {
+    return filter(list, type).length;
+}
+
+
+/** @type {(list: Inspections, type: TYPE) => Intervals} */
+export function filter(list, type) {
+    return list.filter(obj => obj.type == type);
 }
 
 

@@ -5,7 +5,7 @@
      */
     import TableRow from "./TableRow.svelte";
     import ConfirmDelete from "./ConfirmDelete.svelte";
-    import { finalReport, makeReport } from "../lib/Inspections";
+    import { finalReport, getAverage, makeReport } from "../lib/Inspections";
 
     /** @type {Inspections} */
     export let inspections;
@@ -14,7 +14,11 @@
     export let periods;
 
     /** @type {Inspections} */
-    $: initialReport = makeReport(inspections, periods, 840000);
+    $: initialReport = makeReport(
+        inspections,
+        periods,
+        getAverage(inspections, periods)
+    );
 
     /** @type {Inspections} */
     $: report = finalReport(initialReport, periods);

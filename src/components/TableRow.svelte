@@ -168,7 +168,7 @@
     <tr>
         <td class="px-3 py-4 whitespace-no-wrap">
             <div class="text-lg leading-5 text-gray-900 text-center">
-                {inspection.index + 1}
+                {inspection.index}
             </div>
         </td>
         <td class="px-3 py-4 whitespace-no-wrap">

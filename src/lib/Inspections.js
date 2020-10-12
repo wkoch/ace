@@ -2,7 +2,24 @@
  * @typedef { import("./Types").Inspections } Inspections
  * @typedef { import("./Types").Periods } Periods
  */
-import { inspections } from "../../tests/testData";
+import { TEXT, TIME } from "../data/Data";
+import { countByType } from "../lib/Helpers";
+
+
+/** @type {(inspections: Inspections, periods: Periods) => number} */
+export function getAverage(inspections, periods) {
+    const N = countByType(inspections, TEXT.NORMAL);
+    const F = countByType(inspections, TEXT.CLOSED);
+    const R = countByType(inspections, TEXT.RECOVERED);
+
+    let totalSpan = 0;
+
+    periods.forEach(period => {
+        totalSpan += period.span
+    });
+
+    return (totalSpan - F * TIME.CLOSED) / N + R;
+}
 
 /** @type {(inspections: Inspections, periods: Periods, average: number) => Inspections} */
 export function makeReport(inspections, periods, average) {
@@ -16,7 +33,7 @@ export function makeReport(inspections, periods, average) {
 
     if (inspections.length > 0) {
         inspections.forEach(inspection => {
-            let currentSpan = inspection.type == "N" ? average : 180000; // FIXME replace N and 3 by constants
+            let currentSpan = inspection.type == TEXT.CLOSED ? TIME.CLOSED : average;
             let current;
             if (first) {
                 current = {
@@ -63,9 +80,8 @@ export function improvePrecision(simpleReport, ogPeriod) {
     let report = [];
     let period = { ...ogPeriod };
     const inspections = simpleReport.filter(el => el.period == period.name);
-    const Ns = inspections.filter(el => el.type == "N").length;
-    const Fs = inspections.filter(el => el.type == "F").length;
-    const thisAverage = (period.span - 180000 * Fs) / Ns;
+
+    const thisAverage = getAverage(inspections, [period]);
     const periodAverage = Math.floor(thisAverage);
     const decimals = thisAverage - periodAverage;
     let decimalsAccumulator = 0;
@@ -81,7 +97,7 @@ export function improvePrecision(simpleReport, ogPeriod) {
         } else {
             sum = 0;
         }
-        const currentDuration = inspection.type == "N" ? periodAverage : 180000;
+        const currentDuration = inspection.type == TEXT.CLOSED ? TIME.CLOSED : periodAverage;
         let current;
         if (first) {
             current = {

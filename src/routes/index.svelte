@@ -15,6 +15,9 @@
 	import Nav from "../components/Nav.svelte";
 	import Panel from "../components/Panel.svelte";
 	import Report from "../components/Report.svelte";
+	import { subtractIntervalsFromDay } from "../lib/Periods";
+	import { joinIntervals } from "../lib/Intervals";
+	import { TEXT } from "../data/Data";
 
 	/** @type {Inspections} */
 	let inspections = [];
@@ -23,7 +26,7 @@
 	let dayPeriod;
 
 	/** @type {Interval} */
-	let lunchInterval;
+	let lunchInterval = { type: TEXT.LUNCH, start: 68031200000, end: 40800000 };
 
 	/** @type {Intervals} */
 	let rains = [];
@@ -34,9 +37,8 @@
 	/** @type {boolean} */
 	let modalVisible = false;
 
-	$: intervals = orderByStartTime([lunchInterval, ...rains]);
-	$: console.table(intervals);
-	$: periods = []; // FIXME
+	$: intervals = joinIntervals([lunchInterval], rains);
+	$: periods = subtractIntervalsFromDay(dayPeriod, intervals);
 </script>
 
 <style>

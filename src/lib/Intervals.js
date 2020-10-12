@@ -86,3 +86,18 @@ export function newInterval(intervals, newInterval) {
 
     return orderByStartTime(result);
 }
+
+
+export function joinIntervals(lunch, rains) {
+    if (lunch.length == 1) {
+        let result = [...lunch];
+        if (rains.length > 0) {
+            rains.forEach(rain => {
+                newInterval(result, rain);
+            });
+        }
+        return result;
+    } else {
+        return rains;
+    }
+}

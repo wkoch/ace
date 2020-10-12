@@ -1,3 +1,16 @@
+/**
+ * @typedef { import("../lib/Types").Inspection } Inspection
+ * @typedef { import("../lib/Types").Interval } Interval
+ * @typedef { import("../lib/Types").Period } Period
+ */
+
+
+/** @type {(first: Inspection | Interval | Period, second: Inspection | Interval | Period) => boolean} */
+export function contains(first, second) {
+    return (isTimeBetween(second.start, first.start, first.end) && isTimeBetween(second.end, first.start, first.end));
+}
+
+
 /** @type {(time: number, start: number, end: number) => boolean} */
 export function isTimeBetween(time, start, end) {
     return (time >= start && time <= end);

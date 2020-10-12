@@ -6,7 +6,8 @@
  * @typedef { import("../lib/Types").Intervals } Intervals
  */
 import { TEXT } from "../data/Data";
-import { isTimeBetween } from "../lib/Time";
+import { contains, isTimeBetween } from "../lib/Time";
+import { orderByStartTime } from "../lib/Helpers";
 
 
 /** @type {(morning: Period, afternoon: Period) => Interval} */
@@ -19,30 +20,69 @@ export function getLunchInterval(morning, afternoon) {
 }
 
 
-// /** @type {(intervals: Intervals) => Intervals} */
-// export function addInterval(intervals, newInterval) {
-//     let result = [];
+/** @type {(intervals: Intervals, newInterval: Interval) => Intervals} */
+export function newInterval(intervals, newInterval) {
+    /** @type {Intervals} */
+    let result = [];
+    /** @type {boolean} */
+    let intercedes = false;
+    let ignore = false;
 
-//     intervals.forEach(interval => {
-//         if (isTimeBetween(newInterval.start, interval.start, interval.end)) {
-//             if (interval.type == newInterval.type) {
-//                 let unify = { ...interval };
-//                 unify.end = newInterval.end;
-//                 result.push(unify);
-//             } else if (interval.type == TEXT.RAIN && newInterval.type == TEXT.LUNCH) {
-//                 let adjustRainBefore = { ...interval };
-//                 adjustRainBefore.end = newInterval.start;
-//                 result.push(adjustRainBefore);
-//                 result.push(newInterval);
-//             } else if (interval.type == TEXT.LUNCH && newInterval.type == TEXT.RAIN) {
-//                 let adjustRainAfter = { ...newInterval };
-//                 adjustRainAfter.start = interval.end;
-//                 result.push(interval);
-//                 result.push(adjustRainAfter);
-//             }
-//         } else if (interval.end < interval.start) {
-//             // Ignore inverted interval
-//         } else if ()
-//     });
+    if (intervals.length > 0) {
+        intervals.forEach(interval => {
+            if (contains(interval, newInterval)) {
+                // Intervalo cobre novo Intervalo, salva o intervalo
+                result.push(interval);
+                intercedes = true;
+                ignore = true;
+            } else if (contains(newInterval, interval)) {
+                // Novo intervalo cobre intervalo existente
+                if (interval.type == TEXT.LUNCH) {
+                    // Quebra chuvas em volta do almoço
+                    let first = { ...newInterval };
+                    let second = { ...newInterval };
+                    first.end = interval.start;
+                    result.push(first);
+                    result.push(interval);
+                    second.start = interval.end;
+                    result.push(second);
+                    intercedes = true;
+                    ignore = true;
+                } else {
+                    // salva o novo
+                    intercedes = true;
+                }
+            } else if (newInterval.start < interval.start && isTimeBetween(newInterval.end, interval.start, interval.end)) {
+                // Novo intervalo intercede intervalo existente
+                if (interval.type == TEXT.LUNCH) {
+                    newInterval.end = interval.start;
+                    result.push(interval); // Salva o almoço
+                    intercedes = true;
+                } else {
+                    newInterval.end = interval.end;
+                    intercedes = true;
+                }
+            } else if (isTimeBetween(newInterval.start, interval.start, interval.end) && newInterval.end > interval.end) {
+                // Novo intervalo extrapola intervalo existente
+                if (interval.type == TEXT.LUNCH) {
+                    newInterval.start = interval.end;
+                    result.push(interval); // Salva o almoço
+                    intercedes = true;
+                } else {
+                    newInterval.start = interval.start;
+                    intercedes = true;
+                }
+            } else {
+                result.push(interval);
+            }
+        });
 
-// }
+        if (!ignore) {
+            result.push(newInterval);
+        }
+    } else {
+        result.push(newInterval);
+    }
+
+    return orderByStartTime(result);
+}

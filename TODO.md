@@ -3,8 +3,9 @@ Abre o app
 # Eventos Automáticos:
 
 ## Intervalos (Depende de Almoço e Chuvas)
-    1. Processa intervalo de períodos
-    2. Processa intervalos de chuva, quando houver
+    [x] Processa intervalo de períodos
+    [x] Processa intervalos de chuva, quando houver
+    [x] Valida intervalos
 
 
 ## Períodos (Depende de Manhã, Tarde e Intervalos)
@@ -26,7 +27,7 @@ Abre o app
 # Eventos de Usuários
 
 ## Adicionar chuva
-    1. Atualiza lista de intervalos com nova chuva (Ordenada)
+    [X] Atualiza lista de intervalos com nova chuva (Ordenada)
 
 ## Adicionar Vistoria (N, F, R)
-    1. Atualiza lista de Vistorias com nova vistoria (Apenas marcando o index e tipo)
+    [X] Atualiza lista de Vistorias com nova vistoria (Apenas marcando o index e tipo)

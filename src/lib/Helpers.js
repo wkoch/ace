@@ -10,7 +10,7 @@
  */
 
 
-/** @type {(a: Period | Interval | Inspection, b: Period | Interval | Inspection) => number} */
+/** @type {(a: Inspection | Interval | Period, b: Inspection | Interval | Period) => number} */
 export function compareByStartTime(a, b) {
     /** @type {number} */
     const elementoA = a.start;
@@ -26,7 +26,7 @@ export function compareByStartTime(a, b) {
 }
 
 
-/** @type {(list: Periods | Intervals | Inspections) => Periods | Intervals | Inspections} */
+/** @type {(list: Inspections | Intervals | Periods) => Inspections | Intervals | Periods} */
 export function orderByStartTime(list) {
     if (list.length > 1) {
         return list.sort(compareByStartTime);

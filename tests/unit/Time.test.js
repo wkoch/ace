@@ -1,4 +1,35 @@
-import { isTimeBetween, stringToTime, timeToString } from "../../src/lib/Time"
+import { TEXT } from "../../src/data/Data";
+import { contains, isTimeBetween, stringToTime, timeToString } from "../../src/lib/Time"
+import { intervals } from "../testData";
+
+
+describe("contains()", () => {
+    let interval = { type: TEXT.RAIN, start: 9, end: 12 };
+
+    test('Intervalo está contido.', () => {
+        expect(contains(interval, { type: TEXT.RAIN, start: 9, end: 10 })).toBeTruthy();
+    });
+
+    test('Intervalo igual.', () => {
+        expect(contains(interval, interval)).toBeTruthy();
+    });
+
+    test('Intervalo antes.', () => {
+        expect(contains(interval, { type: TEXT.RAIN, start: 7, end: 8 })).toBeFalsy();
+    });
+
+    test('Intervalo depois.', () => {
+        expect(contains(interval, { type: TEXT.RAIN, start: 13, end: 14 })).toBeFalsy();
+    });
+
+    test('Intervalo intercede.', () => {
+        expect(contains(interval, { type: TEXT.RAIN, start: 8, end: 10 })).toBeFalsy();
+    });
+
+    test('Intervalo extrapola.', () => {
+        expect(contains(interval, { type: TEXT.RAIN, start: 11, end: 13 })).toBeFalsy();
+    });
+});
 
 
 describe("isTimeBetween()", () => {

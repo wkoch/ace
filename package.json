@@ -7,36 +7,13 @@
   "author": "William Koch (http://wkoch.com.br)",
   "scripts": {
     "dev": "sapper dev",
+    "build": "sapper build --legacy",
+    "export": "sapper export --legacy",
+    "start": "node __sapper__/build",
+    "validate": "svelte-check --ignore src/node_modules/@sapper",
     "dev:tailwindcss": "postcss static/tailwind.css -o static/main.css -w",
     "build:tailwindcss": "postcss static/tailwind.css -o static/main.css",
-    "build": "npm run build:tailwindcss && sapper build --legacy",
-    "export": "npm run build:tailwindcss && sapper export --legacy",
-    "start": "node __sapper__/build",
-    "cy:run": "cypress run",
-    "cy:open": "cypress open",
-    "test": "jest"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.js$": "babel-jest",
-      "^.+\\.mjs$": "babel-jest",
-      "^.+\\.svelte$": "svelte-jester"
-    },
-    "transformIgnorePatterns": [
-      "src/node_modules/(?!@sapper)"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "mjs",
-      "svelte"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "src/node_modules"
-    ],
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ]
+    "test": "npx folio"
   },
   "dependencies": {
     "compression": "latest",
@@ -50,26 +27,29 @@
     "@babel/preset-env": "latest",
     "@babel/runtime": "latest",
     "@fullhuman/postcss-purgecss": "latest",
+    "@playwright/test": "latest",
     "@rollup/plugin-babel": "latest",
     "@rollup/plugin-commonjs": "latest",
     "@rollup/plugin-node-resolve": "latest",
     "@rollup/plugin-replace": "latest",
-    "@types/jest": "latest",
-    "babel-jest": "latest",
-    "jest-playwright-preset": "latest",
-    "jest": "latest",
-    "npm-run-all": "latest",
+    "@rollup/plugin-typescript": "latest",
+    "@tsconfig/svelte": "latest",
+    "@types/compression": "latest",
+    "@types/node": "latest",
+    "@types/polka": "latest",
     "playwright": "latest",
     "postcss-cli": "latest",
     "postcss-load-config": "latest",
     "postcss": "latest",
-    "rollup-plugin-babel": "latest",
     "rollup-plugin-svelte": "latest",
     "rollup-plugin-terser": "latest",
     "rollup": "latest",
     "sapper": "latest",
-    "svelte-jester": "latest",
+    "svelte-check": "latest",
+    "svelte-preprocess": "latest",
     "svelte": "latest",
-    "tailwindcss": "latest"
+    "tailwindcss": "latest",
+    "tslib": "latest",
+    "typescript": "latest"
   }
 }

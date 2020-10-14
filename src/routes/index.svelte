@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/**
 	 * @typedef { import("../lib/Types").Inspections } Inspections
 	 * @typedef { import("../lib/Types").Interval } Interval

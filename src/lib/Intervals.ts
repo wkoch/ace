@@ -6,8 +6,8 @@
  * @typedef { import("../lib/Types").Intervals } Intervals
  */
 import { TEXT } from "../data/Data";
-import { contains, isTimeBetween } from "../lib/Time";
-import { orderByStartTime } from "../lib/Helpers";
+import { contains, isTimeBetween } from "./Time";
+import { orderByStartTime } from "./Helpers";
 
 
 /** @type {(morning: Period, afternoon: Period) => Interval} */

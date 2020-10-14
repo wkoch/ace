@@ -1,10 +1,12 @@
+import { describe, it, expect } from '@playwright/test';
+
 import { getInitialPeriod, subtractIntervalsFromDay } from "../../src/lib/Periods";
-import { periods } from "./../testData.js";
+import { periods } from "../testData";
 import { TEXT } from "../../src/data/Data";
 
 
 describe("getInitialPeriod()", () => {
-    test('Both periods are active.', () => {
+    it('Both periods are active.', () => {
         let result = { ...periods.morningOn };
         result.end = periods.afternoonOn.end;
         result.endTime = periods.afternoonOn.endTime;
@@ -13,12 +15,12 @@ describe("getInitialPeriod()", () => {
         expect(getInitialPeriod(periods.morningOn, periods.afternoonOn)).toEqual(result);
     });
 
-    test('Only morning active.', () => {
+    it('Only morning active.', () => {
         let result = { ...periods.morningOn };
         expect(getInitialPeriod(periods.morningOn, periods.afternoonOff)).toEqual(result);
     });
 
-    test('Only afternoon active.', () => {
+    it('Only afternoon active.', () => {
         let result = { ...periods.afternoonOn };
         expect(getInitialPeriod(periods.morningOff, periods.afternoonOn)).toEqual(result);
     });
@@ -28,7 +30,7 @@ describe("getInitialPeriod()", () => {
 describe("subtractIntervalsFromDay()", () => {
 
     // Basic periods
-    test('Both periods are active, subtract Lunch.', () => {
+    it('Both periods are active, subtract Lunch.', () => {
         let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "17:20", start: 31200000, end: 62400000, span: 31200000, nextInterval: null };
         let lunchInterval = [{ type: TEXT.LUNCH, start: 40800000, end: 51600000 }];
         let morning = { ...periods.morningOn };
@@ -37,18 +39,18 @@ describe("subtractIntervalsFromDay()", () => {
         expect(subtractIntervalsFromDay(day, lunchInterval)).toEqual(result);
     });
 
-    test('Only morning active, subtract lunch.', () => {
+    it('Only morning active, subtract lunch.', () => {
         let result = [periods.morningOn];
         expect(subtractIntervalsFromDay(periods.morningOn, [])).toEqual(result);
     });
 
-    test('Only afternoon active.', () => {
+    it('Only afternoon active.', () => {
         let result = [periods.afternoonOn];
         expect(subtractIntervalsFromDay(periods.afternoonOn, [])).toEqual(result);
     });
 
     // Periods with rain
-    test('Both periods are active, subtract Lunch and rain.', () => {
+    it('Both periods are active, subtract Lunch and rain.', () => {
         let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "17:20", start: 31200000, end: 62400000, span: 31200000, nextInterval: null };
         let intervals = [{ type: TEXT.RAIN, start: 32400000, end: 36000000 }, { type: TEXT.LUNCH, start: 40800000, end: 51600000 }];
         let morning = [{ name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "09:00", start: 31200000, end: 32400000, span: 1200000, nextInterval: 0 }, { name: TEXT.MORNING, active: true, startTime: "10:00", endTime: "11:20", start: 36000000, end: 40800000, span: 4800000, nextInterval: 1 }];
@@ -56,7 +58,7 @@ describe("subtractIntervalsFromDay()", () => {
         expect(subtractIntervalsFromDay(day, intervals)).toEqual(result);
     });
 
-    test('Both periods are active, subtract Lunch and multiple rains.', () => {
+    it('Both periods are active, subtract Lunch and multiple rains.', () => {
         let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "17:20", start: 31200000, end: 62400000, span: 31200000, nextInterval: null };
         let intervals = [
             { type: TEXT.RAIN, start: 32400000, end: 36000000 },
@@ -74,7 +76,7 @@ describe("subtractIntervalsFromDay()", () => {
         expect(subtractIntervalsFromDay(day, intervals)).toEqual(result);
     });
 
-    test('Morning only, subtract multiple rains.', () => {
+    it('Morning only, subtract multiple rains.', () => {
         let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "11:20", start: 31200000, end: 40800000, span: 9600000, nextInterval: null };
         let intervals = [
             { type: TEXT.RAIN, start: 32400000, end: 36000000 },

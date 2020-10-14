@@ -4,7 +4,7 @@
 * @typedef { import("../lib/Types").Periods } Periods
 */
 
-import { contains, isTimeBetween, timeToString } from "../lib/Time";
+import { contains, isTimeBetween, timeToString } from "./Time";
 import { TEXT } from "../data/Data";
 
 

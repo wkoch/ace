@@ -1,21 +1,9 @@
-import type {
-  Day,
-  Inspection,
-  Inspections,
-  Interval,
-  Intervals,
-  Morning,
-  Period,
-  Periods,
-} from "../../src/lib/Types";
-import { Type } from "../../src/lib/Types";
-
 import { describe, it, expect } from "@playwright/test";
-
 import { getDayPeriod, subtractIntervals } from "../../src/lib/Periods";
-import { stringToTime } from "../../src/lib/Time";
 import { periods, morning, afternoon } from "../testData";
-import { TEXT } from "../../src/data/Data";
+import { stringToTime } from "../../src/lib/Time";
+import { Type } from "../../src/lib/Types";
+import type { Day, Intervals, Periods } from "../../src/lib/Types";
 
 describe("getDayPeriod()", () => {
   it("Both periods are active.", () => {

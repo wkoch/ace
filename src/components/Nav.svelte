@@ -1,32 +1,26 @@
 <script lang="ts">
   import { TEXT } from "../data/Data";
-  import type {
-    Inspection,
-    Inspections,
-    Intervals,
-    Periods,
-  } from "../lib/Types";
   import { Type } from "../lib/Types";
   import Button from "./Button.svelte";
-  import Rain from "./Icons/Rain.svelte";
   import Checkmark from "./Icons/Checkmark.svelte";
   import Denied from "./Icons/Denied.svelte";
+  import Rain from "./Icons/Rain.svelte";
   import Repeat from "./Icons/Repeat.svelte";
   import Settings from "./Icons/Settings.svelte";
+  import type { Inspection, Inspections } from "../lib/Types";
 
   export let inspections: Inspections;
 
   export let panelVisible: boolean;
   export let modalVisible: boolean;
 
-  function add(type: Type): void {
-    let next = {
+  function add(type: Type.Closed | Type.Normal | Type.Recovered): void {
+    let next: Inspection = {
       index: inspections.length + 1,
-      period: TEXT.MORNING,
+      period: 0,
       type: type,
       start: 0,
       stop: 0,
-      nextInterval: null,
     };
     inspections = [...inspections, next];
   }

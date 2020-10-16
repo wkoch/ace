@@ -1,16 +1,8 @@
-import type {
-  Inspection,
-  Inspections,
-  Intervals,
-  Period,
-  Periods,
-  Times,
-  Time,
-} from "../lib/Types";
-import { Type } from "../lib/Types";
-import { TEXT, TIME } from "../data/Data";
 import { countByType } from "./Helpers";
 import { getTimeSpan } from "./Time";
+import { TIME } from "../data/Data";
+import { Type } from "../lib/Types";
+import type { Inspection, Inspections, Period, Periods } from "../lib/Types";
 
 export function finalReport(
   simpleReport: Inspections,

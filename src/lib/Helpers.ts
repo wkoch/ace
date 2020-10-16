@@ -1,15 +1,4 @@
-import type {
-  Inspection,
-  Inspections,
-  Interval,
-  Intervals,
-  Period,
-  Periods,
-  Time,
-  Times,
-  Type,
-  hasType,
-} from "../lib/Types";
+import type { hasType, Time, Type } from "../lib/Types";
 
 export function compareByStartTime(first: Time, second: Time): number {
   if (first.start > second.start) {
@@ -28,7 +17,7 @@ export function filter(list: hasType, type: Type): hasType {
   return list.filter((obj: { type: Type }) => obj.type == type);
 }
 
-export function orderByStartTime(list: Times): Times {
+export function orderByStartTime(list: any[]): any[] {
   if (list.length > 1) {
     return list.sort(compareByStartTime);
   } else {

@@ -1,18 +1,14 @@
 <script lang="ts">
-  import type { Interval, Intervals, Inspections, Period } from "../lib/Types";
+  import { joinIntervals } from "../lib/Intervals";
+  import { subtractIntervals } from "../lib/Periods";
   import { Type } from "../lib/Types";
-
-  import { orderByStartTime } from "../lib/Helpers";
-
   import Content from "../components/Content.svelte";
   import Header from "../components/Header.svelte";
   import Modal from "../components/Modal.svelte";
   import Nav from "../components/Nav.svelte";
   import Panel from "../components/Panel.svelte";
   import Report from "../components/Report.svelte";
-  import { subtractIntervals } from "../lib/Periods";
-  import { joinIntervals } from "../lib/Intervals";
-  import { TEXT } from "../data/Data";
+  import type { Inspections, Interval, Intervals, Period } from "../lib/Types";
 
   let inspections: Inspections = [];
   let day: Period;
@@ -23,11 +19,7 @@
   };
 
   let rains: Intervals = [];
-
-  /** @type {boolean} */
   let panelVisible = false;
-
-  /** @type {boolean} */
   let modalVisible = false;
 
   $: intervals = joinIntervals([lunchInterval], rains);

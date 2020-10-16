@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Inspection, Inspections, Interval, Period } from "../lib/Types";
   import TimeInput from "./TimeInput.svelte";
 
   export let name: string;

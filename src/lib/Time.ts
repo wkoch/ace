@@ -1,13 +1,4 @@
-import type {
-  Inspection,
-  Inspections,
-  Interval,
-  Period,
-  Periods,
-  Times,
-  Time,
-} from "./Types";
-import { Type } from "./Types";
+import type { Times, Time } from "./Types";
 
 export function contains(first: Time, second: Time): boolean {
   return (

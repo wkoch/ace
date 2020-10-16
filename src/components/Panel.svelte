@@ -2,11 +2,10 @@
   import { fly, fade } from "svelte/transition";
   import { getDayPeriod } from "../lib/Periods";
   import { getLunchInterval } from "../lib/Intervals";
-  import { stringToTime } from "../lib/Time";
   import { TEXT } from "../data/Data";
   import PeriodConfig from "./Period.svelte";
   import Toggle from "./Toggle.svelte";
-  import type { Afternoon, Day, Interval, Morning, Period } from "../lib/Types";
+  import type { Afternoon, Day, Interval, Morning } from "../lib/Types";
 
   export let panelVisible = false;
   export let random = false;

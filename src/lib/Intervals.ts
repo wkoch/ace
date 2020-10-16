@@ -1,6 +1,5 @@
 import { contains, isTimeBetween, stringToTime } from "./Time";
 import { orderByStartTime } from "./Helpers";
-import { TEXT } from "../data/Data";
 import { Type } from "../lib/Types";
 import type { Afternoon, Interval, Intervals, Morning } from "../lib/Types";
 
@@ -92,7 +91,7 @@ export function newInterval(
   return orderByStartTime(result);
 }
 
-export function joinIntervals(lunch, rains) {
+export function joinIntervals(lunch: Intervals, rains: Intervals) {
   if (lunch.length == 1) {
     let result = [...lunch];
     if (rains.length > 0) {

@@ -1,138 +1,258 @@
-import type {
-  Inspection,
-  Inspections,
-  Period,
-  Periods,
-} from "../../src/lib/Types";
-import { Type } from "../../src/lib/Types";
-
 import { describe, it, expect } from "@playwright/test";
-
-import { TEXT } from "../../src/data/Data";
 import { finalReport, makeReport } from "../../src/lib/Inspections";
-import { inspections, periods, morning, afternoon } from "../testData";
-import { timeToString } from "../../src/lib/Time";
+import { inspections, periods } from "../testData";
+import { Type } from "../../src/lib/Types";
+import type { Inspections, Periods } from "../../src/lib/Types";
 
-// describe("finalReport()", () => {
-//     it('Empty list.', () => {
-//         expect(finalReport(inspections.emptyDay.list, [periods.first])).toEqual([]);
-// });
+describe("finalReport()", () => {
+  it("Empty list.", () => {
+    expect(finalReport([], [periods.first])).toEqual([]);
+  });
 
-//     it('Two inspections, one period.', () => {
-//         expect(finalReport([{ index: 1, type: Type.Normal,  }, { index: 2, type: Type.Normal,  }], [periods.first])).toEqual([{ average: 4800000, index: 1, type: Type.Normal, , start: 31200000, stop: 36000000, sum: 0 }, { average: 4800000, index: 2, type: Type.Normal, , start: 36000000, stop: 40800000, sum: 0 }]);
-// });
+  it("Two inspections, one period.", () => {
+    expect(
+      finalReport(
+        [
+          { index: 0, type: Type.Normal, period: 0, start: 0, stop: 0 },
+          { index: 1, type: Type.Normal, period: 0, start: 0, stop: 0 },
+        ],
+        [periods.first]
+      )
+    ).toEqual([
+      {
+        index: 0,
+        type: Type.Normal,
+        period: 0,
+        start: 31200000,
+        stop: 36000000,
+      },
+      {
+        index: 1,
+        type: Type.Normal,
+        period: 0,
+        start: 36000000,
+        stop: 40800000,
+      },
+    ]);
+  });
 
-//     it('Four inspections, one period.', () => {
-//         let inspections = [
-//             { index: 1, type: Type.Normal,  },
-//             { index: 2, type: Type.Normal,  },
-//             { index: 3, type: Type.Normal,  },
-//             { index: 4, type: Type.Normal,  }
-//         ];
-//         let result = [
-//             { average: 2400000, index: 1, type: Type.Normal, , start: 31200000, stop: 33600000, sum: 0 },
-//             { average: 2400000, index: 2, type: Type.Normal, , start: 33600000, stop: 36000000, sum: 0 },
-//             { average: 2400000, index: 3, type: Type.Normal, , start: 36000000, stop: 38400000, sum: 0 },
-//             { average: 2400000, index: 4, type: Type.Normal, , start: 38400000, stop: 40800000, sum: 0 }
-//         ];
-//         expect(finalReport(inspections, [periods.first])).toEqual(result);
-// });
+  it("Four inspections, one period.", () => {
+    let inspections: Inspections = [
+      { index: 1, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 2, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 3, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 4, type: Type.Normal, period: 0, start: 0, stop: 0 },
+    ];
+    let result: Inspections = [
+      {
+        index: 1,
+        type: Type.Normal,
+        period: 0,
+        start: 31200000,
+        stop: 33600000,
+      },
+      {
+        index: 2,
+        type: Type.Normal,
+        period: 0,
+        start: 33600000,
+        stop: 36000000,
+      },
+      {
+        index: 3,
+        type: Type.Normal,
+        period: 0,
+        start: 36000000,
+        stop: 38400000,
+      },
+      {
+        index: 4,
+        type: Type.Normal,
+        period: 0,
+        start: 38400000,
+        stop: 40800000,
+      },
+    ];
+    expect(finalReport(inspections, [periods.first])).toEqual(result);
+  });
 
-//     it('Eight inspections, two periods.', () => {
-//         let inspections = [
-//             { index: 1, type: Type.Normal,  },
-//             { index: 2, type: Type.Normal,  },
-//             { index: 3, type: Type.Normal,  },
-//             { index: 4, type: Type.Normal,  },
-//             { index: 5, type: Type.Normal, period: 1 },
-//             { index: 6, type: Type.Normal, period: 1 },
-//             { index: 7, type: Type.Normal, period: 1 },
-//             { index: 8, type: Type.Normal, period: 1 },
-//         ];
-//         let result = [
-//             // Morning
-//             { average: 2400000, index: 1, type: Type.Normal, , start: 31200000, stop: 33600000, sum: 0 },
-//             { average: 2400000, index: 2, type: Type.Normal, , start: 33600000, stop: 36000000, sum: 0 },
-//             // Morning rain interval
-//             { average: 2400000, index: 3, type: Type.Normal, , start: 36000000, stop: 38400000, sum: 0 },
-//             { average: 2400000, index: 4, type: Type.Normal, , start: 38400000, stop: 40800000, sum: 0 },
-//             // Lunch interval
-//             { average: 2700000, index: 5, type: Type.Normal, period: 1, start: 51600000, stop: 54300000, sum: 0 },
-//             { average: 2700000, index: 6, type: Type.Normal, period: 1, start: 54300000, stop: 57000000, sum: 0 },
-//             // Afternoon rain interval
-//             { average: 2700000, index: 7, type: Type.Normal, period: 1, start: 57000000, stop: 59700000, sum: 0 },
-//             { average: 2700000, index: 8, type: Type.Normal, period: 1, start: 59700000, stop: 62400000, sum: 0 }
-//         ];
-//         expect(finalReport(inspections, [periods.first, afternoon.on])).toEqual(result);
-// });
+  it("Eight inspections, two periods.", () => {
+    let inspections: Inspections = [
+      { index: 1, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 2, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 3, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 4, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 5, type: Type.Normal, period: 1, start: 0, stop: 0 },
+      { index: 6, type: Type.Normal, period: 1, start: 0, stop: 0 },
+      { index: 7, type: Type.Normal, period: 1, start: 0, stop: 0 },
+      { index: 8, type: Type.Normal, period: 1, start: 0, stop: 0 },
+    ];
+    let result: Inspections = [
+      // Morning
+      {
+        index: 1,
+        type: Type.Normal,
+        period: 0,
+        start: 31200000,
+        stop: 33600000,
+      },
+      {
+        index: 2,
+        type: Type.Normal,
+        period: 0,
+        start: 33600000,
+        stop: 36000000,
+      },
+      // Morning rain interval
+      {
+        index: 3,
+        type: Type.Normal,
+        period: 0,
+        start: 36000000,
+        stop: 38400000,
+      },
+      {
+        index: 4,
+        type: Type.Normal,
+        period: 0,
+        start: 38400000,
+        stop: 40800000,
+      },
+      // Lunch interval
+      {
+        index: 5,
+        type: Type.Normal,
+        period: 1,
+        start: 51600000,
+        stop: 54300000,
+      },
+      {
+        index: 6,
+        type: Type.Normal,
+        period: 1,
+        start: 54300000,
+        stop: 57000000,
+      },
+      // Afternoon rain interval
+      {
+        index: 7,
+        type: Type.Normal,
+        period: 1,
+        start: 57000000,
+        stop: 59700000,
+      },
+      {
+        index: 8,
+        type: Type.Normal,
+        period: 1,
+        start: 59700000,
+        stop: 62400000,
+      },
+    ];
+    expect(
+      finalReport(inspections, [periods.first, periods.fullday.second])
+    ).toEqual(result);
+  });
 
-//     it('Eight inspections, four periods.', () => {
-//         let periods = [
-//             {
-//                 active: true,
-//                 name: TEXT.MORNING,
-//                 startTime: "08:40",
-//                 endTime: "09:45",
-//                 start: 31200000,
-//                 stop: 35100000,
-//                 span: 3900000,
-//                 nextInterval: 0
-//             },
-//             {
-//                 active: true,
-//                 name: TEXT.MORNING,
-//                 startTime: "10:15",
-//                 endTime: "11:20",
-//                 start: 36900000,
-//                 stop: 40800000,
-//                 span: 3900000,
-//                 nextInterval: 1
-//             },
-//             {
-//                 active: true,
-//                 name: 1,
-//                 startTime: "14:20",
-//                 endTime: "15:30",
-//                 start: 51600000,
-//                 stop: 55800000,
-//                 span: 4200000,
-//                 nextInterval: 2
-//             },
-//             {
-//                 active: true,
-//                 name: 1,
-//                 startTime: "16:10",
-//                 endTime: "17:20",
-//                 start: 58200000,
-//                 stop: 62400000,
-//                 span: 4200000,
-//                 nextInterval: null
-//             },
-//         ];
-//         let inspections = [
-//             { index: 1, type: Type.Normal,  },
-//             { index: 2, type: Type.Normal,  },
-//             { index: 3, type: Type.Normal,  },
-//             { index: 4, type: Type.Normal,  },
-//             { index: 5, type: Type.Normal, period: 1 },
-//             { index: 6, type: Type.Normal, period: 1 },
-//             { index: 7, type: Type.Normal, period: 1 },
-//             { index: 8, type: Type.Normal, period: 1 },
-//         ];
-//         let result = [
-//             { average: 1950000, index: 1, type: Type.Normal, , start: 31200000, stop: 33150000, sum: 0 },
-//             { average: 1950000, index: 2, type: Type.Normal, , start: 33150000, stop: 35100000, sum: 0 },
-//             { average: 1950000, index: 3, type: Type.Normal, , start: 36900000, stop: 38850000, sum: 0 },
-//             { average: 1950000, index: 4, type: Type.Normal, , start: 38850000, stop: 40800000, sum: 0 },
+  it("Eight inspections, four periods.", () => {
+    let periods: Periods = [
+      {
+        index: 0,
+        start: 31200000,
+        stop: 35100000,
+        span: 3900000,
+      },
+      {
+        index: 1,
+        start: 36900000,
+        stop: 40800000,
+        span: 3900000,
+      },
+      {
+        index: 2,
+        start: 51600000,
+        stop: 55800000,
+        span: 4200000,
+      },
+      {
+        index: 3,
+        start: 58200000,
+        stop: 62400000,
+        span: 4200000,
+      },
+    ];
+    let inspections: Inspections = [
+      { index: 1, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 2, type: Type.Normal, period: 0, start: 0, stop: 0 },
+      { index: 3, type: Type.Normal, period: 1, start: 0, stop: 0 },
+      { index: 4, type: Type.Normal, period: 1, start: 0, stop: 0 },
+      { index: 5, type: Type.Normal, period: 2, start: 0, stop: 0 },
+      { index: 6, type: Type.Normal, period: 2, start: 0, stop: 0 },
+      { index: 7, type: Type.Normal, period: 3, start: 0, stop: 0 },
+      { index: 8, type: Type.Normal, period: 3, start: 0, stop: 0 },
+    ];
+    let result: Inspections = [
+      {
+        index: 1,
+        type: Type.Normal,
+        period: 0,
+        start: 31200000,
+        stop: 33150000,
+      },
+      {
+        index: 2,
+        type: Type.Normal,
+        period: 0,
+        start: 33150000,
+        stop: 35100000,
+      },
+      {
+        index: 3,
+        type: Type.Normal,
+        period: 1,
+        start: 36900000,
+        stop: 38850000,
+      },
+      {
+        index: 4,
+        type: Type.Normal,
+        period: 1,
+        start: 38850000,
+        stop: 40800000,
+      },
 
-//             { average: 2100000, index: 5, type: Type.Normal, period: 1, start: 51600000, stop: 53700000, sum: 0 },
-//             { average: 2100000, index: 6, type: Type.Normal, period: 1, start: 53700000, stop: 55800000, sum: 0 },
-//             { average: 2100000, index: 7, type: Type.Normal, period: 1, start: 58200000, stop: 60300000, sum: 0 },
-//             { average: 2100000, index: 8, type: Type.Normal, period: 1, start: 60300000, stop: 62400000, sum: 0 }
-//         ];
-//         expect(finalReport(inspections, periods)).toEqual(result);
-//     });
-// });
+      {
+        index: 5,
+        type: Type.Normal,
+        period: 2,
+        start: 51600000,
+        stop: 53700000,
+      },
+      {
+        index: 6,
+        type: Type.Normal,
+        period: 2,
+        start: 53700000,
+        stop: 55800000,
+      },
+      {
+        index: 7,
+        type: Type.Normal,
+        period: 3,
+        start: 58200000,
+        stop: 60300000,
+      },
+      {
+        index: 8,
+        type: Type.Normal,
+        period: 3,
+        start: 60300000,
+        stop: 62400000,
+      },
+    ];
+    expect(finalReport(inspections, periods)).toEqual(result);
+  });
+});
 
 describe("makeReport()", () => {
   it("Empty list.", () => {
@@ -426,6 +546,6 @@ describe("makeReport()", () => {
   // });
 
   // it('Only afternoon active.', () => {
-  //     expect(makeReport(inspections.normalDay.list, { ...morning.off, ...afternoon.on }, 840000)).toEqual([{}]);
+  //     expect(makeReport(inspections.normalDay.list, { ...morning.off, ...periods.fullDay.second }, 840000)).toEqual([{}]);
   // });
 });

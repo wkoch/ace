@@ -1,22 +1,13 @@
-import type {
-  Inspection,
-  Inspections,
-  Period,
-  Periods,
-  Time,
-} from "../../src/lib/Types";
-import { Type } from "../../src/lib/Types";
-
-import { describe, it, expect } from "@playwright/test";
-
 import {
   compareByStartTime,
   countByType,
   filter,
   orderByStartTime,
 } from "../../src/lib/Helpers";
-import { TEXT } from "../../src/data/Data";
-import { inspections, periods, morning, afternoon } from "../testData";
+import { describe, it, expect } from "@playwright/test";
+import { inspections, periods } from "../testData";
+import { Type } from "../../src/lib/Types";
+import type { Time } from "../../src/lib/Types";
 
 describe("compareByStartTime()", () => {
   it("First is bigger.", () => {

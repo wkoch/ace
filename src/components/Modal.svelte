@@ -1,17 +1,12 @@
 <script lang="ts">
-  import type {
-    Inspection,
-    Inspections,
-    Intervals,
-    Periods,
-  } from "../lib/Types";
-  import { TEXT } from "../data/Data";
-  import TimeInput from "./TimeInput.svelte";
   import { fade } from "svelte/transition";
-  import Rain from "./Icons/Rain.svelte";
-  import Notification from "./Notification.svelte";
-  import { stringToTime } from "../lib/Time";
+  import { Intervals, Type } from "../lib/Types";
   import { newInterval } from "../lib/Intervals";
+  import { stringToTime } from "../lib/Time";
+  import { TEXT } from "../data/Data";
+  import Notification from "./Notification.svelte";
+  import Rain from "./Icons/Rain.svelte";
+  import TimeInput from "./TimeInput.svelte";
 
   export let modalVisible = false;
 
@@ -26,7 +21,6 @@
   let errorEmpty = false;
   let errorEqual = false;
   let errorInverted = false;
-  let triedSaving = false;
 
   $: errorEmpty = start == 0 || stop == 0;
   $: errorEqual = start != 0 && start == stop;
@@ -55,18 +49,15 @@
   $: errorMsg = errorMessage(errorEmpty, errorEqual, errorInverted);
 
   function cancel() {
-    triedSaving = false;
     startTime = "00:00";
     endTime = "00:00";
     modalVisible = false;
   }
 
   function save() {
-    triedSaving = true;
-
     if (!error) {
       rains = newInterval(rains, {
-        type: TEXT.RAIN,
+        type: Type.Rain,
         start: start,
         stop: stop,
       });

@@ -1,19 +1,9 @@
-import type {
-  Inspection,
-  Inspections,
-  Period,
-  Periods,
-  Interval,
-  Intervals,
-} from "../../src/lib/Types";
-import { Type } from "../../src/lib/Types";
-
 import { describe, it, expect } from "@playwright/test";
-
-import { TEXT } from "../../src/data/Data";
 import { getLunchInterval, newInterval } from "../../src/lib/Intervals";
-import { periods, morning, afternoon } from "../testData";
+import { morning, afternoon } from "../testData";
 import { stringToTime } from "../../src/lib/Time";
+import { Type } from "../../src/lib/Types";
+import type { Interval, Intervals } from "../../src/lib/Types";
 
 describe("getLunchInterval()", () => {
   it("Both periods are active.", () => {

@@ -1,17 +1,3 @@
-import type {
-  Day,
-  Interval,
-  Intervals,
-  Inspection,
-  Inspections,
-  Period,
-  Periods,
-} from "../../src/lib/Types";
-import { Type } from "../../src/lib/Types";
-
-import { describe, it, expect } from "@playwright/test";
-
-import { TEXT } from "../../src/data/Data";
 import {
   contains,
   getTimeSpan,
@@ -19,7 +5,9 @@ import {
   stringToTime,
   timeToString,
 } from "../../src/lib/Time";
-import { intervals } from "../testData";
+import { describe, it, expect } from "@playwright/test";
+import { Type } from "../../src/lib/Types";
+import type { Interval } from "../../src/lib/Types";
 
 describe("contains()", () => {
   let interval: Interval = { type: Type.Rain, start: 9, stop: 12 };

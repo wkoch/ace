@@ -43,12 +43,8 @@ export type Period = {
 };
 export type Periods = Array<Period>;
 
-export type Time =
-  | Day
-  | Partial<Inspection>
-  | Partial<Interval>
-  | Partial<Period>;
-export type Times = Array<Time>;
+export type Time = Day | Inspection | Interval | Period;
+export type Times = (Inspection | Interval | Period)[];
 
 export enum Type {
   Closed,

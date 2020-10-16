@@ -1,12 +1,10 @@
 <script lang="ts">
-  import type { Inspection, Inspections, Interval, Period } from "../lib/Types";
-  import { Type } from "../lib/Types";
-
-  import { TEXT } from "../data/Data";
   import { timeToString } from "../lib/Time";
+  import { Type } from "../lib/Types";
+  import type { Inspection, Interval } from "../lib/Types";
 
   export let modalVisible = false;
-  export let inspection: Inspection;
+  export let inspection: Inspection | Interval;
 </script>
 
 {#if inspection.type == Type.Lunch}
@@ -86,9 +84,7 @@
 {:else if inspection.type == Type.Rain}
   <tr>
     <td class="px-3 py-4 whitespace-no-wrap">
-      <div class="text-lg leading-5 text-gray-900 text-center">
-        {inspection.index + 1}
-      </div>
+      <div class="text-lg leading-5 text-gray-900 text-center">-</div>
     </td>
     <td class="px-3 py-4 whitespace-no-wrap">
       <div class="flex items-center text-center">

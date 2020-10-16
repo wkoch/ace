@@ -1,16 +1,5 @@
-import type {
-  Afternoon,
-  Day,
-  Morning,
-  Inspection,
-  Inspections,
-  Intervals,
-  Period,
-  Periods,
-} from "../lib/Types";
-import { Type } from "../lib/Types";
-import { contains, isTimeBetween, stringToTime, timeToString } from "./Time";
-import { TEXT } from "../data/Data";
+import { contains, isTimeBetween, stringToTime } from "./Time";
+import type { Afternoon, Day, Morning, Intervals, Periods } from "../lib/Types";
 
 export function getDayPeriod(morning: Morning, afternoon: Afternoon): Day {
   let result: Day = {

@@ -1,16 +1,10 @@
-<script>
-    /** @type {any} */
-    export let action;
-    /** @type {string} */
+<script lang="ts">
+    export let action: any;
     export let classes = "";
-    /** @type {string} */
     export let id = "";
-    /** @type {string} */
     export let label = "";
-    /** @type {number} */
     export let badge = 0;
 
-    /** @type {string} */
     $: showBadge = badge > 0 ? classes + "badge" : classes;
 </script>
 

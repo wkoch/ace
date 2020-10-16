@@ -1,8 +1,7 @@
-<script>
+<script lang="ts">
     import { TEXT } from "../data/Data";
     import { fade } from "svelte/transition";
 
-    /** @type {boolean} */
     export let confirmVisible = false;
 </script>
 
@@ -22,7 +21,6 @@
                         class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                         <svg
                             class="h-6 w-6 text-red-600"
-                            xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor">

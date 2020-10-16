@@ -1,61 +1,54 @@
 <script lang="ts">
-	/**
-	 * @typedef { import("../lib/Types").Inspections } Inspections
-	 * @typedef { import("../lib/Types").Interval } Interval
-	 * @typedef { import("../lib/Types").Intervals } Intervals
-	 * @typedef { import("../lib/Types").Period } Period
-	 * @typedef { import("../lib/Types").Periods } Periods
-	 */
+  import type { Interval, Intervals, Inspections, Period } from "../lib/Types";
+  import { Type } from "../lib/Types";
 
-	import { orderByStartTime } from "../lib/Helpers";
+  import { orderByStartTime } from "../lib/Helpers";
 
-	import Content from "../components/Content.svelte";
-	import Header from "../components/Header.svelte";
-	import Modal from "../components/Modal.svelte";
-	import Nav from "../components/Nav.svelte";
-	import Panel from "../components/Panel.svelte";
-	import Report from "../components/Report.svelte";
-	import { subtractIntervalsFromDay } from "../lib/Periods";
-	import { joinIntervals } from "../lib/Intervals";
-	import { TEXT } from "../data/Data";
+  import Content from "../components/Content.svelte";
+  import Header from "../components/Header.svelte";
+  import Modal from "../components/Modal.svelte";
+  import Nav from "../components/Nav.svelte";
+  import Panel from "../components/Panel.svelte";
+  import Report from "../components/Report.svelte";
+  import { subtractIntervals } from "../lib/Periods";
+  import { joinIntervals } from "../lib/Intervals";
+  import { TEXT } from "../data/Data";
 
-	/** @type {Inspections} */
-	let inspections = [];
+  let inspections: Inspections = [];
+  let day: Period;
+  let lunchInterval: Interval = {
+    type: Type.Lunch,
+    start: 68031200000,
+    stop: 40800000,
+  };
 
-	/** @type {Period} */
-	let dayPeriod;
+  let rains: Intervals = [];
 
-	/** @type {Interval} */
-	let lunchInterval = { type: TEXT.LUNCH, start: 68031200000, end: 40800000 };
+  /** @type {boolean} */
+  let panelVisible = false;
 
-	/** @type {Intervals} */
-	let rains = [];
+  /** @type {boolean} */
+  let modalVisible = false;
 
-	/** @type {boolean} */
-	let panelVisible = false;
-
-	/** @type {boolean} */
-	let modalVisible = false;
-
-	$: intervals = joinIntervals([lunchInterval], rains);
-	$: periods = subtractIntervalsFromDay(dayPeriod, intervals);
+  $: intervals = joinIntervals([lunchInterval], rains);
+  $: periods = subtractIntervals(day, intervals);
 </script>
 
 <style>
 </style>
 
 <div>
-	<Nav bind:modalVisible bind:panelVisible bind:inspections />
+  <Nav bind:modalVisible bind:panelVisible bind:inspections />
 
-	<Header />
+  <Header />
 
-	{#if inspections.length == 0}
-		<Content />
-	{:else}
-		<Report {inspections} {periods} />
-	{/if}
+  {#if inspections.length == 0}
+    <Content />
+  {:else}
+    <Report {inspections} {periods} />
+  {/if}
 
-	<Panel bind:panelVisible bind:dayPeriod bind:lunchInterval />
+  <Panel bind:panelVisible bind:day bind:lunchInterval />
 
-	<Modal bind:modalVisible bind:rains />
+  <Modal bind:modalVisible bind:rains />
 </div>

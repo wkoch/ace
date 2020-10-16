@@ -1,18 +1,16 @@
-<script>
-    /** @type {string} */
+<script lang="ts">
+    import type {
+        Inspection,
+        Inspections,
+        Interval,
+        Period,
+    } from "../lib/Types";
     export let label = "";
-    /** @type {string} */
     export let id = "";
-    /** @type {string} */
     export let value = "00:00";
-
-    /** @type {boolean} */
     export let disabled = false;
-
-    /** @type {boolean} */
     export let error = false;
 
-    /** @type {string} */
     $: colorDisabled = disabled ? "text-gray-400" : "text-gray-700";
     $: colorError = error ? "border-red-400" : "";
 </script>

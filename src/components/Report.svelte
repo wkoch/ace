@@ -1,26 +1,18 @@
-<script>
-    /**
-     * @typedef { import("../lib/Types").Inspections } Inspections
-     * @typedef { import("../lib/Types").Periods } Periods
-     */
+<script lang="ts">
+    import type {
+        Inspection,
+        Inspections,
+        Interval,
+        Periods,
+    } from "../lib/Types";
     import TableRow from "./TableRow.svelte";
     import ConfirmDelete from "./ConfirmDelete.svelte";
     import { finalReport, getAverage, makeReport } from "../lib/Inspections";
 
-    /** @type {Inspections} */
-    export let inspections;
+    export let inspections: Inspections;
+    export let periods: Periods;
 
-    /** @type {Periods} */
-    export let periods;
-
-    /** @type {Inspections} */
-    $: initialReport = makeReport(
-        inspections,
-        periods,
-        getAverage(inspections, periods)
-    );
-
-    /** @type {Inspections} */
+    $: initialReport = makeReport(inspections, periods);
     $: report = finalReport(initialReport, periods);
 </script>
 

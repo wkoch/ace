@@ -1,14 +1,14 @@
-<script>
-    /** @type {string} */
-    export let name;
+<script lang="ts">
+    import type {
+        Inspection,
+        Inspections,
+        Interval,
+        Period,
+    } from "../lib/Types";
 
-    /** @type {boolean} */
+    export let name: string;
     export let checked = true;
-
-    /** @type {string} */
     $: color = checked ? "text-green-500" : "text-gray-500";
-
-    /** @type {string} */
     $: rotate = checked ? "" : "rotate";
 </script>
 

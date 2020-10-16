@@ -1,92 +1,204 @@
-import { describe, it, expect } from '@playwright/test';
+import type {
+  Day,
+  Inspection,
+  Inspections,
+  Interval,
+  Intervals,
+  Morning,
+  Period,
+  Periods,
+} from "../../src/lib/Types";
+import { Type } from "../../src/lib/Types";
 
-import { getInitialPeriod, subtractIntervalsFromDay } from "../../src/lib/Periods";
-import { periods } from "../testData";
+import { describe, it, expect } from "@playwright/test";
+
+import { getDayPeriod, subtractIntervals } from "../../src/lib/Periods";
+import { stringToTime } from "../../src/lib/Time";
+import { periods, morning, afternoon } from "../testData";
 import { TEXT } from "../../src/data/Data";
 
+describe("getDayPeriod()", () => {
+  it("Both periods are active.", () => {
+    let result: Day = {
+      start: stringToTime(morning.on.begin),
+      stop: stringToTime(afternoon.on.end),
+    };
+    expect(getDayPeriod(morning.on, afternoon.on)).toEqual(result);
+  });
 
-describe("getInitialPeriod()", () => {
-    it('Both periods are active.', () => {
-        let result = { ...periods.morningOn };
-        result.end = periods.afternoonOn.end;
-        result.endTime = periods.afternoonOn.endTime;
-        result.span = periods.morningOn.span + periods.afternoonOn.span;
-        result.nextInterval = 0;
-        expect(getInitialPeriod(periods.morningOn, periods.afternoonOn)).toEqual(result);
-    });
+  it("Only morning active.", () => {
+    let result: Day = {
+      start: stringToTime(morning.on.begin),
+      stop: stringToTime(morning.on.end),
+    };
+    expect(getDayPeriod(morning.on, afternoon.off)).toEqual(result);
+  });
 
-    it('Only morning active.', () => {
-        let result = { ...periods.morningOn };
-        expect(getInitialPeriod(periods.morningOn, periods.afternoonOff)).toEqual(result);
-    });
-
-    it('Only afternoon active.', () => {
-        let result = { ...periods.afternoonOn };
-        expect(getInitialPeriod(periods.morningOff, periods.afternoonOn)).toEqual(result);
-    });
+  it("Only afternoon active.", () => {
+    let result: Day = {
+      start: stringToTime(afternoon.on.begin),
+      stop: stringToTime(afternoon.on.end),
+    };
+    expect(getDayPeriod(morning.off, afternoon.on)).toEqual(result);
+  });
 });
 
+describe("subtractIntervals()", () => {
+  // Basic periods
+  it("Both periods are active, subtract Lunch.", () => {
+    let day: Day = {
+      start: stringToTime(morning.on.begin),
+      stop: stringToTime(afternoon.on.end),
+    };
+    let intervals: Intervals = [
+      {
+        type: Type.Lunch,
+        start: stringToTime(morning.on.end),
+        stop: stringToTime(afternoon.on.begin),
+      },
+    ];
+    let result = [periods.first, periods.second];
+    result[1].index = 1;
+    expect(subtractIntervals(day, intervals)).toEqual(result);
+  });
 
-describe("subtractIntervalsFromDay()", () => {
+  it("Only morning active.", () => {
+    let day: Day = {
+      start: stringToTime(morning.on.begin),
+      stop: stringToTime(morning.on.end),
+    };
+    let result: Periods = [
+      {
+        index: 0,
+        start: stringToTime(morning.on.begin),
+        stop: stringToTime(morning.on.end),
+        span: stringToTime(morning.on.end) - stringToTime(morning.on.begin),
+      },
+    ];
+    expect(subtractIntervals(day, [])).toEqual(result);
+  });
 
-    // Basic periods
-    it('Both periods are active, subtract Lunch.', () => {
-        let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "17:20", start: 31200000, end: 62400000, span: 31200000, nextInterval: null };
-        let lunchInterval = [{ type: TEXT.LUNCH, start: 40800000, end: 51600000 }];
-        let morning = { ...periods.morningOn };
-        morning.nextInterval = 0;
-        let result = [morning, periods.afternoonOn];
-        expect(subtractIntervalsFromDay(day, lunchInterval)).toEqual(result);
-    });
+  it("Only afternoon active.", () => {
+    let day: Day = {
+      start: stringToTime(afternoon.on.begin),
+      stop: stringToTime(afternoon.on.end),
+    };
+    let result: Periods = [
+      {
+        index: 0,
+        start: stringToTime(afternoon.on.begin),
+        stop: stringToTime(afternoon.on.end),
+        span: stringToTime(afternoon.on.end) - stringToTime(afternoon.on.begin),
+      },
+    ];
+    expect(subtractIntervals(day, [])).toEqual(result);
+  });
 
-    it('Only morning active, subtract lunch.', () => {
-        let result = [periods.morningOn];
-        expect(subtractIntervalsFromDay(periods.morningOn, [])).toEqual(result);
-    });
+  let wholeDay: Day = {
+    start: stringToTime(morning.on.begin),
+    stop: stringToTime(afternoon.on.end),
+  };
 
-    it('Only afternoon active.', () => {
-        let result = [periods.afternoonOn];
-        expect(subtractIntervalsFromDay(periods.afternoonOn, [])).toEqual(result);
-    });
+  // Periods with rain
+  it("Both periods are active, subtract Lunch and rain.", () => {
+    let intervals: Intervals = [
+      { type: Type.Rain, start: 32400000, stop: 36000000 },
+      { type: Type.Lunch, start: 40800000, stop: 51600000 },
+    ];
+    let result: Periods = [
+      {
+        index: 0,
+        start: 31200000,
+        stop: 32400000,
+        span: 1200000,
+      },
+      {
+        index: 1,
+        start: 36000000,
+        stop: 40800000,
+        span: 4800000,
+      },
+      {
+        index: 2,
+        start: stringToTime(afternoon.on.begin),
+        stop: stringToTime(afternoon.on.end),
+        span: stringToTime(afternoon.on.end) - stringToTime(afternoon.on.begin),
+      },
+    ];
+    expect(subtractIntervals(wholeDay, intervals)).toEqual(result);
+  });
 
-    // Periods with rain
-    it('Both periods are active, subtract Lunch and rain.', () => {
-        let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "17:20", start: 31200000, end: 62400000, span: 31200000, nextInterval: null };
-        let intervals = [{ type: TEXT.RAIN, start: 32400000, end: 36000000 }, { type: TEXT.LUNCH, start: 40800000, end: 51600000 }];
-        let morning = [{ name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "09:00", start: 31200000, end: 32400000, span: 1200000, nextInterval: 0 }, { name: TEXT.MORNING, active: true, startTime: "10:00", endTime: "11:20", start: 36000000, end: 40800000, span: 4800000, nextInterval: 1 }];
-        let result = [...morning, periods.afternoonOn];
-        expect(subtractIntervalsFromDay(day, intervals)).toEqual(result);
-    });
+  it("Both periods are active, subtract Lunch and multiple rains.", () => {
+    let intervals: Intervals = [
+      { type: Type.Rain, start: 32400000, stop: 36000000 },
+      { type: Type.Rain, start: 37800000, stop: 39600000 },
+      { type: Type.Lunch, start: 40800000, stop: 51600000 },
+      { type: Type.Rain, start: 54000000, stop: 57600000 },
+    ];
+    let result: Periods = [
+      {
+        index: 0,
+        start: 31200000,
+        stop: 32400000,
+        span: 1200000,
+      },
+      {
+        index: 1,
+        start: 36000000,
+        stop: 37800000,
+        span: 1800000,
+      },
+      {
+        index: 2,
+        start: 39600000,
+        stop: 40800000,
+        span: 1200000,
+      },
+      {
+        index: 3,
+        start: 51600000,
+        stop: 54000000,
+        span: 2400000,
+      },
+      {
+        index: 4,
+        start: 57600000,
+        stop: 62400000,
+        span: 4800000,
+      },
+    ];
+    expect(subtractIntervals(wholeDay, intervals)).toEqual(result);
+  });
 
-    it('Both periods are active, subtract Lunch and multiple rains.', () => {
-        let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "17:20", start: 31200000, end: 62400000, span: 31200000, nextInterval: null };
-        let intervals = [
-            { type: TEXT.RAIN, start: 32400000, end: 36000000 },
-            { type: TEXT.RAIN, start: 37800000, end: 39600000 },
-            { type: TEXT.LUNCH, start: 40800000, end: 51600000 },
-            { type: TEXT.RAIN, start: 54000000, end: 57600000 },
-        ];
-        let result = [
-            { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "09:00", start: 31200000, end: 32400000, span: 1200000, nextInterval: 0 },
-            { name: TEXT.MORNING, active: true, startTime: "10:00", endTime: "10:30", start: 36000000, end: 37800000, span: 1800000, nextInterval: 1 },
-            { name: TEXT.MORNING, active: true, startTime: "11:00", endTime: "11:20", start: 39600000, end: 40800000, span: 1200000, nextInterval: 2 },
-            { name: TEXT.AFTERNOON, active: true, startTime: "14:20", endTime: "15:00", start: 51600000, end: 54000000, span: 2400000, nextInterval: 3 },
-            { name: TEXT.AFTERNOON, active: true, startTime: "16:00", endTime: "17:20", start: 57600000, end: 62400000, span: 4800000, nextInterval: null },
-        ];
-        expect(subtractIntervalsFromDay(day, intervals)).toEqual(result);
-    });
-
-    it('Morning only, subtract multiple rains.', () => {
-        let day = { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "11:20", start: 31200000, end: 40800000, span: 9600000, nextInterval: null };
-        let intervals = [
-            { type: TEXT.RAIN, start: 32400000, end: 36000000 },
-            { type: TEXT.RAIN, start: 37800000, end: 39600000 }
-        ];
-        let result = [
-            { name: TEXT.MORNING, active: true, startTime: "08:40", endTime: "09:00", start: 31200000, end: 32400000, span: 1200000, nextInterval: 0 },
-            { name: TEXT.MORNING, active: true, startTime: "10:00", endTime: "10:30", start: 36000000, end: 37800000, span: 1800000, nextInterval: 1 },
-            { name: TEXT.MORNING, active: true, startTime: "11:00", endTime: "11:20", start: 39600000, end: 40800000, span: 1200000, nextInterval: null },
-        ];
-        expect(subtractIntervalsFromDay(day, intervals)).toEqual(result);
-    });
+  it("Morning only, subtract multiple rains.", () => {
+    let day: Day = {
+      start: 31200000,
+      stop: 40800000,
+    };
+    let intervals: Intervals = [
+      { type: Type.Rain, start: 32400000, stop: 36000000 },
+      { type: Type.Rain, start: 37800000, stop: 39600000 },
+    ];
+    let result: Periods = [
+      {
+        index: 0,
+        start: 31200000,
+        stop: 32400000,
+        span: 1200000,
+      },
+      {
+        index: 1,
+        start: 36000000,
+        stop: 37800000,
+        span: 1800000,
+      },
+      {
+        index: 2,
+        start: 39600000,
+        stop: 40800000,
+        span: 1200000,
+      },
+    ];
+    expect(subtractIntervals(day, intervals)).toEqual(result);
+  });
 });

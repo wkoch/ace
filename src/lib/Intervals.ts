@@ -1,103 +1,107 @@
-/**
- * @typedef { import("../lib/Types").Morning } Morning
- * @typedef { import("../lib/Types").Afternoon } Afternoon
- * @typedef { import("../lib/Types").Period } Period
- * @typedef { import("../lib/Types").Interval } Interval
- * @typedef { import("../lib/Types").Intervals } Intervals
- */
-import { TEXT } from "../data/Data";
-import { contains, isTimeBetween } from "./Time";
+import { contains, isTimeBetween, stringToTime } from "./Time";
 import { orderByStartTime } from "./Helpers";
+import { TEXT } from "../data/Data";
+import { Type } from "../lib/Types";
+import type { Afternoon, Interval, Intervals, Morning } from "../lib/Types";
 
-
-/** @type {(morning: Period, afternoon: Period) => Interval} */
-export function getLunchInterval(morning, afternoon) {
-    if (morning.active && afternoon.active) {
-        return { type: TEXT.LUNCH, start: morning.end, end: afternoon.start };
-    } else {
-        return { type: TEXT.LUNCH, start: 0, end: 0 };
-    }
+export function getLunchInterval(
+  morning: Morning,
+  afternoon: Afternoon
+): Interval {
+  if (morning.active && afternoon.active) {
+    return {
+      type: Type.Lunch,
+      start: stringToTime(morning.end),
+      stop: stringToTime(afternoon.begin),
+    };
+  } else {
+    return { type: Type.Lunch, start: 0, stop: 0 };
+  }
 }
 
+export function newInterval(
+  intervals: Intervals,
+  newInterval: Interval
+): Intervals {
+  let result: Intervals = [];
+  let intercedes = false;
+  let ignore = false;
 
-/** @type {(intervals: Intervals, newInterval: Interval) => Intervals} */
-export function newInterval(intervals, newInterval) {
-    /** @type {Intervals} */
-    let result = [];
-    /** @type {boolean} */
-    let intercedes = false;
-    let ignore = false;
-
-    if (intervals.length > 0) {
-        intervals.forEach(interval => {
-            if (contains(interval, newInterval)) {
-                // Intervalo cobre novo Intervalo, salva o intervalo
-                result.push(interval);
-                intercedes = true;
-                ignore = true;
-            } else if (contains(newInterval, interval)) {
-                // Novo intervalo cobre intervalo existente
-                if (interval.type == TEXT.LUNCH) {
-                    // Quebra chuvas em volta do almoço
-                    let first = { ...newInterval };
-                    let second = { ...newInterval };
-                    first.end = interval.start;
-                    result.push(first);
-                    result.push(interval);
-                    second.start = interval.end;
-                    result.push(second);
-                    intercedes = true;
-                    ignore = true;
-                } else {
-                    // salva o novo
-                    intercedes = true;
-                }
-            } else if (newInterval.start < interval.start && isTimeBetween(newInterval.end, interval.start, interval.end)) {
-                // Novo intervalo intercede intervalo existente
-                if (interval.type == TEXT.LUNCH) {
-                    newInterval.end = interval.start;
-                    result.push(interval); // Salva o almoço
-                    intercedes = true;
-                } else {
-                    newInterval.end = interval.end;
-                    intercedes = true;
-                }
-            } else if (isTimeBetween(newInterval.start, interval.start, interval.end) && newInterval.end > interval.end) {
-                // Novo intervalo extrapola intervalo existente
-                if (interval.type == TEXT.LUNCH) {
-                    newInterval.start = interval.end;
-                    result.push(interval); // Salva o almoço
-                    intercedes = true;
-                } else {
-                    newInterval.start = interval.start;
-                    intercedes = true;
-                }
-            } else {
-                result.push(interval);
-            }
-        });
-
-        if (!ignore) {
-            result.push(newInterval);
+  if (intervals.length > 0) {
+    intervals.forEach((interval) => {
+      if (contains(interval, newInterval)) {
+        // Intervalo cobre novo Intervalo, salva o intervalo
+        result.push(interval);
+        intercedes = true;
+        ignore = true;
+      } else if (contains(newInterval, interval)) {
+        // Novo intervalo cobre intervalo existente
+        if (interval.type == Type.Lunch) {
+          // Quebra chuvas em volta do almoço
+          let first = { ...newInterval };
+          let second = { ...newInterval };
+          first.stop = interval.start;
+          result.push(first);
+          result.push(interval);
+          second.start = interval.stop;
+          result.push(second);
+          intercedes = true;
+          ignore = true;
+        } else {
+          // salva o novo
+          intercedes = true;
         }
-    } else {
-        result.push(newInterval);
+      } else if (
+        newInterval.start < interval.start &&
+        isTimeBetween(newInterval.stop, interval.start, interval.stop)
+      ) {
+        // Novo intervalo intercede intervalo existente
+        if (interval.type == Type.Lunch) {
+          newInterval.stop = interval.start;
+          result.push(interval); // Salva o almoço
+          intercedes = true;
+        } else {
+          newInterval.stop = interval.stop;
+          intercedes = true;
+        }
+      } else if (
+        isTimeBetween(newInterval.start, interval.start, interval.stop) &&
+        newInterval.stop > interval.stop
+      ) {
+        // Novo intervalo extrapola intervalo existente
+        if (interval.type == Type.Lunch) {
+          newInterval.start = interval.stop;
+          result.push(interval); // Salva o almoço
+          intercedes = true;
+        } else {
+          newInterval.start = interval.start;
+          intercedes = true;
+        }
+      } else {
+        result.push(interval);
+      }
+    });
+
+    if (!ignore) {
+      result.push(newInterval);
     }
+  } else {
+    result.push(newInterval);
+  }
 
-    return orderByStartTime(result);
+  return orderByStartTime(result);
 }
-
 
 export function joinIntervals(lunch, rains) {
-    if (lunch.length == 1) {
-        let result = [...lunch];
-        if (rains.length > 0) {
-            rains.forEach(rain => {
-                newInterval(result, rain);
-            });
-        }
-        return result;
-    } else {
-        return rains;
+  if (lunch.length == 1) {
+    let result = [...lunch];
+    if (rains.length > 0) {
+      rains.forEach((rain) => {
+        newInterval(result, rain);
+      });
     }
+    return result;
+  } else {
+    return rains;
+  }
 }

@@ -43,7 +43,11 @@ export type Period = {
 };
 export type Periods = Array<Period>;
 
-export type Time = Day | Inspection | Interval | Period;
+export type Time =
+  | Day
+  | Partial<Inspection>
+  | Partial<Interval>
+  | Partial<Period>;
 export type Times = Array<Time>;
 
 export enum Type {
@@ -55,6 +59,8 @@ export enum Type {
   Recovered,
   None,
 }
+
+export type hasType = (Inspection | Interval)[];
 
 // TEXT TYPES
 type TEXT_AFTERNOON = "Tarde";

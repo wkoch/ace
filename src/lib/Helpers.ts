@@ -8,6 +8,7 @@ import type {
   Time,
   Times,
   Type,
+  hasType,
 } from "../lib/Types";
 
 export function compareByStartTime(first: Time, second: Time): number {
@@ -19,14 +20,11 @@ export function compareByStartTime(first: Time, second: Time): number {
   return 0;
 }
 
-export function countByType(list: Inspections | Intervals, type: Type): number {
+export function countByType(list: hasType, type: Type): number {
   return filter(list, type).length;
 }
 
-export function filter(
-  list: (Inspection | Interval)[],
-  type: Type
-): (Inspection | Interval)[] {
+export function filter(list: hasType, type: Type): hasType {
   return list.filter((obj: { type: Type }) => obj.type == type);
 }
 

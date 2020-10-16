@@ -9,10 +9,7 @@ import type {
 } from "./Types";
 import { Type } from "./Types";
 
-export function contains(
-  first: Inspection | Interval | Period,
-  second: Inspection | Interval | Period
-): boolean {
+export function contains(first: Time, second: Time): boolean {
   return (
     isTimeBetween(second.start, first.start, first.stop) &&
     isTimeBetween(second.stop, first.start, first.stop)

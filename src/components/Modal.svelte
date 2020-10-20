@@ -1,12 +1,13 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { Intervals, Type } from "../lib/Types";
   import { newInterval } from "../lib/Intervals";
   import { stringToTime } from "../lib/Time";
   import { TEXT } from "../data/Data";
+  import { Type } from "../lib/Types";
   import Notification from "./Notification.svelte";
   import Rain from "./Icons/Rain.svelte";
   import TimeInput from "./TimeInput.svelte";
+  import type { Intervals } from "../lib/Types";
 
   export let modalVisible = false;
 

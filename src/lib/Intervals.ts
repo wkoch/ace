@@ -1,6 +1,6 @@
 import { contains, isTimeBetween, stringToTime } from "./Time";
 import { orderByStartTime } from "./Helpers";
-import { Type } from "../lib/Types";
+import { Type } from "./Types";
 import type { Afternoon, Interval, Intervals, Morning } from "../lib/Types";
 
 export function getLunchInterval(

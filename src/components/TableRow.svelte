@@ -1,13 +1,35 @@
 <script lang="ts">
   import { timeToString } from "../lib/Time";
   import { Type } from "../lib/Types";
-  import type { Inspection, Interval, Report } from "../lib/Types";
+  import type { Inspections, Intervals, Report } from "../lib/Types";
 
-  export let modalVisible = false;
+  // export let modalVisible = false;
+  export let inspections: Inspections = [];
+  export let rains: Intervals = [];
   export let inspection: Report;
+
+  function changeType(inspection) {
+    if (inspection.type == Type.Normal) {
+      inspections[inspection.index].type = Type.Closed;
+    } else if (inspection.type == Type.Closed) {
+      inspections[inspection.index].type = Type.Recovered;
+    } else if (inspection.type == Type.Recovered) {
+      inspections[inspection.index].type = Type.Normal;
+    }
+  }
+
+  function remove(index) {
+    inspections.splice(index, 1);
+    inspections = [...inspections];
+  }
+
+  function removeRain(index) {
+    rains.splice(index, 1);
+    rains = [...rains];
+  }
 </script>
 
-{#if inspection.type == Type.Lunch}
+{#if inspection.type == Type.Lunch && inspection.start > 0}
   <tr class="bg-orange-200 text-orange-600">
     <td class="px-3 py-4 whitespace-no-wrap" />
     <td class="px-3 py-4 whitespace-no-wrap">
@@ -86,19 +108,42 @@
         {timeToString(inspection.stop)}
       </div>
     </td>
-    <td class="px-3 py-4 whitespace-no-wrap text-sm leading-5 text-center" />
+    <td class="px-3 py-4 whitespace-no-wrap text-sm leading-5 text-center">
+      <button
+        class="p-1 border-2 border-transparent text-red-600 rounded-full hover:text-red-700 focus:outline-none"
+        aria-label="Notifications"
+        on:click={() => removeRain(inspection.index)}>
+        <svg
+          class="h-6 w-6"
+          stroke="currentColor"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6" />
+          <path
+            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <line x1="10" y1="11" x2="10" y2="17" />
+          <line x1="14" y1="11" x2="14" y2="17" />
+        </svg>
+      </button>
+    </td>
   </tr>
 {:else}
   <tr>
     <td class="px-3 py-4 whitespace-no-wrap">
       <div class="text-lg leading-5 text-gray-900 text-center">
-        {inspection.index}
+        {inspection.index + 1}
       </div>
     </td>
     <td class="px-3 py-4 whitespace-no-wrap">
       <div class="flex items-center text-center">
         {#if inspection.type == Type.Normal}
-          <div class="flex-shrink-0 h-6 w-6 m-auto text-green-400">
+          <button
+            class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-green-400"
+            aria-label="Notifications"
+            on:click={() => changeType(inspection)}>
             <svg
               class="h-6 w-6"
               stroke="currentColor"
@@ -110,36 +155,42 @@
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
               <polyline points="22 4 12 14.01 9 11.01" />
             </svg>
-          </div>
+          </button>
         {:else if inspection.type == Type.Closed}
-          <div class="flex-shrink-0 h-6 w-6 m-auto text-red-400">
-            <svg
-              class="h-6 w-6"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-          </div>
+        <button
+        class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-red-400"
+        aria-label="Notifications"
+        on:click={() => changeType(inspection)}>
+              <svg
+                class="h-6 w-6"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+            </button>
         {:else}
-          <div class="flex-shrink-0 h-6 w-6 m-auto text-teal-400">
-            <svg
-              class="h-6 w-6"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round">
-              <polyline points="1 4 1 10 7 10" />
-              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
-            </svg>
-          </div>
+        <button
+        class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-teal-400"
+        aria-label="Notifications"
+        on:click={() => changeType(inspection)}>
+              <svg
+                class="h-6 w-6"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10" />
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+              </svg>
+            </button>
         {/if}
       </div>
     </td>
@@ -157,7 +208,8 @@
       class="px-3 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 text-center">
       <button
         class="p-1 border-2 border-transparent text-indigo-600 rounded-full hover:indigo-gray-700 focus:outline-none"
-        aria-label="Notifications">
+        aria-label="Notifications"
+        on:click={() => changeType(inspection)}>
         <svg
           class="h-6 w-6"
           stroke="currentColor"
@@ -174,7 +226,7 @@
       <button
         class="p-1 border-2 border-transparent text-red-600 rounded-full hover:text-red-700 focus:outline-none"
         aria-label="Notifications"
-        on:click={() => (modalVisible = true)}>
+        on:click={() => remove(inspection.index)}>
         <svg
           class="h-6 w-6"
           stroke="currentColor"

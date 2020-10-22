@@ -17,6 +17,8 @@
     start: 0,
     stop: 0,
   };
+  let random: boolean = true;
+  let lock: boolean = false;
 
   let rains: Intervals = [];
   let panelVisible = false;
@@ -30,17 +32,17 @@
 </style>
 
 <div>
-  <Nav bind:modalVisible bind:panelVisible bind:inspections />
+  <Nav bind:modalVisible bind:panelVisible bind:inspections bind:lock />
 
   <Header />
 
   {#if inspections.length == 0}
     <Content />
   {:else}
-    <Report {inspections} {periods} {intervals} />
+    <Report bind:inspections {periods} {intervals} bind:rains />
   {/if}
 
-  <Panel bind:panelVisible bind:day bind:lunchInterval />
+  <Panel bind:panelVisible bind:day bind:lunchInterval bind:random bind:lock />
 
-  <Modal bind:modalVisible bind:rains />
+  <Modal bind:modalVisible bind:rains {random} />
 </div>

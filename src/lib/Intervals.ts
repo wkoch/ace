@@ -5,13 +5,15 @@ import type { Afternoon, Interval, Intervals, Morning } from "../lib/Types";
 
 export function getLunchInterval(
   morning: Morning,
-  afternoon: Afternoon
+  afternoon: Afternoon,
+  random: boolean = false
 ): Interval {
+  let margin = random ? Math.trunc(Math.random() * 5*60*1000) - 2*60*1000 : 0;
   if (morning.active && afternoon.active) {
     return {
       type: Type.Lunch,
-      start: stringToTime(morning.end),
-      stop: stringToTime(afternoon.begin),
+      start: stringToTime(morning.end)+margin,
+      stop: stringToTime(afternoon.begin)+margin,
     };
   } else {
     return { type: Type.Lunch, start: 0, stop: 0 };

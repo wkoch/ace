@@ -17,18 +17,18 @@
   let Morning: Morning = {
     active: true,
     begin: "08:40",
-    end: "11:20",
+    end: "11:35",
   };
 
   // DADOS DA TARDE
   let Afternoon: Afternoon = {
     active: true,
     begin: "14:20",
-    end: "17:20",
+    end: "17:35",
   };
 
   function save() {
-    day = getDayPeriod(Morning, Afternoon);
+    day = getDayPeriod(Morning, Afternoon, random);
     lunchInterval = getLunchInterval(Morning, Afternoon);
     panelVisible = false;
   }
@@ -84,9 +84,9 @@
               bind:end={Afternoon.end} />
             <hr class="m-4" />
             <div>
-              <Toggle name={TEXT.RANDOM} checked={random} />
+              <Toggle name={TEXT.RANDOM} bind:checked={random} />
               <div class="my-2" />
-              <Toggle name={TEXT.LOCK} checked={lock} />
+              <Toggle name={TEXT.LOCK} bind:checked={lock} />
             </div>
             <div class="bg-gray-200 py-6 px-4 grid md:grid-cols-2 gap-4">
               <span class="w-full rounded-md shadow-sm">

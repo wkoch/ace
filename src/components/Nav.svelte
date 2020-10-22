@@ -8,11 +8,13 @@
   import Repeat from "./Icons/Repeat.svelte";
   import Settings from "./Icons/Settings.svelte";
   import type { Inspection, Inspections } from "../lib/Types";
+  import { countByType } from "../lib/Helpers";
 
   export let inspections: Inspections;
 
   export let panelVisible: boolean;
   export let modalVisible: boolean;
+  export let lock: boolean = false;
 
   function add(type: Type.Closed | Type.Normal | Type.Recovered): void {
     let next: Inspection = {
@@ -24,6 +26,10 @@
     };
     inspections = [...inspections, next];
   }
+  $: disabled = lock;
+  $: countNormal = countByType(inspections, Type.Normal);
+  $: countClosed = countByType(inspections, Type.Closed);
+  $: countRecovered = countByType(inspections, Type.Recovered);
 </script>
 
 <nav
@@ -35,30 +41,30 @@
           id={TEXT.RAIN}
           classes="p-3 border-2 border-transparent text-indigo-400 rounded-full hover:text-indigo-600 focus:outline-none"
           label="Modal"
-          action={() => (modalVisible = true)}>
+          action={() => (modalVisible = true)} {disabled}>
           <Rain />
         </Button>
         <Button
           id={TEXT.NORMAL}
           classes="p-3 border-2 border-transparent text-green-400 rounded-full hover:text-green-600 focus:outline-none"
           label="Nav"
-          action={() => add(Type.Normal)}>
+          action={() => add(Type.Normal)} {disabled} badge={countNormal}>
           <Checkmark />
         </Button>
-        <button
+        <Button
           id={TEXT.CLOSED}
-          class="p-3 border-2 border-transparent text-red-400 rounded-full hover:text-red-600 focus:outline-none"
+          classes="p-3 border-2 border-transparent text-red-400 rounded-full hover:text-red-600 focus:outline-none"
           aria-label="Nav"
-          on:click={() => add(Type.Closed)}>
+          action={() => add(Type.Closed)} {disabled} badge={countClosed}>
           <Denied />
-        </button>
-        <button
+        </Button>
+        <Button
           id={TEXT.RECOVERED}
-          class="p-3 border-2 border-transparent text-teal-400 rounded-full hover:text-teal-600 focus:outline-none"
+          classes="p-3 border-2 border-transparent text-teal-400 rounded-full hover:text-teal-600 focus:outline-none"
           aria-label="Nav"
-          on:click={() => add(Type.Recovered)}>
+          action={() => add(Type.Recovered)} {disabled} badge={countRecovered}>
           <Repeat />
-        </button>
+        </Button>
         <button
           id={TEXT.MENU}
           class="p-3 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-600 focus:outline-none"

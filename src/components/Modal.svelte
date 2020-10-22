@@ -12,11 +12,13 @@
   export let modalVisible = false;
 
   export let rains: Intervals = [];
+  export let random: boolean = false;
 
   let startTime = "00:00";
   let endTime = "00:00";
-  $: start = stringToTime(startTime);
-  $: stop = stringToTime(endTime);
+  let margin = random ? Math.trunc(Math.random() * 5*60*1000) - 2*60*1000 : 0;
+  $: start = stringToTime(startTime)+margin;
+  $: stop = stringToTime(endTime)+margin;
 
   let disabled = false;
   let errorEmpty = false;

@@ -1,15 +1,16 @@
 import { contains, isTimeBetween, stringToTime } from "./Time";
 import type { Afternoon, Day, Morning, Intervals, Periods } from "../lib/Types";
 
-export function getDayPeriod(morning: Morning, afternoon: Afternoon): Day {
+export function getDayPeriod(morning: Morning, afternoon: Afternoon, random: boolean = false): Day {
+  let margin = random ? Math.trunc(Math.random() * 5*60*1000) - 2*60*1000 : 0;
   let result: Day = {
-    start: stringToTime(morning.begin),
-    stop: stringToTime(afternoon.end),
+    start: stringToTime(morning.begin)+margin,
+    stop: stringToTime(afternoon.end)+margin,
   };
   if (morning.active && !afternoon.active) {
-    result.stop = stringToTime(morning.end);
+    result.stop = stringToTime(morning.end)+margin;
   } else if (!morning.active && afternoon.active) {
-    result.start = stringToTime(afternoon.begin);
+    result.start = stringToTime(afternoon.begin)+margin;
   }
   return result;
 }

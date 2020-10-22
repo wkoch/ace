@@ -14,8 +14,8 @@
   let day: Period;
   let lunchInterval: Interval = {
     type: Type.Lunch,
-    start: 68031200000,
-    stop: 40800000,
+    start: 0,
+    stop: 0,
   };
 
   let rains: Intervals = [];
@@ -37,7 +37,7 @@
   {#if inspections.length == 0}
     <Content />
   {:else}
-    <Report {inspections} {periods} />
+    <Report {inspections} {periods} {intervals} />
   {/if}
 
   <Panel bind:panelVisible bind:day bind:lunchInterval />

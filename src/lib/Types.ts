@@ -46,6 +46,8 @@ export type Periods = Array<Period>;
 export type Time = Day | Inspection | Interval | Period;
 export type Times = (Inspection | Interval | Period)[];
 
+export type Report = any;
+
 export enum Type {
   Closed,
   Day,

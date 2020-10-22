@@ -40,7 +40,7 @@
     </div>
   </header>
 
-  <TimeInput label="Início" id="{name}Início" value={begin} {disabled} />
+  <TimeInput label="Início" id="{name}Início" bind:value={begin} {disabled} />
 
-  <TimeInput label="Fim" id="{name}Fim" value={end} {disabled} />
+  <TimeInput label="Fim" id="{name}Fim" bind:value={end} {disabled} />
 </section>

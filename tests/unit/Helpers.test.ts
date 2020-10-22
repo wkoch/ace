@@ -1,13 +1,30 @@
 import {
+  compareByIndex,
   compareByStartTime,
   countByType,
   filter,
+  filterOut,
+  orderByIndex,
   orderByStartTime,
 } from "../../src/lib/Helpers";
 import { describe, it, expect } from "@playwright/test";
 import { inspections, periods } from "../testData";
 import { Type } from "../../src/lib/Types";
 import type { Time } from "../../src/lib/Types";
+
+describe("compareByIndex()", () => {
+  it("First is bigger.", () => {
+    expect(compareByIndex({ index: 2 }, { index: 1 })).toBe(1);
+  });
+
+  it("First is smaller.", () => {
+    expect(compareByIndex({ index: 1 }, { index: 2 })).toBe(-1);
+  });
+
+  it("Both are equal.", () => {
+    expect(compareByIndex({ index: 1 }, { index: 1 })).toBe(0);
+  });
+});
 
 describe("compareByStartTime()", () => {
   it("First is bigger.", () => {
@@ -105,6 +122,73 @@ describe("filter()", () => {
         },
       ]
     );
+  });
+});
+
+describe("filterOut()", () => {
+  it("Inspections list is Empty.", () => {
+    expect(filterOut(inspections.emptyDay.list, Type.Normal).length).toBe(0);
+  });
+
+  it("Inspections list is Empty.", () => {
+    expect(filterOut(inspections.emptyDay.list, Type.Normal)).toEqual([]);
+  });
+
+  it("No inspections of the Type after filtering out the Type.", () => {
+    expect(filterOut(inspections.normalDay.list, Type.Normal).length).toBe(inspections.normalDay.closed);
+  });
+
+  it("Filter out the Normal type.", () => {
+    expect(filterOut(inspections.normalDayRecovered.list, Type.Normal).length).toBe(
+      inspections.normalDayRecovered.recovered + inspections.normalDayRecovered.closed
+    );
+  });
+});
+
+describe("orderByIndex()", () => {
+  it("Empty list.", () => {
+    expect(orderByIndex([])).toEqual([]);
+  });
+
+  it("First is bigger.", () => {
+    expect(orderByIndex([{ index: 2 }, { index: 1 }])).toEqual([
+      { index: 1 },
+      { index: 2 },
+    ]);
+  });
+
+  it("First is smaller.", () => {
+    expect(orderByIndex([{ index: 1 }, { index: 2 }])).toEqual([
+      { index: 1 },
+      { index: 2 },
+    ]);
+  });
+
+  it("Both are equal.", () => {
+    expect(orderByIndex([{ index: 1 }, { index: 1 }])).toEqual([
+      { index: 1 },
+      { index: 1 },
+    ]);
+  });
+
+  it("Multiple values.", () => {
+    expect(
+      orderByIndex([
+        { index: 5 },
+        { index: 3 },
+        { index: 1 },
+        { index: 6 },
+        { index: 2 },
+        { index: 4 },
+      ])
+    ).toEqual([
+      { index: 1 },
+      { index: 2 },
+      { index: 3 },
+      { index: 4 },
+      { index: 5 },
+      { index: 6 },
+    ]);
   });
 });
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "@playwright/test";
-import { getLunchInterval, newInterval } from "../../src/lib/Intervals";
+import { getLunchInterval, joinIntervals, newInterval } from "../../src/lib/Intervals";
 import { morning, afternoon } from "../testData";
 import { stringToTime } from "../../src/lib/Time";
 import { Type } from "../../src/lib/Types";
@@ -33,6 +33,52 @@ describe("getLunchInterval()", () => {
     expect(getLunchInterval(morning.off, afternoon.on)).toEqual(result);
   });
 });
+
+
+describe("joinIntervals()", () => {
+  it("No intervals returns empty list.", () => {
+    expect(joinIntervals([], [])).toEqual([]);
+  });
+
+  it("Joins one with two, result is ordered by Start time.", () => {
+    let first: Intervals = [{
+      type: Type.Lunch,
+      start: 12,
+      stop: 13,
+    }];
+    let second: Intervals = [
+      {
+        type: Type.Rain,
+        start: 9,
+        stop: 10,
+      },
+      {
+        type: Type.Rain,
+        start: 15,
+        stop: 16,
+      }
+    ];
+    let result: Intervals = [
+      {
+        type: Type.Rain,
+        start: 9,
+        stop: 10,
+      },
+      {
+        type: Type.Lunch,
+        start: 12,
+        stop: 13,
+      },
+      {
+        type: Type.Rain,
+        start: 15,
+        stop: 16,
+      }
+    ];
+    expect(joinIntervals(first, second)).toEqual(result);
+  });
+});
+
 
 describe("newInterval()", () => {
   let luchOnly: Intervals = [{ type: Type.Lunch, start: 11, stop: 14 }];

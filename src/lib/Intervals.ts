@@ -92,11 +92,11 @@ export function newInterval(
 }
 
 export function joinIntervals(lunch: Intervals, rains: Intervals) {
-  if (lunch.length == 1) {
+  if (lunch.length > 0) {
     let result = [...lunch];
     if (rains.length > 0) {
       rains.forEach((rain) => {
-        newInterval(result, rain);
+        result = newInterval(result, rain);
       });
     }
     return result;

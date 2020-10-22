@@ -1,10 +1,33 @@
-import { countByType } from "./Helpers";
+import { countByType, filter, filterOut, orderByIndex } from "./Helpers";
 import { getTimeSpan } from "./Time";
 import { TIME } from "../data/Data";
 import { Type } from "../lib/Types";
-import type { Inspection, Inspections, Period, Periods } from "../lib/Types";
+import type { Inspection, Inspections, Intervals, Period, Periods, Report } from "../lib/Types";
 
-export function finalReport(
+export function finalReport(inspections: Inspections, intervals: Intervals): Report {
+  let report: Report = [];
+  let previous = 0;
+  let current = 0;
+  if (intervals.length > 0) {
+    let recovered: Inspections = filter(inspections, Type.Recovered);
+    let rest: Inspections = filterOut(inspections, Type.Recovered);
+    let newInspections: Inspections = [...rest, ...recovered];
+
+    newInspections.forEach(inspection => {
+      previous = current;
+      current = inspection.period;
+      if (previous != current) {
+        report.push(intervals[previous]);
+      }
+      report.push(inspection);
+    });
+    return orderByIndex(report);
+  } else {
+    return inspections;
+  }
+}
+
+export function preciseReport(
   simpleReport: Inspections,
   periods: Periods
 ): Inspections {
@@ -87,10 +110,9 @@ export function makeReport(
   let report = [];
   let changePeriod = false;
   const periodsCount = periods.length;
-  let periodIndex = 0;
-  let period = { ...periods[periodIndex] };
+  let period = { ...periods[0] };
   let first = true;
-  let previous;
+  let previous: Inspection;
 
   if (inspections.length > 0) {
     let average = getAverage(inspections, periods);
@@ -101,37 +123,30 @@ export function makeReport(
         current = {
           index: inspection.index,
           type: inspection.type,
-          period: periodIndex,
+          period: period.index,
           start: period.start,
           stop: Math.floor(period.start + currentSpan),
         };
         first = false;
-      } else if (changePeriod) {
-        periodIndex += 1;
-        period = { ...periods[periodIndex] };
-        current = {
-          index: inspection.index,
-          type: inspection.type,
-          period: periodIndex,
-          start: period.start,
-          stop: Math.floor(period.start + currentSpan),
-        };
-        changePeriod = false;
       } else {
-        if (
-          periodIndex + 1 < periodsCount &&
-          previous.stop < period.stop &&
-          previous.stop + currentSpan > period.stop
-        ) {
-          changePeriod = true;
+        if (previous.stop == period.stop || previous.stop + (currentSpan / 2) > period.stop) {
+          period = { ...periods[period.index + 1] };
+          current = {
+            index: inspection.index,
+            type: inspection.type,
+            period: period.index,
+            start: period.start,
+            stop: Math.floor(period.start + currentSpan),
+          };
+        } else {
+          current = {
+            index: inspection.index,
+            type: inspection.type,
+            period: period.index,
+            start: previous.stop,
+            stop: Math.floor(previous.stop + currentSpan),
+          };
         }
-        current = {
-          index: inspection.index,
-          type: inspection.type,
-          period: periodIndex,
-          start: previous.stop,
-          stop: Math.floor(previous.stop + currentSpan),
-        };
       }
       report.push(current);
       previous = { ...current };

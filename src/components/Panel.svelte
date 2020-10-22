@@ -27,10 +27,13 @@
     end: "17:20",
   };
 
-  function save() {}
+  function save() {
+    day = getDayPeriod(Morning, Afternoon);
+    lunchInterval = getLunchInterval(Morning, Afternoon);
+    panelVisible = false;
+  }
 
-  $: day = getDayPeriod(Morning, Afternoon);
-  $: lunchInterval = getLunchInterval(Morning, Afternoon);
+  save(); // Avoid auto-updating on input value change to have a better UX.
 </script>
 
 {#if panelVisible}

@@ -1,14 +1,16 @@
 <script lang="ts">
-  import { finalReport, makeReport } from "../lib/Inspections";
+  import { finalReport, preciseReport, makeReport } from "../lib/Inspections";
   import ConfirmDelete from "./ConfirmDelete.svelte";
   import TableRow from "./TableRow.svelte";
-  import type { Inspections, Periods } from "../lib/Types";
+  import type { Inspections, Intervals, Periods } from "../lib/Types";
 
   export let inspections: Inspections;
   export let periods: Periods;
+  export let intervals: Intervals;
 
-  $: initialReport = makeReport(inspections, periods);
-  $: report = finalReport(initialReport, periods);
+  $: initial = makeReport(inspections, periods);
+  $: precise = preciseReport(initial, periods);
+  $: report = finalReport(precise, intervals);
 </script>
 
 <section>

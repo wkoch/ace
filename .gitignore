@@ -4,6 +4,5 @@
 /cypress/videos/
 /node_modules/
 /src/node_modules/@sapper/
-/static/main.css
 yarn-error.log
 /.vscode/

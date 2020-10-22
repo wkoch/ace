@@ -9,6 +9,6 @@ module.exports = {
   plugins: [
     tailwindcss("./tailwind.config.js"),
 
-    ...([]) // TODO FIXME Replace by [purgecss] to get smaller CSS file
+    ...([purgecss]) // TODO FIXME Replace by [purgecss] to get smaller CSS file
   ]
 };

@@ -99,7 +99,7 @@ type TEXT_RECOVERED = "Recuperada";
 type TEXT_SAVE = "Salvar";
 type TEXT_START = "Início";
 type TEXT_TYPE = "Tipo";
-type TEXT_VERSION = "6.0.0";
+type TEXT_VERSION = "6.1.1";
 
 export type Text = {
   AFTERNOON: TEXT_AFTERNOON;

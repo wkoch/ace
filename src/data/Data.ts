@@ -39,7 +39,7 @@ export const TEXT: Text = {
   SAVE: "Salvar",
   START: "Início",
   TYPE: "Tipo",
-  VERSION: "6.0.0",
+  VERSION: "6.1.1",
 };
 
 export const TIME: { CLOSED: number } = {

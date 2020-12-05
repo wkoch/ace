@@ -39,7 +39,7 @@
   {#if inspections.length == 0}
     <Content />
   {:else}
-    <Report bind:inspections {periods} {intervals} bind:rains />
+    <Report bind:inspections {periods} {intervals} bind:rains bind:lock />
   {/if}
 
   <Panel bind:panelVisible bind:day bind:lunchInterval bind:random bind:lock />

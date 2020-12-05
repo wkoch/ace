@@ -41,28 +41,35 @@
           id={TEXT.RAIN}
           classes="p-3 border-2 border-transparent text-indigo-400 rounded-full hover:text-indigo-600 focus:outline-none"
           label="Modal"
-          action={() => (modalVisible = true)} {disabled}>
+          action={() => (modalVisible = true)}
+          {disabled}>
           <Rain />
         </Button>
         <Button
           id={TEXT.NORMAL}
           classes="p-3 border-2 border-transparent text-green-400 rounded-full hover:text-green-600 focus:outline-none"
           label="Nav"
-          action={() => add(Type.Normal)} {disabled} badge={countNormal}>
+          action={() => add(Type.Normal)}
+          {disabled}
+          badge={countNormal}>
           <Checkmark />
         </Button>
         <Button
           id={TEXT.CLOSED}
           classes="p-3 border-2 border-transparent text-red-400 rounded-full hover:text-red-600 focus:outline-none"
           aria-label="Nav"
-          action={() => add(Type.Closed)} {disabled} badge={countClosed}>
+          action={() => add(Type.Closed)}
+          {disabled}
+          badge={countClosed}>
           <Denied />
         </Button>
         <Button
           id={TEXT.RECOVERED}
           classes="p-3 border-2 border-transparent text-teal-400 rounded-full hover:text-teal-600 focus:outline-none"
           aria-label="Nav"
-          action={() => add(Type.Recovered)} {disabled} badge={countRecovered}>
+          action={() => add(Type.Recovered)}
+          {disabled}
+          badge={countRecovered}>
           <Repeat />
         </Button>
         <button

@@ -7,6 +7,7 @@
   export let inspections: Inspections = [];
   export let rains: Intervals = [];
   export let inspection: Report;
+  export let lock: boolean = false;
 
   function changeType(inspection) {
     if (inspection.type == Type.Normal) {
@@ -112,7 +113,8 @@
       <button
         class="p-1 border-2 border-transparent text-red-600 rounded-full hover:text-red-700 focus:outline-none"
         aria-label="Notifications"
-        on:click={() => removeRain(inspection.index)}>
+        on:click={() => removeRain(inspection.index)}
+        disabled={lock}>
         <svg
           class="h-6 w-6"
           stroke="currentColor"
@@ -143,7 +145,8 @@
           <button
             class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-green-400"
             aria-label="Notifications"
-            on:click={() => changeType(inspection)}>
+            on:click={() => changeType(inspection)}
+            disabled={lock}>
             <svg
               class="h-6 w-6"
               stroke="currentColor"
@@ -157,40 +160,42 @@
             </svg>
           </button>
         {:else if inspection.type == Type.Closed}
-        <button
-        class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-red-400"
-        aria-label="Notifications"
-        on:click={() => changeType(inspection)}>
-              <svg
-                class="h-6 w-6"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="15" y1="9" x2="9" y2="15" />
-                <line x1="9" y1="9" x2="15" y2="15" />
-              </svg>
-            </button>
+          <button
+            class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-red-400"
+            aria-label="Notifications"
+            on:click={() => changeType(inspection)}
+            disabled={lock}>
+            <svg
+              class="h-6 w-6"
+              stroke="currentColor"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </button>
         {:else}
-        <button
-        class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-teal-400"
-        aria-label="Notifications"
-        on:click={() => changeType(inspection)}>
-              <svg
-                class="h-6 w-6"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-                <polyline points="1 4 1 10 7 10" />
-                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
-              </svg>
-            </button>
+          <button
+            class="p-1 border-2 border-transparent rounded-full focus:outline-none items-center m-auto text-teal-400"
+            aria-label="Notifications"
+            on:click={() => changeType(inspection)}
+            disabled={lock}>
+            <svg
+              class="h-6 w-6"
+              stroke="currentColor"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+            </svg>
+          </button>
         {/if}
       </div>
     </td>
@@ -209,7 +214,8 @@
       <button
         class="p-1 border-2 border-transparent text-indigo-600 rounded-full hover:indigo-gray-700 focus:outline-none"
         aria-label="Notifications"
-        on:click={() => changeType(inspection)}>
+        on:click={() => changeType(inspection)}
+        disabled={lock}>
         <svg
           class="h-6 w-6"
           stroke="currentColor"
@@ -226,7 +232,8 @@
       <button
         class="p-1 border-2 border-transparent text-red-600 rounded-full hover:text-red-700 focus:outline-none"
         aria-label="Notifications"
-        on:click={() => remove(inspection.index)}>
+        on:click={() => remove(inspection.index)}
+        disabled={lock}>
         <svg
           class="h-6 w-6"
           stroke="currentColor"

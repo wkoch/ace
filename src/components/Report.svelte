@@ -8,6 +8,7 @@
   export let periods: Periods;
   export let intervals: Intervals;
   export let rains: Intervals;
+  export let lock: boolean = false;
 
   $: initial = makeReport(inspections, periods);
   $: precise = preciseReport(initial, periods);
@@ -53,7 +54,11 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 {#if report.length > 0}
                   {#each report as inspection}
-                    <TableRow {inspection} bind:inspections bind:rains/>
+                    <TableRow
+                      {inspection}
+                      bind:inspections
+                      bind:rains
+                      bind:lock />
                   {/each}
                 {/if}
               </tbody>

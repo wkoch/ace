@@ -118,7 +118,7 @@ export function makeReport(
         };
         first = false;
       } else {
-        if (previous.stop == period.stop || previous.stop + (currentSpan / 2) > period.stop) {
+        if (period.index < periods.length - 1 && (previous.stop == period.stop || previous.stop + (currentSpan / 2) > period.stop)) {
           period = { ...periods[period.index + 1] };
           current = {
             index: report.length,
